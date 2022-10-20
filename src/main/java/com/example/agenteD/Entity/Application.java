@@ -3,27 +3,20 @@ package com.example.agenteD.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Application")
 public class Application {
 
-        @Id
-        @Getter @Setter
-        @Column(name = "in1")
-        private Integer in1;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "application_id", nullable = false)
+    @Getter @Setter
+    private Integer application_id;
 
-        @Getter @Setter @Column(name = "in2")
-        private Integer in2;
-
-        @Getter @Setter @Column(name = "out1")
-        private Integer out1;
-
-        @Getter @Setter @Column(name = "out2")
-        private Integer out2;
+    @Column(name = "application_name")
+    @Getter @Setter
+    private String application_name;
 
 }

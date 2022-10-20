@@ -16,8 +16,8 @@ public class AgentDApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AgentDApplication.class, args);
 
-		ApplicationDaoImp ApplicationRun = new ApplicationDaoImp();
-		Thread ThreadApplication = new Thread(ApplicationRun);
+		ApplicationDaoImp applicationRun = new ApplicationDaoImp();
+		Thread ThreadApplication = new Thread(applicationRun);
 
 		ApiDaoImp ApiRun = new ApiDaoImp();
 		Thread ThreadApi = new Thread(ApiRun);
