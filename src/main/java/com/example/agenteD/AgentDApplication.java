@@ -4,15 +4,10 @@ import com.example.agenteD.MultiThread.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 @SpringBootApplication
 public class AgentDApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AgentDApplication.class, args);
+	public static void main(String[] args) {SpringApplication.run(AgentDApplication.class, args);
 
 		ApplicationThread applicationRun = new ApplicationThread();
 		Thread applicationThread = new Thread(applicationRun);
@@ -32,20 +27,17 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
-		applicationThread.start();
+		//applicationThread.start();
 
-		/*
-		load_balancerThread.start();
+		//load_balancerThread.start();
 
-		apiThread.start();
+		//apiThread.start();
 
-		serviceThread.start();
+		//serviceThread.start();
 
-		persistenceThread.start();
+		//persistenceThread.start();
 
-		integrationThread.start();
-		*/
-
+		//integrationThread.start();
 
 	}
 }
