@@ -27,17 +27,17 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
-		//applicationThread.start();
+		applicationThread.start();
 
-		//load_balancerThread.start();
+		load_balancerThread.start();
 
-		//apiThread.start();
+		apiThread.start();
 
-		//serviceThread.start();
+		serviceThread.start();
 
-		//persistenceThread.start();
+		persistenceThread.start();
 
-		//integrationThread.start();
+		integrationThread.start();
 
 	}
 }
