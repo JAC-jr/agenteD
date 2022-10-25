@@ -1,0 +1,163 @@
+BEGIN;
+
+
+CREATE TABLE IF NOT EXISTS public.api
+(
+    api_id integer NOT NULL,
+    status character varying COLLATE pg_catalog."default",
+    application_id integer,
+    common boolean,
+    description character varying COLLATE pg_catalog."default",
+    service_name character varying COLLATE pg_catalog."default",
+    name_space character varying COLLATE pg_catalog."default",
+    num_test integer,
+    test_duration abstime,
+    consecutive_successfull_test integer,
+    consecutive_failed_test integer,
+    hist_failed_test bigint,
+    hist_successfull_test bigint,
+    min_test_failed integer,
+    max_test_failed integer,
+    low_alarm integer,
+    high_alarm integer,
+    last_test_date date,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT api_pkey PRIMARY KEY (api_id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE TABLE IF NOT EXISTS public.application
+(
+    application_id integer NOT NULL,
+    application_name character varying COLLATE pg_catalog."default",
+    description character varying COLLATE pg_catalog."default",
+    status character varying COLLATE pg_catalog."default",
+    num_test bigint,
+    last_test_date date,
+    successful_consecutive_test integer,
+    failed_consecutive_test integer,
+    history_successful_test bigint,
+    history_failed_test bigint,
+    min_fail_test integer,
+    max_fail_test integer,
+    low_alarm integer,
+    high_alarm integer,
+    test_duration abstime,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT aplication_pkey PRIMARY KEY (application_id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE TABLE IF NOT EXISTS public.integration
+(
+    integration_id bigint NOT NULL,
+    status character varying COLLATE pg_catalog."default",
+    integration_type character varying COLLATE pg_catalog."default",
+    channel character varying COLLATE pg_catalog."default",
+    aplication_id bigint,
+    description character varying COLLATE pg_catalog."default",
+    num_test integer,
+    test_duration abstime,
+    consecutive_successfull_test integer,
+    consecutive_failed_test integer,
+    his_failed_test bigint,
+    his_successfull_test bigint,
+    min_test_failed integer,
+    max_test_failed integer,
+    low_alarm integer,
+    high_alarm integer,
+    last_test_date date,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT integracion_pkey1 PRIMARY KEY (integration_id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE TABLE IF NOT EXISTS public.load_balancer
+(
+    vserver_id integer NOT NULL,
+    description character varying COLLATE pg_catalog."default",
+    status character varying COLLATE pg_catalog."default",
+    ip_server character varying COLLATE pg_catalog."default",
+    aplication_id integer,
+    port character varying COLLATE pg_catalog."default",
+    num_test integer,
+    last_test_date date,
+    successful_consecutive_test integer,
+    failed_consecutive_test integer,
+    history_successfull_test bigint,
+    history_failed_test bigint,
+    min_fail_test integer,
+    max_fail_test integer,
+    low_alarm integer,
+    high_alarm integer,
+    test_duration abstime,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT load_balancing_pkey1 PRIMARY KEY (vserver_id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE TABLE IF NOT EXISTS public.persistence
+(
+    db_id integer NOT NULL,
+    db_name character varying COLLATE pg_catalog."default",
+    status character varying COLLATE pg_catalog."default",
+    description character varying COLLATE pg_catalog."default",
+    application_id integer,
+    service_name character varying COLLATE pg_catalog."default",
+    host character varying COLLATE pg_catalog."default",
+    port character varying COLLATE pg_catalog."default",
+    num_test integer,
+    test_duration abstime,
+    consecutive_successfull_test integer,
+    consecutive_failed_test integer,
+    hist_failed_test bigint,
+    hist_successfull_test bigint,
+    "min_test-failed" integer,
+    max_test_failed integer,
+    low_alarm integer,
+    high_alarm integer,
+    last_test_date date,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT persistence_pkey PRIMARY KEY (db_id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+CREATE TABLE IF NOT EXISTS public.service
+(
+    service_id integer NOT NULL,
+    description character varying COLLATE pg_catalog."default",
+    estatus character varying COLLATE pg_catalog."default",
+    application_id integer,
+    service_name character varying COLLATE pg_catalog."default",
+    operation character varying COLLATE pg_catalog."default",
+    port character varying COLLATE pg_catalog."default",
+    method character varying COLLATE pg_catalog."default",
+    test_url character varying COLLATE pg_catalog."default",
+    num_test integer,
+    "consecutive_succefull-test" integer,
+    consecutive_failed_test integer,
+    hist_successfull_test bigint,
+    hist_failed_test bigint,
+    max_failed_test integer,
+    min_failed_test integer,
+    low_alarm integer,
+    high_alarm integer,
+    test_duration abstime,
+    last_tets_date date,
+    "req/seg" character varying COLLATE pg_catalog."default",
+    CONSTRAINT service_pkey PRIMARY KEY (service_id)
+)
+WITH (
+    OIDS = FALSE
+);
+END;
