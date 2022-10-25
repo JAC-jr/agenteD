@@ -7,8 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AgentDApplication {
 
-	public static void main(String[] args) {SpringApplication.run(AgentDApplication.class, args);
+	public static void main(String[] args) throws InterruptedException {
 
+		SpringApplication.run(AgentDApplication.class, args);
 		ApplicationThread applicationRun = new ApplicationThread();
 		Thread applicationThread = new Thread(applicationRun);
 
@@ -27,17 +28,17 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
-		applicationThread.start();
+		//applicationThread.start();
 
-		load_balancerThread.start();
+		//load_balancerThread.start();
 
-		apiThread.start();
+		//apiThread.start();
 
-		serviceThread.start();
+		//serviceThread.start();
 
-		persistenceThread.start();
+		//persistenceThread.start();
 
-		integrationThread.start();
+		//integrationThread.start();
 
 	}
 }
