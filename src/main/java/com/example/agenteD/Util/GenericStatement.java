@@ -1,8 +1,14 @@
 package com.example.agenteD.Util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 
 public class GenericStatement {
+
+    Logger logger = LoggerFactory.getLogger(GenericStatement.class);
+
     public ResultSet rs;
     Connection c = null;
     PreparedStatement stmt = null;
@@ -20,16 +26,10 @@ public class GenericStatement {
             c.close();
 
         } catch (ClassNotFoundException e) {
+            logger.info("connection to database failure");
             throw new RuntimeException(e);
         }
         return rs;
     }
-
-  /*  public void update_value (String query_post) throws SQLException {
-
-
-        stmt =  c.createStatement();
-        rs = stmt.executeUpdate(query_post);
-    }*/
 }
 
