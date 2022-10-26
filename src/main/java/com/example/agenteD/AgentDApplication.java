@@ -39,5 +39,6 @@ public class AgentDApplication {
 		persistenceThread.start();
 		integrationThread.start();
 	}
+	
 }
 
