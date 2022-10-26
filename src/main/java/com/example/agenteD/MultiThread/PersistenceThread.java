@@ -1,11 +1,13 @@
 package com.example.agenteD.MultiThread;
 
 import com.example.agenteD.Util.GenericStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
 public class PersistenceThread extends GenericStatement implements Runnable {
-
+    Logger logger = LoggerFactory.getLogger(PersistenceThread.class);
     GenericStatement genericStatement = new GenericStatement();
     String query = "SELECT * FROM persistence";
 
@@ -17,7 +19,7 @@ public class PersistenceThread extends GenericStatement implements Runnable {
             try {
                 genericStatement.createStatement(query);
 
-                System.out.println("persistence data returned ");
+                logger.info("persistence data returned from database");
 
                 while (genericStatement.rs.next()) {
 
@@ -30,23 +32,22 @@ public class PersistenceThread extends GenericStatement implements Runnable {
                     String port = genericStatement.rs.getString("port");
                     long test_interv = genericStatement.rs.getLong("test_interv");
 
-
-                    System.out.println("db_id = " + db_id + ", db_name = " + db_name
-                            + ", description = " + description + ", application_id = " + application_id
-                            + ", service_name = " + service_name + ", service_name = " + service_name
-                            + ", host = " + host + ", port = " + port);
+                    logger.info("db_id = {}, db_name = {}, description = {},application_id = {}, " +
+                                    "service_name = {}, host = {}, port = {}"
+                            ,db_id, db_name, description, application_id,
+                            service_name, host, port);
 
                     try {
                         Thread.sleep(test_interv);
                     } catch (InterruptedException e) {
+                        logger.error("PersistenceThread interruption");
                         throw new RuntimeException(e);
                     }
-
                 }
             } catch (SQLException e) {
+                logger.error("PersistenceThread failed to get data from database");
                 throw new RuntimeException(e);
             }
-
         } while (true);
     }
 }

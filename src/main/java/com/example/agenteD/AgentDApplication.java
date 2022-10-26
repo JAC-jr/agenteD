@@ -1,6 +1,8 @@
 package com.example.agenteD;
 
 import com.example.agenteD.MultiThread.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AgentDApplication {
 
 	public static void main(String[] args) throws InterruptedException {
+
+		Logger logger = LoggerFactory.getLogger(AgentDApplication.class);
 
 		SpringApplication.run(AgentDApplication.class, args);
 		ApplicationThread applicationRun = new ApplicationThread();
@@ -28,18 +32,12 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
-		//applicationThread.start();
-
-		//load_balancerThread.start();
-
-		//apiThread.start();
-
-		//serviceThread.start();
-
-		//persistenceThread.start();
-
-		//integrationThread.start();
-
+		applicationThread.start();
+		load_balancerThread.start();
+		apiThread.start();
+		serviceThread.start();
+		persistenceThread.start();
+		integrationThread.start();
 	}
 }
 

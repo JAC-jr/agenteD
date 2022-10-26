@@ -1,6 +1,0 @@
-------database-----
-host
-name
-maintendance
-username
-password

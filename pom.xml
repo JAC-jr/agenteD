@@ -68,7 +68,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${project.parent.version}</version>\\en caso de "org.springframework.boot not found"
+				<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>

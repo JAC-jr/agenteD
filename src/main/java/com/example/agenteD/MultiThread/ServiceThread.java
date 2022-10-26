@@ -1,11 +1,13 @@
 package com.example.agenteD.MultiThread;
 
 import com.example.agenteD.Util.GenericStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
 public class ServiceThread extends GenericStatement implements Runnable {
-
+    Logger logger = LoggerFactory.getLogger(ServiceThread.class);
     GenericStatement genericStatement = new GenericStatement();
     String query = "SELECT * FROM service";
 
@@ -17,7 +19,7 @@ public class ServiceThread extends GenericStatement implements Runnable {
             try {
                 genericStatement.createStatement(query);
 
-                System.out.println("service data returned ");
+                logger.info("service data returned from database");
 
                 while (genericStatement.rs.next()) {
 
@@ -28,19 +30,19 @@ public class ServiceThread extends GenericStatement implements Runnable {
                     String port = genericStatement.rs.getString("port");
                     long test_interv = genericStatement.rs.getLong("test_interv");
 
-
-                    System.out.println("service_id = " + service_id + ", description = " + description
-                            + ", application_id = " + application_id + ", service_name = " + service_name
-                            + ", port = " + port);
+                    logger.info("service_id = {}, description = {}, application_id = {},service_name = {}, port = {}"
+                            ,service_id, description, application_id, service_name, port);
 
                     try {
                         Thread.sleep(test_interv);
                     } catch (InterruptedException e) {
+                        logger.error("ServiceThread interruption");
                         throw new RuntimeException(e);
                     }
 
                 }
             } catch (SQLException e) {
+                logger.error("ServiceThread failed to get data from database");
                 throw new RuntimeException(e);
             }
         } while (true);
