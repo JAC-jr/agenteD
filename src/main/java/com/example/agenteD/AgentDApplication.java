@@ -40,5 +40,9 @@ public class AgentDApplication {
 		integrationThread.start();
 	}
 
+<<<<<<< Updated upstream
+=======
+	
+>>>>>>> Stashed changes
 }
 
