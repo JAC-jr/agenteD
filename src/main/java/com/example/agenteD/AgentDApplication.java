@@ -32,6 +32,7 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
+		logger.info("initialization of threads");
 		applicationThread.start();
 		load_balancerThread.start();
 		apiThread.start();
