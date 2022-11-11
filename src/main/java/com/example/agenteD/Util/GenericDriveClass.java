@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-public class GenericStatement {
+public class GenericDriveClass {
 
-    Logger logger = LoggerFactory.getLogger(GenericStatement.class);
+    Logger logger = LoggerFactory.getLogger(GenericDriveClass.class);
 
     public ResultSet rs;
     Connection c = null;

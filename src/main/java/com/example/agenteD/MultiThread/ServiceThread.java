@@ -1,14 +1,14 @@
 package com.example.agenteD.MultiThread;
 
-import com.example.agenteD.Util.GenericStatement;
+import com.example.agenteD.Util.GenericDriveClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
-public class ServiceThread extends GenericStatement implements Runnable {
+public class ServiceThread extends GenericDriveClass implements Runnable {
     Logger logger = LoggerFactory.getLogger(ServiceThread.class);
-    GenericStatement genericStatement = new GenericStatement();
+    GenericDriveClass genericStatement = new GenericDriveClass();
     String query = "SELECT * FROM service";
 
     @Override
