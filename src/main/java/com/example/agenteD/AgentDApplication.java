@@ -1,10 +1,16 @@
 package com.example.agenteD;
 
+import com.example.agenteD.Entity.Api;
 import com.example.agenteD.MultiThread.*;
+import com.example.agenteD.Repository.ApiRepository;
+import com.example.agenteD.Util.TestJpa;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
 
 @SpringBootApplication
 public class AgentDApplication {
@@ -32,13 +38,18 @@ public class AgentDApplication {
 		IntegrationThread integrationRun = new IntegrationThread();
 		Thread integrationThread = new Thread(integrationRun);
 
-		logger.info("initialization of threads");
+		/*logger.info("initialization of threads");
 		applicationThread.start();
 		load_balancerThread.start();
 		apiThread.start();
 		serviceThread.start();
 		persistenceThread.start();
-		integrationThread.start();
+		integrationThread.start();*/
+
+		TestJpa testRun = new TestJpa();
+		Thread testJpaThread = new Thread(testRun);
+
+		testJpaThread.start();
 	}
 }
 
