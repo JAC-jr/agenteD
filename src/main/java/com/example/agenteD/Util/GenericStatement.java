@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,18 +30,22 @@ public class GenericStatement{
     ServiceRepository serviceRepository;
 
     @Async
-    public CompletableFuture<List<Api>> apilistCompletableFuture() throws InterruptedException{
+    public CompletableFuture<List<Api>> apiCompletableFuture() throws InterruptedException{
         logger.info("Looking up api info");
         List<Api> results = apiRepository.findAll();
         // Artificial delay of 1s for demonstration purposes
         Thread.sleep(1000L);
         logger.info("{}", results);
+        for(Api str : results)
+        {
+            System.out.println(str);
+        }
         System.out.println();
         return CompletableFuture.completedFuture(results);
     }
 
     @Async
-    public CompletableFuture<List<Application>> applicationlistCompletableFuture() throws InterruptedException {
+    public CompletableFuture<List<Application>> applicationCompletableFuture() throws InterruptedException {
         logger.info("Looking up application info");
         List<Application> results = applicationRepository.findAll();
         // Artificial delay of 1s for demonstration purposes
@@ -50,7 +54,7 @@ public class GenericStatement{
     }
 
     @Async
-    public CompletableFuture<List<Integration>> integrationlistCompletableFuture() throws InterruptedException{
+    public CompletableFuture<List<Integration>> integrationCompletableFuture() throws InterruptedException{
         logger.info("Looking up integration info");
         List<Integration> results = integrationRepository.findAll();
         // Artificial delay of 1s for demonstration purposes
