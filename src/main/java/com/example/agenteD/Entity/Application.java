@@ -16,7 +16,7 @@ public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id", nullable = false)
-    private Integer id;
+    private Integer application_id;
 
     @Column(name = "application_name", length = 45)
     private String applicationName;

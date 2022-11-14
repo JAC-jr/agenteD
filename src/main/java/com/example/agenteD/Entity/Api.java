@@ -15,8 +15,8 @@ import java.time.LocalDate;
 public class Api {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @Column(name = "api_id", nullable = false)
+    private Long api_id;
 
     @Column(name = "status", length = 45)
     private String status;
