@@ -1,9 +1,11 @@
 package com.example.agenteD.Entity;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Builder
 @AllArgsConstructor
@@ -62,4 +64,25 @@ public class Api {
 
     @Column(name = "\"req/seg\"", length = 45)
     private String reqSeg;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "api_id = " + api_id + ", " +
+                "status = " + status + ", " +
+                "applicationId = " + applicationId + ", " +
+                "common = " + common + ", " +
+                "description = " + description + ", " +
+                "numTest = " + numTest + ", " +
+                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
+                "histFailedTest = " + histFailedTest + ", " +
+                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "minTestFailed = " + minTestFailed + ", " +
+                "maxTestFailed = " + maxTestFailed + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "lastTestDate = " + lastTestDate + ", " +
+                "reqSeg = " + reqSeg + ")";
+    }
 }

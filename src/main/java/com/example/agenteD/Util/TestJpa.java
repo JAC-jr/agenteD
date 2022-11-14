@@ -20,7 +20,7 @@ public class TestJpa implements CommandLineRunner {
 
     public void run(String... args) throws Exception {
 
-
+        while (true){
         CompletableFuture<List<Api>> apiResponse = genericStatement.apiCompletableFuture();
         CompletableFuture<List<Application>> applicationResponse = genericStatement.applicationCompletableFuture();
         CompletableFuture<List<Integration>> integrationResponse = genericStatement.integrationCompletableFuture();
@@ -30,6 +30,7 @@ public class TestJpa implements CommandLineRunner {
 
         CompletableFuture.allOf(apiResponse, applicationResponse, integrationResponse,
                 loadBalancerResponse, persistenceResponse, serviceResponse).join();
+        }
     }
 }
 

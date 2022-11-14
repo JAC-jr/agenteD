@@ -78,4 +78,29 @@ public class Service {
     @Column(name = "test_interv")
     private Long testInterv;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "description = " + description + ", " +
+                "estatus = " + estatus + ", " +
+                "applicationId = " + applicationId + ", " +
+                "serviceName = " + serviceName + ", " +
+                "operation = " + operation + ", " +
+                "port = " + port + ", " +
+                "method = " + method + ", " +
+                "testUrl = " + testUrl + ", " +
+                "numTest = " + numTest + ", " +
+                "consecutiveSuccefullTest = " + consecutiveSuccefullTest + ", " +
+                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
+                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "histFailedTest = " + histFailedTest + ", " +
+                "maxFailedTest = " + maxFailedTest + ", " +
+                "minFailedTest = " + minFailedTest + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "lastTetsDate = " + lastTetsDate + ", " +
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
+    }
 }

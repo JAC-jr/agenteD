@@ -69,4 +69,26 @@ public class LoadBalancer {
     @Column(name = "test_interv")
     private Long testInterv;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "description = " + description + ", " +
+                "status = " + status + ", " +
+                "ipServer = " + ipServer + ", " +
+                "aplicationId = " + aplicationId + ", " +
+                "port = " + port + ", " +
+                "numTest = " + numTest + ", " +
+                "lastTestDate = " + lastTestDate + ", " +
+                "successfulConsecutiveTest = " + successfulConsecutiveTest + ", " +
+                "failedConsecutiveTest = " + failedConsecutiveTest + ", " +
+                "historySuccessfullTest = " + historySuccessfullTest + ", " +
+                "historyFailedTest = " + historyFailedTest + ", " +
+                "minFailTest = " + minFailTest + ", " +
+                "maxFailTest = " + maxFailTest + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
+    }
 }

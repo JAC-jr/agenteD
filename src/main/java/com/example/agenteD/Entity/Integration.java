@@ -69,4 +69,26 @@ public class Integration {
     @Column(name = "test_interv")
     private Long testInterv;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "status = " + status + ", " +
+                "integrationType = " + integrationType + ", " +
+                "channel = " + channel + ", " +
+                "aplicationId = " + aplicationId + ", " +
+                "description = " + description + ", " +
+                "numTest = " + numTest + ", " +
+                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
+                "hisFailedTest = " + hisFailedTest + ", " +
+                "hisSuccessfullTest = " + hisSuccessfullTest + ", " +
+                "minTestFailed = " + minTestFailed + ", " +
+                "maxTestFailed = " + maxTestFailed + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "lastTestDate = " + lastTestDate + ", " +
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
+    }
 }

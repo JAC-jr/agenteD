@@ -75,4 +75,28 @@ public class Persistence {
     @Column(name = "test_interv")
     private Long testInterv;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "dbName = " + dbName + ", " +
+                "status = " + status + ", " +
+                "description = " + description + ", " +
+                "applicationId = " + applicationId + ", " +
+                "serviceName = " + serviceName + ", " +
+                "host = " + host + ", " +
+                "port = " + port + ", " +
+                "numTest = " + numTest + ", " +
+                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
+                "histFailedTest = " + histFailedTest + ", " +
+                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "minTestFailed = " + minTestFailed + ", " +
+                "maxTestFailed = " + maxTestFailed + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "lastTestDate = " + lastTestDate + ", " +
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
+    }
 }
