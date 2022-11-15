@@ -11,24 +11,35 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig {
 
-    @Bean(name = "ApiThreadPoolTaskExecutor")
-    public Executor apiThreadPoolTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("apiThread--");
-        executor.initialize();
-        return executor;
-    }
-
-    @Bean(name = "SubProcessThreadPoolTaskExecutor")
+    @Bean(name = "PrincipalThreadPoolTaskExecutor")
     public Executor subProcessThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(6);
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("ApiSubThread");
+        executor.initialize();
+        return executor;
+    }
+
+    @Bean(name = "ApiThreadPoolTaskExecutor")
+    public Executor apiThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("apiThread--");
+        executor.initialize();
+        return executor;
+    }
+
+    @Bean(name = "ApplicationThreadPoolTaskExecutor")
+    public Executor applicationThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("applicationThread");
         executor.initialize();
         return executor;
     }

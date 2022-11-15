@@ -22,8 +22,8 @@ public class FuturosCompletables implements CommandLineRunner {
 
             CompletableFuture<List<Api>> apiResponse = genericStatement.apiCompletableFuture();
 
-       /* CompletableFuture<List<Application>> applicationResponse = genericStatement.applicationCompletableFuture();
-        CompletableFuture<List<Integration>> integrationResponse = genericStatement.integrationCompletableFuture();
+        CompletableFuture<List<Application>> applicationResponse = genericStatement.applicationCompletableFuture();
+       /* CompletableFuture<List<Integration>> integrationResponse = genericStatement.integrationCompletableFuture();
         CompletableFuture<List<LoadBalancer>> loadBalancerResponse = genericStatement.loadBalancerCompletableFuture();
         CompletableFuture<List<Persistence>> persistenceResponse = genericStatement.persistenceCompletableFuture();
         CompletableFuture<List<Service>> serviceResponse = genericStatement.serviceCompletableFuture();
