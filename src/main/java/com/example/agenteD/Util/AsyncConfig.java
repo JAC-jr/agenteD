@@ -11,26 +11,72 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig {
 
-    @Bean(name = "PrimaryThreadPoolTaskExecutor")
-    public Executor PrimaryThreadPoolTaskExecutor() {
+    @Bean(name = "ApiThreadPoolTaskExecutor")
+    public Executor apiThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("Test1-");
+        executor.setThreadNamePrefix("apiThread--");
         executor.initialize();
         return executor;
     }
 
-    @Bean(name = "SecondaryThreadPoolTaskExecutor")
-    public Executor SecondaryThreadPoolTaskExecutor(){
+    @Bean(name = "SubProcessThreadPoolTaskExecutor")
+    public Executor subProcessThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(3);
+        executor.setMaxPoolSize(6);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("Test2-");
+        executor.setThreadNamePrefix("ApiSubThread");
         executor.initialize();
         return executor;
     }
+
+   @Bean(name = "IntegrationThreadPoolTaskExecutor")
+    public Executor integrationThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("IntegrationThread--");
+        executor.initialize();
+        return executor;
+    }
+
+   /*  @Bean(name = "LoadBalancerThreadPoolTaskExecutor")
+    public Executor loadBalancerThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("LoadBalancerThread--");
+        executor.initialize();
+        return executor;
+    }
+
+    @Bean(name = "PersistenceThreadPoolTaskExecutor")
+    public Executor persistenceThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("PersistenceThread--");
+        executor.initialize();
+        return executor;
+    }
+
+    @Bean(name = "ServiceThreadPoolTaskExecutor")
+    public Executor serviceThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("ServiceThread--");
+        executor.initialize();
+        return executor;
+    }
+
+     */
 }
 

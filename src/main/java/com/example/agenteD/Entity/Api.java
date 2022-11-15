@@ -1,24 +1,22 @@
 package com.example.agenteD.Entity;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "Api")
 @Table(name = "api")
 public class Api {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_id", nullable = false)
-    private Long api_id;
+    private Integer api_id;
 
     @Column(name = "status", length = 45)
     private String status;
@@ -31,6 +29,12 @@ public class Api {
 
     @Column(name = "description", length = 45)
     private String description;
+
+    @Column(name = "service_name", length = 45)
+    private String serviceName;
+
+    @Column(name = "name_space", length = 45)
+    private String nameSpace;
 
     @Column(name = "num_test")
     private Integer numTest;
@@ -65,6 +69,9 @@ public class Api {
     @Column(name = "\"req/seg\"", length = 45)
     private String reqSeg;
 
+    @Column(name = "test_interv")
+    private Long testInterv;
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
@@ -73,6 +80,8 @@ public class Api {
                 "applicationId = " + applicationId + ", " +
                 "common = " + common + ", " +
                 "description = " + description + ", " +
+                "serviceName = " + serviceName + ", " +
+                "nameSpace = " + nameSpace + ", " +
                 "numTest = " + numTest + ", " +
                 "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
                 "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
@@ -83,6 +92,7 @@ public class Api {
                 "lowAlarm = " + lowAlarm + ", " +
                 "highAlarm = " + highAlarm + ", " +
                 "lastTestDate = " + lastTestDate + ", " +
-                "reqSeg = " + reqSeg + ")";
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
     }
 }

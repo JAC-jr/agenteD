@@ -24,18 +24,19 @@ public class GenericStatement{
     @Autowired
     ApiService apiService;
 
-    @Async("PrimaryThreadPoolTaskExecutor")
+    @Async("ApiThreadPoolTaskExecutor")
     public CompletableFuture<List<Api>> apiCompletableFuture() throws InterruptedException{
         logger.info("Looking up api info");
         List<Api> result = apiRepository.findAll();
-
-        result.forEach(p -> {
-            logger.info("{}", p);
-            apiService.subProcess((List<Api>) result);
+        Thread.sleep(1000);
+        result.forEach(api -> {
+            logger.info("{}", api);
+            //Integer ID = api.getApi_id();
+            apiService.objetResponse(api);
         });
         return CompletableFuture.completedFuture(result);
     }
-    @Async("PrimaryThreadPoolTaskExecutor")
+   /* @Async("PrimaryThreadPoolTaskExecutor")
     public CompletableFuture<List<Application>> applicationCompletableFuture() throws InterruptedException {
         logger.info("Looking up application info");
         List<Application> result = applicationRepository.findAll();
@@ -89,6 +90,8 @@ public class GenericStatement{
         });
         return CompletableFuture.completedFuture(result);
     }
+
+    */
 
 }
 
