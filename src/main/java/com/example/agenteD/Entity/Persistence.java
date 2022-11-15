@@ -16,7 +16,7 @@ public class Persistence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "db_id", nullable = false)
-    private Integer id;
+    private Integer persistence_id;
 
     @Column(name = "db_name", length = 45)
     private String dbName;
@@ -78,7 +78,7 @@ public class Persistence {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + persistence_id + ", " +
                 "dbName = " + dbName + ", " +
                 "status = " + status + ", " +
                 "description = " + description + ", " +

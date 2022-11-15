@@ -16,7 +16,7 @@ public class Integration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "integration_id", nullable = false)
-    private Long id;
+    private Long integration_id;
 
     @Column(name = "status", length = 45)
     private String status;
@@ -72,7 +72,7 @@ public class Integration {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + integration_id + ", " +
                 "status = " + status + ", " +
                 "integrationType = " + integrationType + ", " +
                 "channel = " + channel + ", " +

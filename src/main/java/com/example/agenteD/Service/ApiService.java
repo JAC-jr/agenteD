@@ -28,7 +28,6 @@ public class ApiService {
     }*/
     @Async("SubProcessThreadPoolTaskExecutor")
    public void objetResponse(Api api){
-
        while (true){
            try {
                Long objectResponse = subProcess.subProcessCompletableFuture(api).get();

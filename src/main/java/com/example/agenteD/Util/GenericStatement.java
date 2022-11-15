@@ -81,9 +81,9 @@ public class GenericStatement{
     }
 
     @Async("PrimaryThreadPoolTaskExecutor")
-    public CompletableFuture<List<com.example.agenteD.Entity.Service>> serviceCompletableFuture() throws InterruptedException{
+    public CompletableFuture<List<com.example.agenteD.Entity.Servicios>> serviceCompletableFuture() throws InterruptedException{
         logger.info("Looking up service info");
-        List<com.example.agenteD.Entity.Service> result = serviceRepository.findAll();
+        List<com.example.agenteD.Entity.Servicios> result = serviceRepository.findAll();
 
         result.forEach(p -> {
             logger.info("{}", p);

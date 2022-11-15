@@ -10,13 +10,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "Service")
-@Table(name = "service")
-public class Service {
+@Entity(name = "Services")
+@Table(name = "services")
+public class Servicios {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id", nullable = false)
-    private Integer id;
+    private Integer service_id;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -81,7 +81,7 @@ public class Service {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + service_id+ ", " +
                 "description = " + description + ", " +
                 "estatus = " + estatus + ", " +
                 "applicationId = " + applicationId + ", " +

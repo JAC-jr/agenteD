@@ -16,7 +16,7 @@ public class LoadBalancer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vserver_id", nullable = false)
-    private Integer id;
+    private Integer vserver_id;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -72,7 +72,7 @@ public class LoadBalancer {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + vserver_id + ", " +
                 "description = " + description + ", " +
                 "status = " + status + ", " +
                 "ipServer = " + ipServer + ", " +
