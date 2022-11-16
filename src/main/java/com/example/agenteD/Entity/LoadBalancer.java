@@ -16,7 +16,7 @@ public class LoadBalancer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vserver_id", nullable = false)
-    private Integer id;
+    private Integer vserver_id;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -27,8 +27,8 @@ public class LoadBalancer {
     @Column(name = "ip_server", length = 45)
     private String ipServer;
 
-    @Column(name = "aplication_id")
-    private Integer aplicationId;
+    @Column(name = "application_id")
+    private Integer applicationId;
 
     @Column(name = "port", length = 45)
     private String port;
@@ -45,8 +45,8 @@ public class LoadBalancer {
     @Column(name = "failed_consecutive_test")
     private Integer failedConsecutiveTest;
 
-    @Column(name = "history_successfull_test")
-    private Long historySuccessfullTest;
+    @Column(name = "history_successful_test")
+    private Long historySuccessfulTest;
 
     @Column(name = "history_failed_test")
     private Long historyFailedTest;
@@ -72,17 +72,17 @@ public class LoadBalancer {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + vserver_id + ", " +
                 "description = " + description + ", " +
                 "status = " + status + ", " +
                 "ipServer = " + ipServer + ", " +
-                "aplicationId = " + aplicationId + ", " +
+                "applicationId = " + applicationId + ", " +
                 "port = " + port + ", " +
                 "numTest = " + numTest + ", " +
                 "lastTestDate = " + lastTestDate + ", " +
                 "successfulConsecutiveTest = " + successfulConsecutiveTest + ", " +
                 "failedConsecutiveTest = " + failedConsecutiveTest + ", " +
-                "historySuccessfullTest = " + historySuccessfullTest + ", " +
+                "historySuccessfulTest = " + historySuccessfulTest + ", " +
                 "historyFailedTest = " + historyFailedTest + ", " +
                 "minFailTest = " + minFailTest + ", " +
                 "maxFailTest = " + maxFailTest + ", " +

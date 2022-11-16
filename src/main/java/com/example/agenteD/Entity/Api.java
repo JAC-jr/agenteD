@@ -39,8 +39,8 @@ public class Api {
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successfull_test")
-    private Integer consecutiveSuccessfullTest;
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
 
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
@@ -48,8 +48,8 @@ public class Api {
     @Column(name = "hist_failed_test")
     private Long histFailedTest;
 
-    @Column(name = "hist_successfull_test")
-    private Long histSuccessfullTest;
+    @Column(name = "hist_successful_test")
+    private Long histSuccessfulTest;
 
     @Column(name = "min_test_failed")
     private Integer minTestFailed;
@@ -83,10 +83,10 @@ public class Api {
                 "serviceName = " + serviceName + ", " +
                 "nameSpace = " + nameSpace + ", " +
                 "numTest = " + numTest + ", " +
-                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
                 "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
                 "histFailedTest = " + histFailedTest + ", " +
-                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "histSuccessfulTest = " + histSuccessfulTest + ", " +
                 "minTestFailed = " + minTestFailed + ", " +
                 "maxTestFailed = " + maxTestFailed + ", " +
                 "lowAlarm = " + lowAlarm + ", " +

@@ -1,9 +1,7 @@
-package com.example.agenteD.Util;
+package com.example.agenteD.Refractory;
 
 import com.example.agenteD.Entity.*;
 import com.example.agenteD.Repository.*;
-import com.example.agenteD.Service.ApiService;
-import com.example.agenteD.Service.ApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +12,15 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class GenericStatement{
-    Logger logger = LoggerFactory.getLogger(GenericStatement.class);
+public class EntityRefractory {
+    Logger logger = LoggerFactory.getLogger(EntityRefractory.class);
     @Autowired ApiRepository apiRepository;
     @Autowired ApplicationRepository applicationRepository;
     @Autowired IntegrationRepository integrationRepository;
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-    @Autowired
-    ApiService apiService;
-    @Autowired
-    ApplicationService applicationService;
-
+    @Autowired objetRefractory objetRefractory;
     @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Api>> apiCompletableFuture() throws InterruptedException{
         logger.info("Looking up api info");
@@ -34,10 +28,11 @@ public class GenericStatement{
         Thread.sleep(1000);
         result.forEach(api -> {
             logger.info("{}", api);
-            apiService.objetResponse(api);
+            objetRefractory.objetResponse(api);
         });
         return CompletableFuture.completedFuture(result);
     }
+
     @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Application>> applicationCompletableFuture() throws InterruptedException {
         logger.info("Looking up application info");
@@ -45,18 +40,19 @@ public class GenericStatement{
 
         result.forEach(application -> {
             logger.info("{}", application);
-            applicationService.objetResponse(application);
+            objetRefractory.objetResponse(application);
         });
         return CompletableFuture.completedFuture(result);
     }
 
-   /* @Async("PrincipalThreadPoolTaskExecutor")
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Integration>> integrationCompletableFuture() throws InterruptedException{
         logger.info("Looking up integration info");
         List<Integration> result = integrationRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(integration -> {
+            logger.info("{}", integration);
+            objetRefractory.objetResponse(integration);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -66,8 +62,9 @@ public class GenericStatement{
         logger.info("Looking up loadBalancer info");
         List<LoadBalancer> result = loadBalancerRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(loadBalancer -> {
+            logger.info("{}", loadBalancer);
+            objetRefractory.objetResponse(loadBalancer);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -77,8 +74,9 @@ public class GenericStatement{
         logger.info("Looking up Persistence info");
         List<Persistence> result = persistenceRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(persistence -> {
+            logger.info("{}", persistence);
+            objetRefractory.objetResponse(persistence);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -88,13 +86,11 @@ public class GenericStatement{
         logger.info("Looking up service info");
         List<com.example.agenteD.Entity.Service> result = serviceRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(service -> {
+            logger.info("{}", service);
+            objetRefractory.objetResponse(service);
         });
         return CompletableFuture.completedFuture(result);
     }
-
-    */
-
 }
 

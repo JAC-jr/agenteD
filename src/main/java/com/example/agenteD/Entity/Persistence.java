@@ -16,7 +16,7 @@ public class Persistence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "db_id", nullable = false)
-    private Integer id;
+    private Integer db_id;
 
     @Column(name = "db_name", length = 45)
     private String dbName;
@@ -42,8 +42,8 @@ public class Persistence {
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successfull_test")
-    private Integer consecutiveSuccessfullTest;
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
 
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
@@ -51,8 +51,8 @@ public class Persistence {
     @Column(name = "hist_failed_test")
     private Long histFailedTest;
 
-    @Column(name = "hist_successfull_test")
-    private Long histSuccessfullTest;
+    @Column(name = "hist_successful_test")
+    private Long histSuccessfulTest;
 
     @Column(name = "\"min_test-failed\"")
     private Integer minTestFailed;
@@ -78,7 +78,7 @@ public class Persistence {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + db_id + ", " +
                 "dbName = " + dbName + ", " +
                 "status = " + status + ", " +
                 "description = " + description + ", " +
@@ -87,10 +87,10 @@ public class Persistence {
                 "host = " + host + ", " +
                 "port = " + port + ", " +
                 "numTest = " + numTest + ", " +
-                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
                 "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
                 "histFailedTest = " + histFailedTest + ", " +
-                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "histSuccessfulTest = " + histSuccessfulTest + ", " +
                 "minTestFailed = " + minTestFailed + ", " +
                 "maxTestFailed = " + maxTestFailed + ", " +
                 "lowAlarm = " + lowAlarm + ", " +

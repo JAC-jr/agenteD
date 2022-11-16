@@ -16,7 +16,7 @@ public class Integration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "integration_id", nullable = false)
-    private Long id;
+    private Long integration_id;
 
     @Column(name = "status", length = 45)
     private String status;
@@ -27,8 +27,8 @@ public class Integration {
     @Column(name = "channel", length = 45)
     private String channel;
 
-    @Column(name = "aplication_id")
-    private Long aplicationId;
+    @Column(name = "application_id")
+    private Long applicationId;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -36,8 +36,8 @@ public class Integration {
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successfull_test")
-    private Integer consecutiveSuccessfullTest;
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
 
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
@@ -45,8 +45,8 @@ public class Integration {
     @Column(name = "his_failed_test")
     private Long hisFailedTest;
 
-    @Column(name = "his_successfull_test")
-    private Long hisSuccessfullTest;
+    @Column(name = "his_successful_test")
+    private Long hisSuccessfulTest;
 
     @Column(name = "min_test_failed")
     private Integer minTestFailed;
@@ -72,17 +72,17 @@ public class Integration {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
+                "id = " + integration_id + ", " +
                 "status = " + status + ", " +
                 "integrationType = " + integrationType + ", " +
                 "channel = " + channel + ", " +
-                "aplicationId = " + aplicationId + ", " +
+                "applicationId = " + applicationId + ", " +
                 "description = " + description + ", " +
                 "numTest = " + numTest + ", " +
-                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
                 "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
                 "hisFailedTest = " + hisFailedTest + ", " +
-                "hisSuccessfullTest = " + hisSuccessfullTest + ", " +
+                "hisSuccessfulTest = " + hisSuccessfulTest + ", " +
                 "minTestFailed = " + minTestFailed + ", " +
                 "maxTestFailed = " + maxTestFailed + ", " +
                 "lowAlarm = " + lowAlarm + ", " +

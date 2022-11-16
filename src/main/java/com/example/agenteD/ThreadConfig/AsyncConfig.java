@@ -1,4 +1,4 @@
-package com.example.agenteD.Util;
+package com.example.agenteD.ThreadConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class AsyncConfig {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(6);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("ApiSubThread");
+        executor.setThreadNamePrefix("Thread--");
         executor.initialize();
         return executor;
     }
@@ -55,7 +55,7 @@ public class AsyncConfig {
         return executor;
     }
 
-   /*  @Bean(name = "LoadBalancerThreadPoolTaskExecutor")
+    @Bean(name = "LoadBalancerThreadPoolTaskExecutor")
     public Executor loadBalancerThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
@@ -87,7 +87,5 @@ public class AsyncConfig {
         executor.initialize();
         return executor;
     }
-
-     */
 }
 
