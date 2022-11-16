@@ -1,4 +1,4 @@
-package com.example.agenteD.Entity;
+package com.example.MonitorAgent.Entity;
 
 import lombok.*;
 
@@ -10,25 +10,34 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "Integration")
-@Table(name = "integration")
-public class Integration {
+@Entity(name = "Persistence")
+@Table(name = "persistence")
+public class Persistence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "integration_id", nullable = false)
-    private Long integration_id;
+    @Column(name = "db_id", nullable = false)
+    private Integer db_id;
+
+    @Column(name = "db_name", length = 45)
+    private String dbName;
 
     @Column(name = "status", length = 45)
     private String status;
 
-    @Column(name = "integration_type", length = 45)
-    private String integrationType;
-
-    @Column(name = "channel", length = 45)
-    private String channel;
-
     @Column(name = "description", length = 45)
     private String description;
+
+    @Column(name = "application_id")
+    private Integer applicationId;
+
+    @Column(name = "service_name", length = 45)
+    private String serviceName;
+
+    @Column(name = "host", length = 45)
+    private String host;
+
+    @Column(name = "port", length = 45)
+    private String port;
 
     @Column(name = "num_test")
     private Integer numTest;
@@ -36,10 +45,10 @@ public class Integration {
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
-    @Column(name = "his_failed_test")
-    private Long hisFailedTest;
+    @Column(name = "hist_failed_test")
+    private Long histFailedTest;
 
-    @Column(name = "min_test_failed")
+    @Column(name = "\"min_test-failed\"")
     private Integer minTestFailed;
 
     @Column(name = "max_test_failed")
@@ -60,13 +69,10 @@ public class Integration {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Column(name = "application_id")
-    private Long applicationId;
-
     @Column(name = "consecutive_successful_test")
     private Integer consecutiveSuccessfulTest;
 
-    @Column(name = "his_successful_test")
-    private Long hisSuccessfulTest;
+    @Column(name = "hist_successful_test")
+    private Long histSuccessfulTest;
 
 }

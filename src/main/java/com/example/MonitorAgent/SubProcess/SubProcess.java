@@ -1,7 +1,7 @@
-package com.example.agenteD.SubProcess;
+package com.example.MonitorAgent.SubProcess;
 
-import com.example.agenteD.Entity.*;
-import com.example.agenteD.Repository.ApplicationRepository;
+import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.Repository.ApplicationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class SubProcess {
         return CompletableFuture.completedFuture(result);
     }
 
-    public CompletableFuture<Long> serviceSubProcessCompletableFuture(com.example.agenteD.Entity.Service service) throws InterruptedException{
+    public CompletableFuture<Long> serviceSubProcessCompletableFuture(com.example.MonitorAgent.Entity.Service service) throws InterruptedException{
         Long result = service.getTestInterv();
         logger.info("service_id = {}, testInterv = {}",service.getService_id(), result);
         Thread.sleep(result);

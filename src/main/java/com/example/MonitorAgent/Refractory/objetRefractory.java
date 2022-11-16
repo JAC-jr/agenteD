@@ -1,7 +1,7 @@
-package com.example.agenteD.Refractory;
+package com.example.MonitorAgent.Refractory;
 
-import com.example.agenteD.Entity.*;
-import com.example.agenteD.SubProcess.SubProcess;
+import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.SubProcess.SubProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class objetRefractory {
     }
 
     @Async("ServiceThreadPoolTaskExecutor")
-    public void objetResponse(com.example.agenteD.Entity.Service service){
+    public void objetResponse(com.example.MonitorAgent.Entity.Service service){
 
         while (true){
             try {

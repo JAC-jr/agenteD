@@ -1,6 +1,6 @@
-package com.example.agenteD.Repository;
+package com.example.MonitorAgent.Repository;
 
-import com.example.agenteD.Entity.Persistence;
+import com.example.MonitorAgent.Entity.Persistence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

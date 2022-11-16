@@ -1,6 +1,6 @@
-package com.example.agenteD.Repository;
+package com.example.MonitorAgent.Repository;
 
-import com.example.agenteD.Entity.LoadBalancer;
+import com.example.MonitorAgent.Entity.LoadBalancer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.agenteD.ThreadConfig;
+package com.example.MonitorAgent.ThreadConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

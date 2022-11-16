@@ -1,4 +1,4 @@
-package com.example.agenteD.Entity;
+package com.example.MonitorAgent.Entity;
 
 import lombok.*;
 

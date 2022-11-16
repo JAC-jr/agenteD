@@ -1,7 +1,7 @@
-package com.example.agenteD.Refractory;
+package com.example.MonitorAgent.Refractory;
 
-import com.example.agenteD.Entity.*;
-import com.example.agenteD.Repository.*;
+import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,9 +82,9 @@ public class EntityRefractory {
     }
 
     @Async("PrincipalThreadPoolTaskExecutor")
-    public CompletableFuture<List<com.example.agenteD.Entity.Service>> serviceCompletableFuture() throws InterruptedException{
+    public CompletableFuture<List<com.example.MonitorAgent.Entity.Service>> serviceCompletableFuture() throws InterruptedException{
         logger.info("Looking up service info");
-        List<com.example.agenteD.Entity.Service> result = serviceRepository.findAll();
+        List<com.example.MonitorAgent.Entity.Service> result = serviceRepository.findAll();
 
         result.forEach(service -> {
             logger.info("{}", service);
