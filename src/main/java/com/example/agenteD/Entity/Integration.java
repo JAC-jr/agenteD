@@ -27,26 +27,17 @@ public class Integration {
     @Column(name = "channel", length = 45)
     private String channel;
 
-    @Column(name = "application_id")
-    private Long applicationId;
-
     @Column(name = "description", length = 45)
     private String description;
 
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successful_test")
-    private Integer consecutiveSuccessfulTest;
-
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
     @Column(name = "his_failed_test")
     private Long hisFailedTest;
-
-    @Column(name = "his_successful_test")
-    private Long hisSuccessfulTest;
 
     @Column(name = "min_test_failed")
     private Integer minTestFailed;
@@ -69,26 +60,13 @@ public class Integration {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + integration_id + ", " +
-                "status = " + status + ", " +
-                "integrationType = " + integrationType + ", " +
-                "channel = " + channel + ", " +
-                "applicationId = " + applicationId + ", " +
-                "description = " + description + ", " +
-                "numTest = " + numTest + ", " +
-                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
-                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
-                "hisFailedTest = " + hisFailedTest + ", " +
-                "hisSuccessfulTest = " + hisSuccessfulTest + ", " +
-                "minTestFailed = " + minTestFailed + ", " +
-                "maxTestFailed = " + maxTestFailed + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "lastTestDate = " + lastTestDate + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
+    @Column(name = "application_id")
+    private Long applicationId;
+
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
+
+    @Column(name = "his_successful_test")
+    private Long hisSuccessfulTest;
+
 }

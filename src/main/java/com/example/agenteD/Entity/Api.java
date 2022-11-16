@@ -39,17 +39,11 @@ public class Api {
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successful_test")
-    private Integer consecutiveSuccessfulTest;
-
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
     @Column(name = "hist_failed_test")
     private Long histFailedTest;
-
-    @Column(name = "hist_successful_test")
-    private Long histSuccessfulTest;
 
     @Column(name = "min_test_failed")
     private Integer minTestFailed;
@@ -72,27 +66,10 @@ public class Api {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "api_id = " + api_id + ", " +
-                "status = " + status + ", " +
-                "applicationId = " + applicationId + ", " +
-                "common = " + common + ", " +
-                "description = " + description + ", " +
-                "serviceName = " + serviceName + ", " +
-                "nameSpace = " + nameSpace + ", " +
-                "numTest = " + numTest + ", " +
-                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
-                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
-                "histFailedTest = " + histFailedTest + ", " +
-                "histSuccessfulTest = " + histSuccessfulTest + ", " +
-                "minTestFailed = " + minTestFailed + ", " +
-                "maxTestFailed = " + maxTestFailed + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "lastTestDate = " + lastTestDate + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
+
+    @Column(name = "hist_successful_test")
+    private Long histSuccessfulTest;
+
 }

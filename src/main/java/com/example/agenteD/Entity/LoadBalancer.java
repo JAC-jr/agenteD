@@ -27,9 +27,6 @@ public class LoadBalancer {
     @Column(name = "ip_server", length = 45)
     private String ipServer;
 
-    @Column(name = "application_id")
-    private Integer applicationId;
-
     @Column(name = "port", length = 45)
     private String port;
 
@@ -44,9 +41,6 @@ public class LoadBalancer {
 
     @Column(name = "failed_consecutive_test")
     private Integer failedConsecutiveTest;
-
-    @Column(name = "history_successful_test")
-    private Long historySuccessfulTest;
 
     @Column(name = "history_failed_test")
     private Long historyFailedTest;
@@ -69,26 +63,10 @@ public class LoadBalancer {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + vserver_id + ", " +
-                "description = " + description + ", " +
-                "status = " + status + ", " +
-                "ipServer = " + ipServer + ", " +
-                "applicationId = " + applicationId + ", " +
-                "port = " + port + ", " +
-                "numTest = " + numTest + ", " +
-                "lastTestDate = " + lastTestDate + ", " +
-                "successfulConsecutiveTest = " + successfulConsecutiveTest + ", " +
-                "failedConsecutiveTest = " + failedConsecutiveTest + ", " +
-                "historySuccessfulTest = " + historySuccessfulTest + ", " +
-                "historyFailedTest = " + historyFailedTest + ", " +
-                "minFailTest = " + minFailTest + ", " +
-                "maxFailTest = " + maxFailTest + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
+    @Column(name = "application_id")
+    private Integer applicationId;
+
+    @Column(name = "history_successful_test")
+    private Long historySuccessfulTest;
+
 }

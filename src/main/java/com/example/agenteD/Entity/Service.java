@@ -21,9 +21,6 @@ public class Service {
     @Column(name = "description", length = 45)
     private String description;
 
-    @Column(name = "status", length = 45)
-    private String status;
-
     @Column(name = "application_id")
     private Integer applicationId;
 
@@ -45,14 +42,8 @@ public class Service {
     @Column(name = "num_test")
     private Integer numTest;
 
-    @Column(name = "consecutive_successful-test")
-    private Integer consecutiveSuccessfulTest;
-
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
-
-    @Column(name = "hist_successful_test")
-    private Long histSuccessfulTest;
 
     @Column(name = "hist_failed_test")
     private Long histFailedTest;
@@ -69,38 +60,19 @@ public class Service {
     @Column(name = "high_alarm")
     private Integer highAlarm;
 
-    @Column(name = "last_tests_date")
-    private LocalDate lastTestsDate;
-
     @Column(name = "\"req/seg\"", length = 45)
     private String reqSeg;
 
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + service_id + ", " +
-                "description = " + description + ", " +
-                "status = " + status + ", " +
-                "applicationId = " + applicationId + ", " +
-                "serviceName = " + serviceName + ", " +
-                "operation = " + operation + ", " +
-                "port = " + port + ", " +
-                "method = " + method + ", " +
-                "testUrl = " + testUrl + ", " +
-                "numTest = " + numTest + ", " +
-                "consecutiveSuccessfulTest = " + consecutiveSuccessfulTest + ", " +
-                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
-                "histSuccessfulTest = " + histSuccessfulTest + ", " +
-                "histFailedTest = " + histFailedTest + ", " +
-                "maxFailedTest = " + maxFailedTest + ", " +
-                "minFailedTest = " + minFailedTest + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "lastTestsDate = " + lastTestsDate + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
+    @Column(name = "hist_successful_test")
+    private Long histSuccessfulTest;
+
+    @Column(name = "last_tests_date")
+    private LocalDate lastTestsDate;
+
+    @Column(name = "status", length = 45)
+    private String status;
+
 }
