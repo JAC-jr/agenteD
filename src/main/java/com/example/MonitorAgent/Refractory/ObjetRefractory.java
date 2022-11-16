@@ -8,21 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class objetRefractory {
+public class ObjetRefractory {
 
-    Logger logger = LoggerFactory.getLogger(objetRefractory.class);
+    Logger logger = LoggerFactory.getLogger(ObjetRefractory.class);
     @Autowired
     SubProcess subProcess;
 
     @Async("ApiThreadPoolTaskExecutor")
-   public void objetResponse(Api api){
+   public void objetResponse(Application application){
 
        while (true){
            try {
-               Long objectResponse = subProcess.apiSubProcessCompletableFuture(api).get();
+               List<Api> objectResponse = subProcess.apiSubProcessCompletableFuture(application).get();
            } catch (InterruptedException e) {
                throw new RuntimeException(e);
            } catch (ExecutionException e) {
@@ -31,7 +33,7 @@ public class objetRefractory {
        }
    }
 
-    @Async("ApplicationThreadPoolTaskExecutor")
+   /* @Async("ApplicationThreadPoolTaskExecutor")
     public void objetResponse(Application application){
 
         while (true){
@@ -44,6 +46,8 @@ public class objetRefractory {
             }
         }
     }
+
+    */
 
     @Async("IntegrationThreadPoolTaskExecutor")
     public void objetResponse(Integration integration){

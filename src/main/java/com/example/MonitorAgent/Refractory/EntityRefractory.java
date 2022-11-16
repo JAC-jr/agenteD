@@ -20,7 +20,8 @@ public class EntityRefractory {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-    @Autowired objetRefractory objetRefractory;
+    @Autowired
+    ObjetRefractory objetRefractory;
     @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Api>> apiCompletableFuture() throws InterruptedException{
         logger.info("Looking up api info");
@@ -28,7 +29,7 @@ public class EntityRefractory {
         Thread.sleep(1000);
         result.forEach(api -> {
             logger.info("{}", api);
-            objetRefractory.objetResponse(api);
+            //objetRefractory.objetResponse(api);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -37,7 +38,7 @@ public class EntityRefractory {
     public CompletableFuture<List<Application>> applicationCompletableFuture() throws InterruptedException {
         logger.info("Looking up application info");
         List<Application> result = applicationRepository.findAll();
-
+        Thread.sleep(1000);
         result.forEach(application -> {
             logger.info("{}", application);
             objetRefractory.objetResponse(application);
