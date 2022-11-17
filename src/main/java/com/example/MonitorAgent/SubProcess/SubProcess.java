@@ -22,7 +22,7 @@ public class SubProcess {
         logger.info("application_id = {}, testInterv = {}",api.getApi_id(), result);
         Thread.sleep(result);*/
         Integer applicationId = application.getApplication_id();
-        List<Api> result = apiRepository.findAllById(Collections.singleton(applicationId));
+        List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
             logger.info("{}, {}, {}, {}",api.getApi_id(),api.getTestInterv(),api.getApplicationId(),api.getDescription());
