@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 @Service
-public class ObjetRefractory {
+public class ThreadFactory {
 
-    Logger logger = LoggerFactory.getLogger(ObjetRefractory.class);
+    Logger logger = LoggerFactory.getLogger(ThreadFactory.class);
     @Autowired
     SubProcess subProcess;
     @Async("ApiThreadPoolTaskExecutor")

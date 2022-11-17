@@ -1,7 +1,7 @@
 package com.example.MonitorAgent.ComponentInit;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.Refractory.ObjetRefractory;
+import com.example.MonitorAgent.Refractory.ThreadFactory;
 import com.example.MonitorAgent.Repository.ApplicationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class ComponentInit implements CommandLineRunner {
     ApplicationRepository applicationRepository;
 
     @Autowired
-    ObjetRefractory objetRefractory;
+    ThreadFactory threadFactory;
 
     @Value("${monitor.application}")
     private String applicationName;
@@ -42,9 +42,9 @@ public class ComponentInit implements CommandLineRunner {
                 Integer applicationId = application.getApplication_id();
                 logger.info("Encontrada aplicación {}", app);
                 logger.info("id = {}", application.getApplication_id());
-                objetRefractory.apiObjetResponse(application);
-                objetRefractory.integrationObjetResponse(application);
-                objetRefractory.loadBalancerObjetResponse(application);
+                threadFactory.apiObjetResponse(application);
+                threadFactory.integrationObjetResponse(application);
+                threadFactory.loadBalancerObjetResponse(application);
                 numApplication++;
             }
         }
