@@ -20,7 +20,7 @@ public class ObjetRefractory {
     SubProcess subProcess;
 
     @Async("ApiThreadPoolTaskExecutor")
-   public void objetResponse(Application application){
+   public void apiObjetResponse(Application application){
 
        while (true){
            try {
@@ -35,11 +35,11 @@ public class ObjetRefractory {
 
 
     @Async("IntegrationThreadPoolTaskExecutor")
-    public void objetResponse(Integration integration){
+    public void integrationObjetResponse(Application application){
 
         while (true){
             try {
-                Long objectResponse = subProcess.integrationSubProcessCompletableFuture(integration).get();
+                List<Integration> objectResponse = subProcess.integrationSubProcessCompletableFuture(application).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {

@@ -61,7 +61,7 @@ public class Integration {
     private Long testInterv;
 
     @Column(name = "application_id")
-    private Long applicationId;
+    private Integer applicationId;
 
     @Column(name = "consecutive_successful_test")
     private Integer consecutiveSuccessfulTest;

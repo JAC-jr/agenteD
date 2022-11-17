@@ -62,7 +62,8 @@ public class ComponentInit implements CommandLineRunner {
                 Integer applicationId = application.getApplication_id();
                 logger.info("Encontrada aplicación {}", app);
                 logger.info("id = {}", application.getApplication_id());
-                objetRefractory.objetResponse(application);
+                objetRefractory.apiObjetResponse(application);
+                objetRefractory.integrationObjetResponse(application);
                 //objetRefractory.objetResponse(optId.get());
                 numApplication++;
             }
@@ -74,7 +75,7 @@ public class ComponentInit implements CommandLineRunner {
             System.exit(1);
         }
 
-        CompletableFuture<List<Api>> apiResponse = entityRefractory.apiCompletableFuture();
+       /* CompletableFuture<List<Api>> apiResponse = entityRefractory.apiCompletableFuture();
         CompletableFuture<List<Application>> applicationResponse = entityRefractory.applicationCompletableFuture();
         CompletableFuture<List<Integration>> integrationResponse = entityRefractory.integrationCompletableFuture();
         CompletableFuture<List<LoadBalancer>> loadBalancerResponse = entityRefractory.loadBalancerCompletableFuture();
@@ -83,6 +84,8 @@ public class ComponentInit implements CommandLineRunner {
 
                 CompletableFuture.allOf( applicationResponse, integrationResponse,
                  loadBalancerResponse, persistenceResponse, serviceResponse).join();
+
+        */
     }
 }
 
