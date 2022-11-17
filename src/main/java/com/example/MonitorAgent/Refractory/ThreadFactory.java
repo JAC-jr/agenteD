@@ -77,7 +77,7 @@ public class ThreadFactory {
 
         while (true){
             try {
-                List<com.example.MonitorAgent.Entity.Service> objectResponse = subProcess.serviceSubProcessCompletableFuture(application).get();
+                List<Servicio> objectResponse = subProcess.serviceSubProcessCompletableFuture(application).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {

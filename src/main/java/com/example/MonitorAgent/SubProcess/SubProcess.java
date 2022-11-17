@@ -87,16 +87,16 @@ public class SubProcess {
         return CompletableFuture.completedFuture(result);
     }
 
-    public CompletableFuture<List<com.example.MonitorAgent.Entity.Service>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
+    public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
-        List<com.example.MonitorAgent.Entity.Service> result = serviceRepository.findAllByApplicationId(applicationId);
+        List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);
 
-        result.forEach(service -> {
+        result.forEach(servicio -> {
             logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, " +
-                    "status = {}",service.getApplicationId(),service.getService_id(),service.getTestInterv()
-                    ,service.getStatus());
+                    "status = {}", servicio.getApplicationId(), servicio.getService_id(), servicio.getTestInterv()
+                    , servicio.getStatus());
             try {
-                Thread.sleep(service.getTestInterv());
+                Thread.sleep(servicio.getTestInterv());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

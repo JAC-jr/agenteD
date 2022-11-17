@@ -132,7 +132,7 @@ WITH (
     OIDS = FALSE
 );
 
-CREATE TABLE IF NOT EXISTS public.service
+CREATE TABLE IF NOT EXISTS public.servicio
 (
     service_id integer NOT NULL,
     description character varying COLLATE pg_catalog."default",
