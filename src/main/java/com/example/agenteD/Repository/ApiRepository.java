@@ -9,4 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface ApiRepository extends JpaRepository<Api, Integer> {
+
 }

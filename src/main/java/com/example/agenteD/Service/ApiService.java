@@ -16,21 +16,17 @@ public class ApiService {
     Logger logger = LoggerFactory.getLogger(ApiService.class);
     @Autowired
     SubProcess subProcess;
-    /* public void subProcess(List<Api> result){
-       /*p.forEach(api -> {
-            Integer api_id = api.getApi_id();
-            Integer applicationId = api.getApplicationId();
-            String serviceName = api.getServiceName();
-            String nameSpace = api.getNameSpace();
-            //logger.info("data: api_id = {}, applicationId = {}, serviceName = {}, nameSpace = {}",
-                  //  api_id, applicationId, serviceName, nameSpace);
-        });
-    }*/
+
     @Async("SubProcessThreadPoolTaskExecutor")
    public void objetResponse(Api api){
        while (true){
            try {
                Long objectResponse = subProcess.subProcessCompletableFuture(api).get();
+               /*Integer applicationId = api.getApplicationId();
+               String serviceName = api.getServiceName();
+               String nameSpace = api.getNameSpace();
+               logger.info("data: applicationId = {}, serviceName = {}, nameSpace = {}",
+                       applicationId, serviceName, nameSpace);*/
            } catch (InterruptedException e) {
                throw new RuntimeException(e);
            } catch (ExecutionException e) {
