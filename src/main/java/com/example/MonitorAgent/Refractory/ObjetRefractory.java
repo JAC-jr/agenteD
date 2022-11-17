@@ -64,11 +64,11 @@ public class ObjetRefractory {
     }
 
     @Async("LoadBalancerThreadPoolTaskExecutor")
-    public void objetResponse(LoadBalancer loadBalancer){
+    public void loadBalancerObjetResponse(Application application){
 
         while (true){
             try {
-                Long objectResponse = subProcess.loadBalancerSubProcessCompletableFuture(loadBalancer).get();
+                List<LoadBalancer> objectResponse = subProcess.loadBalancerSubProcessCompletableFuture(application).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {

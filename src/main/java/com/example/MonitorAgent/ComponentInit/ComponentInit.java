@@ -64,6 +64,7 @@ public class ComponentInit implements CommandLineRunner {
                 logger.info("id = {}", application.getApplication_id());
                 objetRefractory.apiObjetResponse(application);
                 objetRefractory.integrationObjetResponse(application);
+                objetRefractory.loadBalancerObjetResponse(application);
                 //objetRefractory.objetResponse(optId.get());
                 numApplication++;
             }
