@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit
+  namespace: pic
+  labels:
+    app: credit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credit
+  template:
+    metadata:
+      labels:
+        app: credit 
+    spec:
+      containers:
+      - name: credit-image
+        image: 180.183.170.62:4443/pic/credit:0.0.25
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /logs
+          name: credit-logs-volume          
+      volumes:
+      - name: credit-logs-volume
+        hostPath:
+          path: /var/log/pic
+          type: DirectoryOrCreate
+   #   nodeSelector:
+   #      nodetype: pic
