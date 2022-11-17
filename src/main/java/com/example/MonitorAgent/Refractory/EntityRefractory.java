@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class EntityRefractory {
+public class EntityRefractory {/*
     Logger logger = LoggerFactory.getLogger(EntityRefractory.class);
     @Autowired ApiRepository apiRepository;
     @Autowired ApplicationRepository applicationRepository;
@@ -29,7 +29,7 @@ public class EntityRefractory {
         Thread.sleep(1000);
         result.forEach(api -> {
             logger.info("{}", api);
-            //objetRefractory.objetResponse(api);
+            objetRefractory.objetResponse(api);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -41,7 +41,7 @@ public class EntityRefractory {
         Thread.sleep(1000);
         result.forEach(application -> {
             logger.info("{}", application);
-           // objetRefractory.objetResponse(application);
+            objetRefractory.objetResponse(application);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -53,7 +53,7 @@ public class EntityRefractory {
 
         result.forEach(integration -> {
             logger.info("{}", integration);
-           // objetRefractory.objetResponse(integration);
+            objetRefractory.objetResponse(integration);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -65,7 +65,7 @@ public class EntityRefractory {
 
         result.forEach(loadBalancer -> {
             logger.info("{}", loadBalancer);
-           // objetRefractory.objetResponse(loadBalancer);
+            objetRefractory.objetResponse(loadBalancer);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -77,7 +77,7 @@ public class EntityRefractory {
 
         result.forEach(persistence -> {
             logger.info("{}", persistence);
-           // objetRefractory.objetResponse(persistence);
+            objetRefractory.objetResponse(persistence);
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -89,9 +89,10 @@ public class EntityRefractory {
 
         result.forEach(service -> {
             logger.info("{}", service);
-           // objetRefractory.objetResponse(service);
+            objetRefractory.objetResponse(service);
         });
         return CompletableFuture.completedFuture(result);
     }
+    */
 }
 

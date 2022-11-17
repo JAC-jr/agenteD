@@ -9,18 +9,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-
 @Service
 public class ObjetRefractory {
 
     Logger logger = LoggerFactory.getLogger(ObjetRefractory.class);
     @Autowired
     SubProcess subProcess;
-
     @Async("ApiThreadPoolTaskExecutor")
-   public void apiObjetResponse(Application application){
+    public void apiObjetResponse(Application application){
 
        while (true){
            try {
@@ -32,22 +29,6 @@ public class ObjetRefractory {
            }
        }
    }
-
-   /* @Async("ApplicationThreadPoolTaskExecutor")
-    public void objetResponse(Application application){
-
-        while (true){
-            try {
-                Long objectResponse = subProcess.applicationSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    */
 
     @Async("IntegrationThreadPoolTaskExecutor")
     public void integrationObjetResponse(Application application){
