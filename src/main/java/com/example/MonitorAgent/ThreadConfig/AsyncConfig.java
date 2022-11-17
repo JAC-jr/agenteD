@@ -1,4 +1,4 @@
-package com.example.agenteD.Util;
+package com.example.MonitorAgent.ThreadConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,24 +11,35 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfig {
 
+    @Bean(name = "PrincipalThreadPoolTaskExecutor")
+    public Executor subProcessThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("Thread--");
+        executor.initialize();
+        return executor;
+    }
+
     @Bean(name = "ApiThreadPoolTaskExecutor")
     public Executor apiThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
+        executor.setMaxPoolSize(6);
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("apiThread--");
         executor.initialize();
         return executor;
     }
 
-    @Bean(name = "SubProcessThreadPoolTaskExecutor")
-    public Executor subProcessThreadPoolTaskExecutor() {
+    @Bean(name = "ApplicationThreadPoolTaskExecutor")
+    public Executor applicationThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(6);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("ApiSubThread");
+        executor.setThreadNamePrefix("applicationThread");
         executor.initialize();
         return executor;
     }
@@ -44,7 +55,7 @@ public class AsyncConfig {
         return executor;
     }
 
-   /*  @Bean(name = "LoadBalancerThreadPoolTaskExecutor")
+    @Bean(name = "LoadBalancerThreadPoolTaskExecutor")
     public Executor loadBalancerThreadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
@@ -76,7 +87,5 @@ public class AsyncConfig {
         executor.initialize();
         return executor;
     }
-
-     */
 }
 

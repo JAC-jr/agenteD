@@ -1,4 +1,4 @@
-package com.example.agenteD.Entity;
+package com.example.MonitorAgent.Entity;
 
 import lombok.*;
 
@@ -63,24 +63,4 @@ public class Application {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "application_id = " + application_id + ", " +
-                "applicationName = " + applicationName + ", " +
-                "description = " + description + ", " +
-                "status = " + status + ", " +
-                "numTest = " + numTest + ", " +
-                "lastTestDate = " + lastTestDate + ", " +
-                "successfulConsecutiveTest = " + successfulConsecutiveTest + ", " +
-                "failedConsecutiveTest = " + failedConsecutiveTest + ", " +
-                "historySuccessfulTest = " + historySuccessfulTest + ", " +
-                "historyFailedTest = " + historyFailedTest + ", " +
-                "minFailTest = " + minFailTest + ", " +
-                "maxFailTest = " + maxFailTest + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
 }
