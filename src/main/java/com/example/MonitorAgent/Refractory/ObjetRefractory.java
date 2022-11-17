@@ -33,21 +33,6 @@ public class ObjetRefractory {
        }
    }
 
-   /* @Async("ApplicationThreadPoolTaskExecutor")
-    public void objetResponse(Application application){
-
-        while (true){
-            try {
-                Long objectResponse = subProcess.applicationSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    */
 
     @Async("IntegrationThreadPoolTaskExecutor")
     public void objetResponse(Integration integration){

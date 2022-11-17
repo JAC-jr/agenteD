@@ -63,7 +63,7 @@ public class SubProcess {
 
     public CompletableFuture<Long> persistenceSubProcessCompletableFuture(Persistence persistence) throws InterruptedException{
         Long result = persistence.getTestInterv();
-        logger.info("persistence_id = {}, testInterv = {}",persistence.getDb_id(), result);
+        logger.info("persistence_id = {}, testInterv = {}",persistence.getPersistence_id(), result);
         Thread.sleep(result);
 
         return CompletableFuture.completedFuture(result);

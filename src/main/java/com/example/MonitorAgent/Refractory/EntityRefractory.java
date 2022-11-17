@@ -1,97 +1,98 @@
-package com.example.agenteD.Util;
+package com.example.MonitorAgent.Refractory;
 
-import com.example.agenteD.Entity.*;
-import com.example.agenteD.Repository.*;
-import com.example.agenteD.Service.ApiService;
+import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class GenericStatement{
-    Logger logger = LoggerFactory.getLogger(GenericStatement.class);
+public class EntityRefractory {
+    Logger logger = LoggerFactory.getLogger(EntityRefractory.class);
     @Autowired ApiRepository apiRepository;
     @Autowired ApplicationRepository applicationRepository;
     @Autowired IntegrationRepository integrationRepository;
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
+
     @Autowired ServiceRepository serviceRepository;
     @Autowired
-    ApiService apiService;
-
-    @Async("ApiThreadPoolTaskExecutor")
+    ObjetRefractory objetRefractory;
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Api>> apiCompletableFuture() throws InterruptedException{
         logger.info("Looking up api info");
         List<Api> result = apiRepository.findAll();
         Thread.sleep(1000);
         result.forEach(api -> {
             logger.info("{}", api);
-            //Integer ID = api.getApi_id();
-            apiService.objetResponse(api);
+            //objetRefractory.objetResponse(api);
         });
         return CompletableFuture.completedFuture(result);
     }
-   /* @Async("PrimaryThreadPoolTaskExecutor")
+
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Application>> applicationCompletableFuture() throws InterruptedException {
         logger.info("Looking up application info");
         List<Application> result = applicationRepository.findAll();
-
-        result.forEach(p -> {
-            logger.info("{}", p);
+        Thread.sleep(1000);
+        result.forEach(application -> {
+            logger.info("{}", application);
+            objetRefractory.objetResponse(application);
         });
         return CompletableFuture.completedFuture(result);
     }
 
-    @Async("PrimaryThreadPoolTaskExecutor")
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Integration>> integrationCompletableFuture() throws InterruptedException{
         logger.info("Looking up integration info");
         List<Integration> result = integrationRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(integration -> {
+            logger.info("{}", integration);
+            objetRefractory.objetResponse(integration);
         });
         return CompletableFuture.completedFuture(result);
     }
 
-    @Async("PrimaryThreadPoolTaskExecutor")
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<LoadBalancer>> loadBalancerCompletableFuture() throws InterruptedException{
         logger.info("Looking up loadBalancer info");
         List<LoadBalancer> result = loadBalancerRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(loadBalancer -> {
+            logger.info("{}", loadBalancer);
+            objetRefractory.objetResponse(loadBalancer);
         });
         return CompletableFuture.completedFuture(result);
     }
 
-    @Async("PrimaryThreadPoolTaskExecutor")
+    @Async("PrincipalThreadPoolTaskExecutor")
     public CompletableFuture<List<Persistence>> persistenceCompletableFuture() throws InterruptedException{
         logger.info("Looking up Persistence info");
         List<Persistence> result = persistenceRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(persistence -> {
+            logger.info("{}", persistence);
+            objetRefractory.objetResponse(persistence);
         });
         return CompletableFuture.completedFuture(result);
     }
 
-    @Async("PrimaryThreadPoolTaskExecutor")
-    public CompletableFuture<List<com.example.agenteD.Entity.Servicios>> serviceCompletableFuture() throws InterruptedException{
+    @Async("PrincipalThreadPoolTaskExecutor")
+    public CompletableFuture<List<com.example.MonitorAgent.Entity.Service>> serviceCompletableFuture() throws InterruptedException{
         logger.info("Looking up service info");
-        List<com.example.agenteD.Entity.Servicios> result = serviceRepository.findAll();
+        List<com.example.MonitorAgent.Entity.Service> result = serviceRepository.findAll();
 
-        result.forEach(p -> {
-            logger.info("{}", p);
+        result.forEach(service -> {
+            logger.info("{}", service);
+            objetRefractory.objetResponse(service);
         });
         return CompletableFuture.completedFuture(result);
     }
-
-    */
-
 }
-
