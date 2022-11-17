@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PersistenceRepository extends JpaRepository<Persistence, Integer> {
-    List<Persistence> findByApplicationId(Integer applicationId);
+    List<Persistence> findAllByApplicationId(Integer applicationId);
 }

@@ -45,6 +45,8 @@ public class ComponentInit implements CommandLineRunner {
                 threadFactory.apiObjetResponse(application);
                 threadFactory.integrationObjetResponse(application);
                 threadFactory.loadBalancerObjetResponse(application);
+                threadFactory.persistenceObjetResponse(application);
+                threadFactory.serviceObjetResponse(application);
                 numApplication++;
             }
         }

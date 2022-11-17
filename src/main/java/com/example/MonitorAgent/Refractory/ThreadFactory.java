@@ -59,11 +59,11 @@ public class ThreadFactory {
     }
 
     @Async("PersistenceThreadPoolTaskExecutor")
-    public void objetResponse(Persistence persistence){
+    public void persistenceObjetResponse(Application application){
 
         while (true){
             try {
-                Long objectResponse = subProcess.persistenceSubProcessCompletableFuture(persistence).get();
+                List<Persistence> objectResponse = subProcess.persistenceSubProcessCompletableFuture(application).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {
@@ -73,11 +73,11 @@ public class ThreadFactory {
     }
 
     @Async("ServiceThreadPoolTaskExecutor")
-    public void objetResponse(com.example.MonitorAgent.Entity.Service service){
+    public void serviceObjetResponse(Application application){
 
         while (true){
             try {
-                Long objectResponse = subProcess.serviceSubProcessCompletableFuture(service).get();
+                List<com.example.MonitorAgent.Entity.Service> objectResponse = subProcess.serviceSubProcessCompletableFuture(application).get();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } catch (ExecutionException e) {

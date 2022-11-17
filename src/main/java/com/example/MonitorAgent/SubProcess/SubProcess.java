@@ -24,7 +24,9 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
-            logger.info("application_Id = {}, Api_Id = {}, Test_interv = {}, description = {}",api.getApplicationId(),api.getApi_id(),api.getTestInterv(),api.getDescription());
+            logger.info("application_Id = {}, Api_Id = {}, Test_interv = {}, " +
+                    "status = {}",api.getApplicationId(),api.getApi_id()
+                    ,api.getTestInterv(),api.getStatus());
             try {
                 Thread.sleep(api.getTestInterv());
             } catch (InterruptedException e) {
@@ -40,7 +42,7 @@ public class SubProcess {
 
         result.forEach(integration -> {
             logger.info("application_Id = {}, Integration_Id = {}, Test_interv = {}, status = {}",
-                    integration.getIntegration_id(),integration.getApplicationId(),integration.getTestInterv()
+                    integration.getApplicationId(),integration.getIntegration_id(),integration.getTestInterv()
                     ,integration.getStatus());
             try {
                 Thread.sleep(integration.getTestInterv());
@@ -57,8 +59,8 @@ public class SubProcess {
 
         result.forEach(loadBalancer -> {
             logger.info("application_Id = {}, Vserver_Id = {}, Test_interv = {}, " +
-                    "description = {}",loadBalancer.getApplicationId(),loadBalancer.getVserver_id(),loadBalancer.getTestInterv()
-                    ,loadBalancer.getDescription());
+                    "status = {}",loadBalancer.getApplicationId(),loadBalancer.getVserver_id(),loadBalancer.getTestInterv()
+                    ,loadBalancer.getStatus());
             try {
                 Thread.sleep(loadBalancer.getTestInterv());
             } catch (InterruptedException e) {
@@ -67,19 +69,38 @@ public class SubProcess {
         });
         return CompletableFuture.completedFuture(result);
     }
+    public CompletableFuture<List<Persistence>> persistenceSubProcessCompletableFuture(Application application) throws InterruptedException{
+        Integer applicationId = application.getApplication_id();
+        List<Persistence> result = persistenceRepository.findAllByApplicationId(applicationId);
 
-    public CompletableFuture<Long> persistenceSubProcessCompletableFuture(Persistence persistence) throws InterruptedException{
-        Long result = persistence.getTestInterv();
-        logger.info("persistence_id = {}, testInterv = {}",persistence.getDb_id(), result);
-        Thread.sleep(result);
+        result.forEach(persistence -> {
+            logger.info("application_Id = {}, Db_Id = {}, Test_interv = {}, " +
+                    "status = {}",persistence.getApplicationId(),persistence.getDb_id(),persistence.getTestInterv()
+                    ,persistence.getStatus());
+            try {
+                Thread.sleep(persistence.getTestInterv());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return CompletableFuture.completedFuture(result);
     }
 
-    public CompletableFuture<Long> serviceSubProcessCompletableFuture(com.example.MonitorAgent.Entity.Service service) throws InterruptedException{
-        Long result = service.getTestInterv();
-        logger.info("service_id = {}, testInterv = {}",service.getService_id(), result);
-        Thread.sleep(result);
+    public CompletableFuture<List<com.example.MonitorAgent.Entity.Service>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
+        Integer applicationId = application.getApplication_id();
+        List<com.example.MonitorAgent.Entity.Service> result = serviceRepository.findAllByApplicationId(applicationId);
+
+        result.forEach(service -> {
+            logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, " +
+                    "status = {}",service.getApplicationId(),service.getService_id(),service.getTestInterv()
+                    ,service.getStatus());
+            try {
+                Thread.sleep(service.getTestInterv());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return CompletableFuture.completedFuture(result);
     }
