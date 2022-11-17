@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface LoadBalancerRepository extends JpaRepository<LoadBalancer, Integer> {
-
     Optional<LoadBalancer> findByApplicationId(Integer applicationId);
 }

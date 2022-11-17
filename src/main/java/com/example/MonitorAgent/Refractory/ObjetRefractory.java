@@ -32,8 +32,6 @@ public class ObjetRefractory {
            }
        }
    }
-
-
     @Async("IntegrationThreadPoolTaskExecutor")
     public void integrationObjetResponse(Application application){
 
@@ -47,7 +45,6 @@ public class ObjetRefractory {
             }
         }
     }
-
     @Async("LoadBalancerThreadPoolTaskExecutor")
     public void objetResponse(LoadBalancer loadBalancer){
 
@@ -61,7 +58,6 @@ public class ObjetRefractory {
             }
         }
     }
-
     @Async("PersistenceThreadPoolTaskExecutor")
     public void objetResponse(Persistence persistence){
 
@@ -75,7 +71,6 @@ public class ObjetRefractory {
             }
         }
     }
-
     @Async("ServiceThreadPoolTaskExecutor")
     public void objetResponse(com.example.MonitorAgent.Entity.Service service){
 

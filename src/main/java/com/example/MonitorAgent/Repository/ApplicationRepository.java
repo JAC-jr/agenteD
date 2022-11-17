@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
-
     Optional<Application> getIdByApplicationName(String applicationName);
 }

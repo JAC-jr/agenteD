@@ -75,17 +75,6 @@ public class ComponentInit implements CommandLineRunner {
             System.exit(1);
         }
 
-       /* CompletableFuture<List<Api>> apiResponse = entityRefractory.apiCompletableFuture();
-        CompletableFuture<List<Application>> applicationResponse = entityRefractory.applicationCompletableFuture();
-        CompletableFuture<List<Integration>> integrationResponse = entityRefractory.integrationCompletableFuture();
-        CompletableFuture<List<LoadBalancer>> loadBalancerResponse = entityRefractory.loadBalancerCompletableFuture();
-        CompletableFuture<List<Persistence>> persistenceResponse = entityRefractory.persistenceCompletableFuture();
-        CompletableFuture<List<Service>> serviceResponse = entityRefractory.serviceCompletableFuture();
-
-                CompletableFuture.allOf( applicationResponse, integrationResponse,
-                 loadBalancerResponse, persistenceResponse, serviceResponse).join();
-
-        */
     }
 }
 
