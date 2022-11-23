@@ -1,5 +1,4 @@
 package com.example.MonitorAgent.Entity;
-
 import lombok.*;
 
 import javax.persistence.*;
