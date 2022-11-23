@@ -1,6 +1,8 @@
 package com.example.MonitorAgent.SubProcess;
 
+
 import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.NextStep.NextStep;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,8 @@ public class SubProcess {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
+
+    @Autowired NextStep nextStep;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
     
     public CompletableFuture<List<Api>> apiSubProcessCompletableFuture(Application application) throws InterruptedException{
@@ -92,9 +96,16 @@ public class SubProcess {
         List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);
 
         result.forEach(servicio -> {
-            logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, " +
-                    "status = {}", servicio.getApplicationId(), servicio.getService_id(), servicio.getTestInterv()
-                    , servicio.getStatus());
+
+            String serviceName = servicio.getServiceName();
+            String port = servicio.getPort();
+            Long testInterv = servicio.getTestInterv();
+
+            System.out.println(nextStep.getCurl(serviceName,port));
+
+            logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, ",
+                    servicio.getApplicationId(), servicio.getService_id(), testInterv);
+
             try {
                 Thread.sleep(servicio.getTestInterv());
             } catch (InterruptedException e) {
