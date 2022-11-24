@@ -2,43 +2,42 @@ package com.example.MonitorAgent.NextStep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Service
 public class NextStep {
 
     Logger logger = LoggerFactory.getLogger(NextStep.class);
-
-    public String getCurl (String serviceName, String port){
+    @Autowired
+    RestTemplate restTemplate;
+    public HttpEntity<Object> testUrl (String baseUrl) throws URISyntaxException {
         //http://", serviceName,":", port
-        String[] commands = {"curl", "-k", "GET",
-                "https://openweathermap.org/apihttps://openweathermap.org/apiv"};
-        Process process;
-        try {
-            process = Runtime.getRuntime().exec(commands);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                process.getInputStream()));
-        String line;
-        String response = null ;
+        URI uri = new URI(baseUrl);
 
-        while (true) {
-            try {
-                if (((line = reader.readLine()) == null)) {
-                    break;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            response.lines();
+        HttpHeaders headers = new HttpHeaders();
+        //headers.set("X-COM-LOCATION", "USA");
+
+        HttpEntity<Object> requestEntity = new HttpEntity<>(null, headers);
+
+        try
+        {
+            restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
+            //Assert.fail();
+            logger.debug("test exitoso de url: {}",baseUrl);
         }
-        return response;
+        catch(Exception ex)
+        {
+            logger.error("error haciendo test de url: {} error {}",baseUrl,ex.getMessage());
+
+        }
+        return requestEntity;
     }
 }

@@ -17,24 +17,19 @@ public class RestTemplateConfig {
     private static final Logger logger = LoggerFactory.getLogger(RestTemplateConfig.class);
 
     private static final int CONNECTION_TIMEOUT = 5000;
-    private static final int SOCKET_TIMEOUT = 10000;
+    private static final int SOCKET_TIMEOUT = 5000;
     private static final int CONNECTION_REQUEST_TIMEOUT = 5000;
-    private static final int MAX_ROUTE_PER_HOST = 133;
-    private static final int MAX_TOTAL_CONNECTIONS = 400;
+    private static final int MAX_ROUTE_PER_HOST = 10;
+    private static final int MAX_TOTAL_CONNECTIONS = 10;
 
 
     @Bean("RestTemplate")
     public RestTemplate getRestTemplate() {
-        logger.info("");
+        logger.info("creando el bean de configuracion de rest template");
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(getClientHttpRequestFactory());
         return restTemplate;
     }
-
-    /**
-     * Configuración para establecer comunicación.
-     * @return
-     */
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() {
         logger.debug("ConnectTimeout: {} ConnectionRequestTimeout {}: SocketTimeout {}:",CONNECTION_TIMEOUT,CONNECTION_REQUEST_TIMEOUT,SOCKET_TIMEOUT);
@@ -48,9 +43,8 @@ public class RestTemplateConfig {
     }
 
     private RequestConfig getRequestConfig() {
+           logger.info("comprobando la configuracion de rest template");
         return RequestConfig.custom().setConnectTimeout(CONNECTION_TIMEOUT)
                 .setConnectionRequestTimeout(CONNECTION_REQUEST_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
     }
 }
-
-

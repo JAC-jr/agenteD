@@ -42,10 +42,12 @@ public class ComponentInit implements CommandLineRunner {
                 Integer applicationId = application.getApplication_id();
                 logger.info("Encontrada aplicación {}", app);
                 logger.info("id = {}", application.getApplication_id());
-                threadFactory.apiObjetResponse(application);
+                /*threadFactory.apiObjetResponse(application);
                 threadFactory.integrationObjetResponse(application);
                 threadFactory.loadBalancerObjetResponse(application);
                 threadFactory.persistenceObjetResponse(application);
+
+                 */
                 threadFactory.serviceObjetResponse(application);
                 numApplication++;
             }

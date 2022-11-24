@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -101,7 +102,13 @@ public class SubProcess {
             String port = servicio.getPort();
             Long testInterv = servicio.getTestInterv();
 
-            System.out.println(nextStep.getCurl(serviceName,port));
+
+            String baseUrl = servicio.getTestUrl();
+            try {
+                System.out.println("response= "+nextStep.testUrl(baseUrl));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
 
             logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, ",
                     servicio.getApplicationId(), servicio.getService_id(), testInterv);
