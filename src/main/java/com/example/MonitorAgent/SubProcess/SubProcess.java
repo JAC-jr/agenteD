@@ -7,6 +7,7 @@ import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
@@ -101,18 +102,27 @@ public class SubProcess {
             String serviceName = servicio.getServiceName();
             String port = servicio.getPort();
             Long testInterv = servicio.getTestInterv();
-
-
+            String status = servicio.getStatus();
             String baseUrl = servicio.getTestUrl();
+
             try {
-                System.out.println("response= "+nextStep.testUrl(baseUrl));
+                HttpEntity<Object> response = nextStep.testUrl(baseUrl);
+                logger.info("{}",response);
+                if (response.getHeaders().isEmpty()){
+                    servicio.setStatus("null");
+                    serviceRepository.save(servicio);
+                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                            servicio.getApplicationId(), servicio.getService_id(), status);
+                }
+                else {
+                    servicio.setStatus("good");
+                    serviceRepository.save(servicio);
+                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                            servicio.getApplicationId(), servicio.getService_id(), status);
+                }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
-
-            logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, ",
-                    servicio.getApplicationId(), servicio.getService_id(), testInterv);
-
             try {
                 Thread.sleep(servicio.getTestInterv());
             } catch (InterruptedException e) {

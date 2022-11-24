@@ -23,9 +23,10 @@ public class NextStep {
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
+        //headers.setContentType(MediaType.APPLICATION_JSON);
         //headers.set("X-COM-LOCATION", "USA");
 
-        HttpEntity<Object> requestEntity = new HttpEntity<>(null, headers);
+        HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
         try
         {

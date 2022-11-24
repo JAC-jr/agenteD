@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(RestTemplateConfig.class);
-
     private static final int CONNECTION_TIMEOUT = 5000;
     private static final int SOCKET_TIMEOUT = 5000;
     private static final int CONNECTION_REQUEST_TIMEOUT = 5000;
