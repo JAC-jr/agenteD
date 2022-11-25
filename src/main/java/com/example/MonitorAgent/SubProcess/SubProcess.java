@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
@@ -109,9 +110,10 @@ public class SubProcess {
 
             try {
                 long firstDate = System.currentTimeMillis();
-                HttpEntity<ResponseBase> response = nextStep.testUrl(baseUrl);
+                ResponseEntity<Object> response = nextStep.testUrl(baseUrl);
                 long timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("{}",response);
+                logger.info("firstDate= {}" ,firstDate);
+                logger.info("time lapse= {}" ,timeLapse);
 
                 if (response.getHeaders().isEmpty()){
 
@@ -121,7 +123,7 @@ public class SubProcess {
                             servicio.getApplicationId(), servicio.getService_id(), status);
                 }
                 else {
-                    servicio.setStatus("good");
+                    servicio.setStatus(String.valueOf(response.getStatusCodeValue()));
                     serviceRepository.save(servicio);
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
                             servicio.getApplicationId(), servicio.getService_id(), status);

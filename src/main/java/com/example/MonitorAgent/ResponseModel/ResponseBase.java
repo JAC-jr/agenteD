@@ -4,13 +4,17 @@ import lombok.Data;
 
     @Data
     public class ResponseBase {
-        private Integer timeLapse;
+
+        private Object headers;
+
         private String statusCode;
+        private Integer statusCodeValue;
+
         @Override
         public String toString() {
             return "Response{" +
                     "statusCode=" + statusCode +
-                    ", timeLapse='" + timeLapse +
+                    ", statusCodeValue='" + statusCodeValue +
                     '}';
         }
 }
