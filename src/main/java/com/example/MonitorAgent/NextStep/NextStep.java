@@ -1,6 +1,7 @@
 package com.example.MonitorAgent.NextStep;
 
 import com.example.MonitorAgent.ResponseModel.ResponseBase;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 @Service
 public class NextStep {
@@ -18,7 +20,6 @@ public class NextStep {
     @Autowired
     RestTemplate restTemplate;
     public HttpEntity<ResponseBase> testUrl (String baseUrl) throws URISyntaxException {
-        //http://", serviceName,":", port
 
         URI uri = new URI(baseUrl);
 
@@ -26,9 +27,12 @@ public class NextStep {
         HttpEntity<ResponseBase> requestEntity = new HttpEntity<>(headers);
         try
         {
-             requestEntity =restTemplate.exchange(
-                    uri, HttpMethod.GET, requestEntity, ResponseBase.class);
+//             requestEntity =restTemplate.exchange(
+//                    uri, HttpMethod.HEAD, requestEntity, ResponseBase.class);
             logger.debug("test exitoso de url: {}",baseUrl);
+        ResponseEntity<Object> response = restTemplate.exchange(uri, HttpMethod.HEAD, requestEntity, Object.class);
+            logger.info("Aqui viene la informacion baseUrl: " + new ObjectMapper().writeValueAsString(response));
+
         }
         catch(Exception ex)
         {

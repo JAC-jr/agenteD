@@ -108,10 +108,13 @@ public class SubProcess {
             String baseUrl = servicio.getTestUrl();
 
             try {
+                long firstDate = System.currentTimeMillis();
                 HttpEntity<ResponseBase> response = nextStep.testUrl(baseUrl);
+                long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("{}",response);
-                logger.info("{}", response.getBody().getStatusCode());
+
                 if (response.getHeaders().isEmpty()){
+
                     servicio.setStatus("null");
                     serviceRepository.save(servicio);
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
