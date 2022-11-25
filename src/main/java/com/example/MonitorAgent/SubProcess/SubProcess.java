@@ -4,11 +4,15 @@ package com.example.MonitorAgent.SubProcess;
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.NextStep.NextStep;
 import com.example.MonitorAgent.Repository.*;
+import com.example.MonitorAgent.ResponseModel.ResponseBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -100,12 +104,28 @@ public class SubProcess {
             String serviceName = servicio.getServiceName();
             String port = servicio.getPort();
             Long testInterv = servicio.getTestInterv();
+            String status = servicio.getStatus();
+            String baseUrl = servicio.getTestUrl();
 
-            System.out.println(nextStep.getCurl(serviceName,port));
-
-            logger.info("application_Id = {}, Service_Id = {}, Test_interv = {}, ",
-                    servicio.getApplicationId(), servicio.getService_id(), testInterv);
-
+            try {
+                HttpEntity<ResponseBase> response = nextStep.testUrl(baseUrl);
+                logger.info("{}",response);
+                logger.info("{}", response.getBody().getStatusCode());
+                if (response.getHeaders().isEmpty()){
+                    servicio.setStatus("null");
+                    serviceRepository.save(servicio);
+                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                            servicio.getApplicationId(), servicio.getService_id(), status);
+                }
+                else {
+                    servicio.setStatus("good");
+                    serviceRepository.save(servicio);
+                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                            servicio.getApplicationId(), servicio.getService_id(), status);
+                }
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 Thread.sleep(servicio.getTestInterv());
             } catch (InterruptedException e) {
