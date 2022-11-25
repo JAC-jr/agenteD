@@ -4,10 +4,12 @@ package com.example.MonitorAgent.SubProcess;
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.NextStep.NextStep;
 import com.example.MonitorAgent.Repository.*;
+import com.example.MonitorAgent.ResponseModel.ResponseBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
@@ -106,8 +108,9 @@ public class SubProcess {
             String baseUrl = servicio.getTestUrl();
 
             try {
-                HttpEntity<Object> response = nextStep.testUrl(baseUrl);
+                HttpEntity<ResponseBase> response = nextStep.testUrl(baseUrl);
                 logger.info("{}",response);
+                logger.info("{}", response.getBody().getStatusCode());
                 if (response.getHeaders().isEmpty()){
                     servicio.setStatus("null");
                     serviceRepository.save(servicio);
