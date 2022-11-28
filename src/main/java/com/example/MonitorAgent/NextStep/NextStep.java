@@ -34,17 +34,15 @@ public class NextStep {
 //             requestEntity =restTemplate.exchange(
 //                    uri, HttpMethod.HEAD, requestEntity, ResponseBase.class);
             logger.debug("test exitoso de url: {}",baseUrl);
-        response = restTemplate.exchange(uri, HttpMethod.HEAD, requestEntity, Object.class);
+            response = restTemplate.exchange(uri, HttpMethod.HEAD, requestEntity, Object.class);
 
            // LinkedHashMap<String, Object> respons = (LinkedHashMap<String, Object>) response;
 
-            logger.info("getStatusCodeValue: " + new ObjectMapper().writeValueAsString(response.getStatusCodeValue()));
-
-            logger.info("Aqui viene la informacion baseUrl: " + new ObjectMapper().writeValueAsString(response));
-            logger.info("Aqui viene la informacion response.getHeaders(): " + new ObjectMapper().writeValueAsString(response.getHeaders()));
-            logger.info("Aqui viene la informacion response.getBody(): " + new ObjectMapper().writeValueAsString(response.getBody()));
-
-
+//            logger.info("getStatusCodeValue: " + new ObjectMapper().writeValueAsString(response.getStatusCodeValue()));
+//
+//            logger.info("Aqui viene la informacion baseUrl: " + new ObjectMapper().writeValueAsString(response));
+//            logger.info("Aqui viene la informacion response.getHeaders(): " + new ObjectMapper().writeValueAsString(response.getHeaders()));
+//            logger.info("Aqui viene la informacion response.getBody(): " + new ObjectMapper().writeValueAsString(response.getBody()));
         }
         catch(Exception ex)
         {

@@ -102,31 +102,35 @@ public class SubProcess {
 
         result.forEach(servicio -> {
 
-            String serviceName = servicio.getServiceName();
-            String port = servicio.getPort();
-            Long testInterv = servicio.getTestInterv();
+//            String serviceName = servicio.getServiceName();
+//            String port = servicio.getPort();
+//            Long testInterv = servicio.getTestInterv();
             String status = servicio.getStatus();
             String baseUrl = servicio.getTestUrl();
 
             try {
-                long firstDate = System.currentTimeMillis();
+                double firstDate = System.currentTimeMillis();
                 ResponseEntity<Object> response = nextStep.testUrl(baseUrl);
-                long timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("firstDate= {}" ,firstDate);
+                double timeLapse = System.currentTimeMillis() - firstDate;
+//                logger.info("firstDate= {}" ,firstDate);
                 logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getHeaders().isEmpty()){
+                if (response.getStatusCode().isError()){
 
-                    servicio.setStatus("null");
+                    servicio.setStatus(response.getStatusCode().toString());
                     serviceRepository.save(servicio);
+                    logger.info("{}",servicio);
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), status);
+                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
+                    logger.info("error al recibir respuesta");
                 }
                 else {
-                    servicio.setStatus(String.valueOf(response.getStatusCodeValue()));
+                    servicio.setStatus(response.getStatusCode().toString());
                     serviceRepository.save(servicio);
+                    logger.info("{}",servicio.getStatus());
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), status);
+                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
+                    logger.info("respuesta del servicio exitosa");
                 }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
