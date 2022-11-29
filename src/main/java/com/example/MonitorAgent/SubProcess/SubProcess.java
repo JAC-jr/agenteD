@@ -3,8 +3,8 @@ package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.NextStep.NextStep;
+import com.example.MonitorAgent.NextStep.PingTest;
 import com.example.MonitorAgent.Repository.*;
-import com.example.MonitorAgent.ResponseModel.ResponseBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,9 +34,25 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
-            logger.info("application_Id = {}, Api_Id = {}, Test_interv = {}, " +
-                    "status = {}",api.getApplicationId(),api.getApi_id()
-                    ,api.getTestInterv(),api.getStatus());
+
+            String serviceName = api.getServiceName();
+            Long testInterv = api.getTestInterv();
+            String status = api.getStatus();
+            String BaseIP = api.getNameSpace();
+            try {
+                boolean reachable = new PingTest().testPIng(BaseIP);
+                if (reachable) {
+                    api.setStatus("UP");
+                    apiRepository.save(api);
+                    logger.info("Ping exitoso a: " + BaseIP);
+                } else {
+                    api.setStatus("DOWN");
+                    apiRepository.save(api);
+                    logger.info("Ping fallido a: " + BaseIP);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 Thread.sleep(api.getTestInterv());
             } catch (InterruptedException e) {
@@ -44,6 +61,8 @@ public class SubProcess {
         });
     return CompletableFuture.completedFuture(result);
     }
+
+
 
     public CompletableFuture<List<Integration>> integrationSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
@@ -115,12 +134,12 @@ public class SubProcess {
                 logger.info("firstDate= {}" ,firstDate);
                 logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getHeaders().isEmpty()){
+                if (response.getStatusCode().value() == 200){
 
-                    servicio.setStatus("null");
+                    servicio.setStatus("bad");
                     serviceRepository.save(servicio);
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), status);
+                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
                 }
                 else {
                     servicio.setStatus(String.valueOf(response.getStatusCodeValue()));

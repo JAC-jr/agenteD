@@ -1,6 +1,6 @@
 package com.example.MonitorAgent.NextStep;
 
-import com.example.MonitorAgent.ResponseModel.ResponseBase;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class NextStep {
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-        ResponseEntity<Object> response = new ResponseEntity<Object>(HttpStatus.OK);
+        ResponseEntity<Object> response = null;
         try
         {
 //             requestEntity =restTemplate.exchange(
