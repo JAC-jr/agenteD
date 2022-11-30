@@ -1,9 +1,7 @@
 package com.example.MonitorAgent.SubProcess;
 
-
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.NextStep.NextStep;
-import com.example.MonitorAgent.NextStep.PingTest;
+import com.example.MonitorAgent.NextStep.CurlTest;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,34 +21,48 @@ public class SubProcess {
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
 
-    @Autowired NextStep nextStep;
+    @Autowired
+    CurlTest curlTest;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
-    
+
+    //------------------------------------------------------------------------------------------------------
     public CompletableFuture<List<Api>> apiSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
+           // String status = servicio.getStatus();
+            String baseUrl = api.getNameSpace();
+            String method = api.getMethod();
+            String Json = api.getJson();
 
-            String serviceName = api.getServiceName();
-            Long testInterv = api.getTestInterv();
-            String status = api.getStatus();
-            String BaseIP = api.getNameSpace();
-            String Http_metodo = api.getHttp_method();
-            try {
-                boolean reachable = new PingTest().testPIng(BaseIP);
-                if (reachable) {
-                    api.setStatus("UP");
+            try{
+                double firstDate = System.currentTimeMillis();
+                ResponseEntity<Object> response = curlTest.testUrl(baseUrl,method,Json);
+                double timeLapse = System.currentTimeMillis() - firstDate;
+                logger.info("time lapse= {}" ,timeLapse);
+
+                if (response.getStatusCode().is2xxSuccessful()){
+
+                    api.setStatus(response.getStatusCode().toString());
                     apiRepository.save(api);
-                    logger.info("Ping exitoso a: " + BaseIP);
-                } else {
-                    api.setStatus("DOWN");
-                    apiRepository.save(api);
-                    logger.info("Ping fallido a: " + BaseIP);
+                    logger.info("{}",api.getStatus());
+                    logger.info("application_Id = {}, api_Id = {}, status = {}, ",
+                            api.getApplicationId(), api.getApi_id(), api.getStatus());
+                    logger.info("respuesta del servicio exitosa");
                 }
-            } catch (IOException e) {
+                else {
+                    api.setStatus(response.getStatusCode().toString());
+                    apiRepository.save(api);
+                    logger.info("{}",api);
+                    logger.info("application_Id = {},api_Id = {}, status = {}, ",
+                            api.getApplicationId(), api.getApi_id(), api.getStatus());
+                    logger.info("error al recibir respuesta");
+                }
+            } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
+
             try {
                 Thread.sleep(api.getTestInterv());
             } catch (InterruptedException e) {
@@ -60,9 +71,7 @@ public class SubProcess {
         });
     return CompletableFuture.completedFuture(result);
     }
-
-
-
+//------------------------------------------------------------------------------------------------------------
     public CompletableFuture<List<Integration>> integrationSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Integration> result = integrationRepository.findAllByApplicationId(applicationId);
@@ -79,7 +88,7 @@ public class SubProcess {
         });
         return CompletableFuture.completedFuture(result);
     }
-
+//-----------------------------------------------------------------------------------------------------------
     public CompletableFuture<List<LoadBalancer>> loadBalancerSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<LoadBalancer> result = loadBalancerRepository.findAllByApplicationId(applicationId);
@@ -96,6 +105,7 @@ public class SubProcess {
         });
         return CompletableFuture.completedFuture(result);
     }
+    //--------------------------------------------------------------------------------------------------------
     public CompletableFuture<List<Persistence>> persistenceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Persistence> result = persistenceRepository.findAllByApplicationId(applicationId);
@@ -113,39 +123,39 @@ public class SubProcess {
 
         return CompletableFuture.completedFuture(result);
     }
-
+//-----------------------------------------------------------------------------------------------------------
     public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);
 
         result.forEach(servicio -> {
 
-            String serviceName = servicio.getServiceName();
-            String port = servicio.getPort();
-            Long testInterv = servicio.getTestInterv();
-            String status = servicio.getStatus();
+            String method = servicio.getMethod();
             String baseUrl = servicio.getTestUrl();
-            String Http_metodo = servicio.getHttpMethod();
+            String Json = servicio.getStatus();
 
             try {
-                long firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = nextStep.testUrl(baseUrl, Http_metodo);
-                long timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("firstDate= {}" ,firstDate);
+                double firstDate = System.currentTimeMillis();
+                ResponseEntity<Object> response = curlTest.testUrl(baseUrl,method,Json);
+                double timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getStatusCode().value() == 200){
+                if (response.getStatusCode().isError()){
 
-                    servicio.setStatus("bad");
+                    servicio.setStatus(response.getStatusCode().toString());
                     serviceRepository.save(servicio);
+                    logger.info("{}",servicio);
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
                             servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
+                    logger.info("error al recibir respuesta");
                 }
                 else {
-                    servicio.setStatus(String.valueOf(response.getStatusCodeValue()));
+                    servicio.setStatus(response.getStatusCode().toString());
                     serviceRepository.save(servicio);
+                    logger.info("{}",servicio.getStatus());
                     logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), status);
+                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
+                    logger.info("respuesta del servicio exitosa");
                 }
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
