@@ -8,8 +8,6 @@ import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +37,7 @@ public class SubProcess {
             Long testInterv = api.getTestInterv();
             String status = api.getStatus();
             String BaseIP = api.getNameSpace();
+            String Http_metodo = api.getHttp_method();
             try {
                 boolean reachable = new PingTest().testPIng(BaseIP);
                 if (reachable) {
@@ -126,10 +125,11 @@ public class SubProcess {
             Long testInterv = servicio.getTestInterv();
             String status = servicio.getStatus();
             String baseUrl = servicio.getTestUrl();
+            String Http_metodo = servicio.getHttpMethod();
 
             try {
                 long firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = nextStep.testUrl(baseUrl);
+                ResponseEntity<Object> response = nextStep.testUrl(baseUrl, Http_metodo);
                 long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("firstDate= {}" ,firstDate);
                 logger.info("time lapse= {}" ,timeLapse);

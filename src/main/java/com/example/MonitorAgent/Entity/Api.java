@@ -72,4 +72,7 @@ public class Api {
     @Column(name = "hist_successful_test")
     private Long histSuccessfulTest;
 
+    @Column(name = "http_method", length = 45)
+    private String Http_method;
+
 }

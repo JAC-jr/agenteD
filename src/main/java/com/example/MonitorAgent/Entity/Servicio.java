@@ -75,4 +75,7 @@ public class Servicio {
     @Column(name = "status", length = 45)
     private String status;
 
+    @Column(name = "http_method")
+    private String httpMethod;
+
 }

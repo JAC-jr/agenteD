@@ -11,8 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
-import java.util.Objects;
 
 @Service
 public class NextStep {
@@ -20,23 +18,25 @@ public class NextStep {
     Logger logger = LoggerFactory.getLogger(NextStep.class);
     @Autowired
     RestTemplate restTemplate;
-    public ResponseEntity<Object> testUrl (String baseUrl) throws URISyntaxException {
+    public ResponseEntity<Object> testUrl (String baseUrl, String Http_metodo) throws URISyntaxException {
 
         URI uri = new URI(baseUrl);
 
-        //ResponseBase responseBase = null;
+
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<Object> response = null;
+
+        HttpMethod method = HttpMethod.valueOf(Http_metodo);
+
+
         try
         {
-//             requestEntity =restTemplate.exchange(
-//                    uri, HttpMethod.HEAD, requestEntity, ResponseBase.class);
-            logger.debug("test exitoso de url: {}",baseUrl);
-        response = restTemplate.exchange(uri, HttpMethod.HEAD, requestEntity, Object.class);
 
-           // LinkedHashMap<String, Object> respons = (LinkedHashMap<String, Object>) response;
+        response = restTemplate.exchange(uri, method, requestEntity, Object.class);
+
+
 
             logger.info("getStatusCodeValue: " + new ObjectMapper().writeValueAsString(response.getStatusCodeValue()));
 
