@@ -39,6 +39,7 @@ public class RestTemplateConfig {
         return restTemplate;
     }
 
+
     private ClientHttpRequestFactory getClientHttpRequestFactory() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         logger.debug("ConnectTimeout: {} ConnectionRequestTimeout {}: SocketTimeout {}:",CONNECTION_TIMEOUT,CONNECTION_REQUEST_TIMEOUT,SOCKET_TIMEOUT);
 
