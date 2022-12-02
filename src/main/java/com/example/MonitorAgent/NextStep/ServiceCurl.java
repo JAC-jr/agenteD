@@ -1,10 +1,6 @@
 package com.example.MonitorAgent.NextStep;
 
-import com.fasterxml.jackson.core.json.JsonWriteContext;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import netscape.javascript.JSObject;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +8,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.HttpMethodConstraintElement;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 @Service
-public class CurlTest {
+public class ServiceCurl {
 
-    Logger logger = LoggerFactory.getLogger(CurlTest.class);
+    Logger logger = LoggerFactory.getLogger(ServiceCurl.class);
     @Autowired
     RestTemplate restTemplate;
     public ResponseEntity<Object> testUrl (String baseUrl,String method,String Json) throws URISyntaxException {
