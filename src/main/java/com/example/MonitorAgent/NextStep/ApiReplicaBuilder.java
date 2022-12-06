@@ -23,7 +23,7 @@ public class ApiReplicaBuilder {
     Logger logger = LoggerFactory.getLogger(ApiReplicaBuilder.class);
     @Autowired
     RestTemplate restTemplate;
-    public ResponseEntity<Object> apiKubeGet() {
+    public ResponseEntity<Object> apiKubeGet(String baseUrl) {
 
         try {
             logger.debug(" Creando contexto ");
@@ -55,7 +55,7 @@ public class ApiReplicaBuilder {
 
                     logger.info("metadata: {}", item.getMetadata());
                     ResponseEntity<String> responseEntityDetailQueue = restTemplate.exchange(
-                            "http://" + item.getStatus().getPodIP()+"  " api,
+                            "http://" + item.getStatus().getPodIP()+ baseUrl,
                             HttpMethod.GET, requestEntity, String.class);
                     logger.debug(" Response  " + "http://"
                             + item.getStatus().getPodIP()

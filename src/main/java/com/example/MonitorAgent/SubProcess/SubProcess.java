@@ -35,12 +35,12 @@ public class SubProcess {
 
         result.forEach(api -> {
            // String status = servicio.getStatus();
-            String baseUrl = api.getNameSpace();
+            String baseUrl = api.getServiceName();
             String method = api.getMethod();
             String Json = api.getJson();
 
             double firstDate = System.currentTimeMillis();
-            ResponseEntity<Object> response = apiReplicaBuilder.apiKubeGet();
+            ResponseEntity<Object> response = apiReplicaBuilder.apiKubeGet(baseUrl);
             double timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
 
