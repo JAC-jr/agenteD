@@ -54,16 +54,11 @@ public class ApiReplicaBuilder {
                     //************Se busca primero con el metdo de los servicios nuevos******************
 
                     logger.info("metadata: {}", item.getMetadata());
+                    logger.info("curl http://" + item.getStatus().getPodIP()+ baseUrl);
                     ResponseEntity<String> responseEntityDetailQueue = restTemplate.exchange(
                             "http://" + item.getStatus().getPodIP()+ baseUrl,
                             HttpMethod.GET, requestEntity, String.class);
-                    logger.debug(" Response  " + "http://"
-                            + item.getStatus().getPodIP()
-                            + "/getCurrentQueue  "
-                            + item.getMetadata().getName()
-                            + " --- " + responseEntityDetailQueue.getBody());
-                    request = responseEntityDetailQueue.getBody().split(":")[0].replace(
-                            ".REQ", "");
+                  //  request = responseEntityDetailQueue.getBody().split(":")[0].replace(".REQ", "");
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
