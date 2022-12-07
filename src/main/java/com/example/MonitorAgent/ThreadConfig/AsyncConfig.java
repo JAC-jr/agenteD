@@ -76,5 +76,16 @@ public class AsyncConfig {
         executor.initialize();
         return executor;
     }
+
+    @Bean(name = "ApiReplicaThreadPoolTaskExecutor")
+    public Executor apiReplicaThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(6);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("ApiReplicaThread--");
+        executor.initialize();
+        return executor;
+    }
 }
 

@@ -17,7 +17,7 @@ public class ServiceCurl {
     Logger logger = LoggerFactory.getLogger(ServiceCurl.class);
     @Autowired
     RestTemplate restTemplate;
-    public ResponseEntity<Object> testUrl (String baseUrl,String method,String Json) throws URISyntaxException {
+    public ResponseEntity<Object> testService (String baseUrl,String method,String Json) throws URISyntaxException {
 
         URI uri = new URI(baseUrl);
         HttpHeaders headers = new HttpHeaders();

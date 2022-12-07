@@ -1,7 +1,7 @@
 package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.NextStep.ApiReplicaBuilder;
+import com.example.MonitorAgent.NextStep.ApiPodList;
 import com.example.MonitorAgent.NextStep.ServiceCurl;
 import com.example.MonitorAgent.NextStep.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
@@ -25,7 +25,8 @@ public class SubProcess {
 
     @Autowired ServiceCurl serviceCurl;
     @Autowired LoadBalancerCurl loadBalancerCurl;
-    @Autowired ApiReplicaBuilder apiReplicaBuilder;
+    @Autowired
+    ApiPodList apiPodList;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //------------------------------------------------------------------------------------------------------
@@ -34,33 +35,21 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
-           // String status = servicio.getStatus();
-            String baseUrl = api.getServiceName();
-            String method = api.getMethod();
-            String Json = api.getJson();
+            String baseUrl = api.getDescription();
+            String nameSpace = api.getNameSpace();
+            String serviceName = api.getServiceName();
 
             double firstDate = System.currentTimeMillis();
-            ResponseEntity<Object> response = apiReplicaBuilder.apiKubeGet(baseUrl);
+            ResponseEntity<Object> response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
             double timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
-
-            if (response.getStatusCode().is2xxSuccessful()){
 
                 api.setStatus(response.getStatusCode().toString());
                 apiRepository.save(api);
                 logger.info("{}",api.getStatus());
                 logger.info("application_Id = {}, api_Id = {}, status = {}, ",
                         api.getApplicationId(), api.getApi_id(), api.getStatus());
-                logger.info("respuesta del servicio exitosa");
-            }
-            else {
-                api.setStatus(response.getStatusCode().toString());
-                apiRepository.save(api);
-                logger.info("{}",api);
-                logger.info("application_Id = {},api_Id = {}, status = {}, ",
-                        api.getApplicationId(), api.getApi_id(), api.getStatus());
-                logger.info("error al recibir respuesta");
-            }
+                logger.info("respuesta del Api exitosa");
 
             try {
                 Thread.sleep(api.getTestInterv());
@@ -164,7 +153,7 @@ public class SubProcess {
 
             try {
                 double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = serviceCurl.testUrl(baseUrl,method,Json);
+                ResponseEntity<Object> response = serviceCurl.testService(baseUrl,method,Json);
                 double timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
 
