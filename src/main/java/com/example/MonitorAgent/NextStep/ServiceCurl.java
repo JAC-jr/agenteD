@@ -1,6 +1,5 @@
 package com.example.MonitorAgent.NextStep;
 
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +12,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Service
-public class CurlTest {
+public class ServiceCurl {
 
-    Logger logger = LoggerFactory.getLogger(CurlTest.class);
+    Logger logger = LoggerFactory.getLogger(ServiceCurl.class);
     @Autowired
     RestTemplate restTemplate;
-    public ResponseEntity<Object> testUrl (String baseUrl,String method,String Json) throws URISyntaxException {
+    public ResponseEntity<Object> testService (String baseUrl,String method,String Json) throws URISyntaxException {
 
         URI uri = new URI(baseUrl);
         HttpHeaders headers = new HttpHeaders();

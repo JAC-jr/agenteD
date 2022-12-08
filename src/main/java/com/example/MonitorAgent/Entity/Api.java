@@ -21,12 +21,6 @@ public class Api {
     @Column(name = "status", length = 45)
     private String status;
 
-    @Column(name = "http_method", length = 45)
-    private String method;
-
-    @Column(name = "Json", length = 250)
-    private String Json;
-
     @Column(name = "application_id")
     private Integer applicationId;
 

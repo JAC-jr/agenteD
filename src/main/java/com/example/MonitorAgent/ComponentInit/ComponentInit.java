@@ -43,13 +43,13 @@ public class ComponentInit implements CommandLineRunner {
                 logger.info("Encontrada aplicación {}", app);
                 logger.info("id = {}", application.getApplication_id());
                 threadFactory.apiObjetResponse(application);
-                /*threadFactory.integrationObjetResponse(application);
-                threadFactory.loadBalancerObjetResponse(application);
-                threadFactory.persistenceObjetResponse(application);
+                //threadFactory.integrationObjetResponse(application);
+                //threadFactory.loadBalancerObjetResponse(application);
+                //threadFactory.persistenceObjetResponse(application);
 
 
-                threadFactory.serviceObjetResponse(application);
-                */numApplication++;
+                //threadFactory.serviceObjetResponse(application);
+                numApplication++;
             }
         }
         if(numApplication == 0 )

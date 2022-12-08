@@ -1,7 +1,9 @@
 package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.NextStep.CurlTest;
+import com.example.MonitorAgent.NextStep.ApiPodList;
+import com.example.MonitorAgent.NextStep.ServiceCurl;
+import com.example.MonitorAgent.NextStep.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,10 @@ public class SubProcess {
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
 
+    @Autowired ServiceCurl serviceCurl;
+    @Autowired LoadBalancerCurl loadBalancerCurl;
     @Autowired
-    CurlTest curlTest;
+    ApiPodList apiPodList;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //------------------------------------------------------------------------------------------------------
@@ -31,37 +35,21 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
-           // String status = servicio.getStatus();
-            String baseUrl = api.getNameSpace();
-            String method = api.getMethod();
-            String Json = api.getJson();
+            String baseUrl = api.getDescription();
+            String nameSpace = api.getNameSpace();
+            String serviceName = api.getServiceName();
 
-            try{
-                double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = curlTest.testUrl(baseUrl,method,Json);
-                double timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("time lapse= {}" ,timeLapse);
+            double firstDate = System.currentTimeMillis();
+            ResponseEntity<Object> response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
+            double timeLapse = System.currentTimeMillis() - firstDate;
+            logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getStatusCode().is2xxSuccessful()){
-
-                    api.setStatus(response.getStatusCode().toString());
-                    apiRepository.save(api);
-                    logger.info("{}",api.getStatus());
-                    logger.info("application_Id = {}, api_Id = {}, status = {}, ",
-                            api.getApplicationId(), api.getApi_id(), api.getStatus());
-                    logger.info("respuesta del servicio exitosa");
-                }
-                else {
-                    api.setStatus(response.getStatusCode().toString());
-                    apiRepository.save(api);
-                    logger.info("{}",api);
-                    logger.info("application_Id = {},api_Id = {}, status = {}, ",
-                            api.getApplicationId(), api.getApi_id(), api.getStatus());
-                    logger.info("error al recibir respuesta");
-                }
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
+                api.setStatus(response.getStatusCode().toString());
+                apiRepository.save(api);
+                logger.info("{}",api.getStatus());
+                logger.info("application_Id = {}, api_Id = {}, status = {}, ",
+                        api.getApplicationId(), api.getApi_id(), api.getStatus());
+                logger.info("respuesta del Api exitosa");
 
             try {
                 Thread.sleep(api.getTestInterv());
@@ -94,14 +82,43 @@ public class SubProcess {
         List<LoadBalancer> result = loadBalancerRepository.findAllByApplicationId(applicationId);
 
         result.forEach(loadBalancer -> {
-            logger.info("application_Id = {}, Vserver_Id = {}, Test_interv = {}, " +
-                    "status = {}",loadBalancer.getApplicationId(),loadBalancer.getVserver_id(),loadBalancer.getTestInterv()
-                    ,loadBalancer.getStatus());
-            try {
-                Thread.sleep(loadBalancer.getTestInterv());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+                    String baseUrl = loadBalancer.getIpServer();
+                  //  String method = api.getMethod();
+
+                    try{
+                        double firstDate = System.currentTimeMillis();
+                        ResponseEntity<Object> response = loadBalancerCurl.testLoadBalancer(baseUrl);
+                        double timeLapse = System.currentTimeMillis() - firstDate;
+                        logger.info("time lapse= {}" ,timeLapse);
+
+                        if (response.getStatusCode().is2xxSuccessful()){
+
+                            loadBalancer.setStatus(response.getStatusCode().toString());
+                            loadBalancerRepository.save(loadBalancer);
+                            logger.info("{}",loadBalancer.getStatus());
+                            logger.info("application_Id = {}, load_balancer_id = {}, status = {}, ",
+                                    loadBalancer.getApplicationId(), loadBalancer.getVserver_id(),
+                                    loadBalancer.getStatus());
+                            logger.info("respuesta del servicio exitosa");
+                        }
+                        else {
+                            loadBalancer.setStatus(response.getStatusCode().toString());
+                            loadBalancerRepository.save(loadBalancer);
+                            logger.info("{}",loadBalancer);
+                            logger.info("application_Id = {}, load_balancer_id = {}, status = {}, ",
+                                    loadBalancer.getApplicationId(), loadBalancer.getVserver_id(),
+                                    loadBalancer.getStatus());
+                            logger.info("error al recibir respuesta");
+                        }
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try {
+                        Thread.sleep(loadBalancer.getTestInterv());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
         });
         return CompletableFuture.completedFuture(result);
     }
@@ -132,11 +149,11 @@ public class SubProcess {
 
             String method = servicio.getMethod();
             String baseUrl = servicio.getTestUrl();
-            String Json = servicio.getStatus();
+            String Json = servicio.getJson();
 
             try {
                 double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = curlTest.testUrl(baseUrl,method,Json);
+                ResponseEntity<Object> response = serviceCurl.testService(baseUrl,method,Json);
                 double timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
 

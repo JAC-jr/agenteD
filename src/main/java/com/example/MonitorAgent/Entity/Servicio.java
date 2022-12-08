@@ -27,8 +27,8 @@ public class Servicio {
     @Column(name = "service_name", length = 45)
     private String serviceName;
 
-    @Column(name = "operation", length = 45)
-    private String operation;
+    @Column(name = "json", length = 200)
+    private String json;
 
     @Column(name = "port", length = 45)
     private String port;
@@ -36,7 +36,7 @@ public class Servicio {
     @Column(name = "method", length = 45)
     private String method;
 
-    @Column(name = "test_url", length = 45)
+    @Column(name = "test_url", length = 200)
     private String testUrl;
 
     @Column(name = "num_test")
