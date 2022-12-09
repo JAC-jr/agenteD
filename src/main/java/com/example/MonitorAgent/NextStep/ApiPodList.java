@@ -1,5 +1,8 @@
 package com.example.MonitorAgent.NextStep;
 
+import com.example.MonitorAgent.Entity.ApiReplica;
+import com.example.MonitorAgent.Repository.ApiReplicaRepository;
+import com.example.MonitorAgent.Repository.ApiRepository;
 import com.example.MonitorAgent.Threadfractory.ThreadFactory;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
@@ -22,7 +25,9 @@ public class ApiPodList {
     Logger logger = LoggerFactory.getLogger(ApiPodList.class);
     @Autowired
     RestTemplate restTemplate;
-    public ResponseEntity<Object> apiKubeGet(String baseUrl, String nameSpace, String serviceName) {
+    @Autowired
+    ApiReplicaRepository apiReplicaRepository;
+    public double apiKubeGet(String baseUrl, String nameSpace, String serviceName) {
 
         try {
             logger.debug(" Creando contexto ");
@@ -37,6 +42,8 @@ public class ApiPodList {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
+            double state = 0;
+            double items = 0;
 
             logger.debug(" Invocando APIs ");
 
@@ -46,15 +53,27 @@ public class ApiPodList {
 
             for (V1Pod item : list.getItems()) {
 
+                items++;
                 response = restTemplate.exchange("https://" + item.getStatus().getPodIP()+ baseUrl,
                         HttpMethod.GET, requestEntity, Object.class);
-                logger.info("response {}", response);
+                logger.info("item = {} , response {}", item.getMetadata().getName(), response);
                 logger.info("status={}", response.getStatusCode());
+                ApiReplica apiReplica = new ApiReplica();
+                apiReplica.setReplica_name(item.getMetadata().getName());
+                apiReplica.setReplica_ip(item.getStatus().getPodIP());
+                apiReplica.setReplica_status(response.getStatusCode().toString());
+                apiReplica.setReplica_date(item.getMetadata().getCreationTimestamp().toString());
+                apiReplicaRepository.save(apiReplica);
 
+
+                if (response.getStatusCode().is2xxSuccessful())
+                {state++;}
+                return (items/state)*100;
             }
         } catch (Exception e) {
             logger.error(" failure method getQueue " + e.getMessage());
         }
-        return null;
+
+        return 0;
     }
 }

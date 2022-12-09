@@ -40,11 +40,11 @@ public class SubProcess {
             String serviceName = api.getServiceName();
 
             double firstDate = System.currentTimeMillis();
-            ResponseEntity<Object> response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
+            double response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
             double timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
 
-                api.setStatus(response.getStatusCode().toString());
+                api.setStatus(response+"%");
                 apiRepository.save(api);
                 logger.info("{}",api.getStatus());
                 logger.info("application_Id = {}, api_Id = {}, status = {}, ",

@@ -6,18 +6,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class ApiCurl {
-
     Logger logger = LoggerFactory.getLogger(ApiCurl.class);
     @Autowired
     RestTemplate restTemplate;
+//        @Async("ApiReplicaThreadPoolTaskExecutor")
+//    public void apiReplicaObjetResponse(V1Pod item, String baseUrl){
+//
+//        while (true){
+//            try {
+//                ResponseEntity<Object> objectResponse = testApi(item, baseUrl).get();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            } catch (ExecutionException e) {
+//                throw new RuntimeException(e);
+//            } catch (URISyntaxException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
     public ResponseEntity<Object> testApi (V1Pod item, String baseUrl) throws URISyntaxException {
 
         URI uri = new URI(baseUrl);

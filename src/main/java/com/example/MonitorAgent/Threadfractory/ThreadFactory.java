@@ -92,19 +92,4 @@ public class ThreadFactory {
         }
     }
 
-//    @Async("ApiReplicaThreadPoolTaskExecutor")
-//    public void apiReplicaObjetResponse(V1Pod item, String baseUrl){
-//
-//        while (true){
-//            try {
-//                ResponseEntity<Object> objectResponse = apiCurl.testApi(item, baseUrl).get();
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            } catch (ExecutionException e) {
-//                throw new RuntimeException(e);
-//            } catch (URISyntaxException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
 }
