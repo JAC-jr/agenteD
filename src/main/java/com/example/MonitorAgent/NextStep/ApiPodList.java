@@ -2,8 +2,6 @@ package com.example.MonitorAgent.NextStep;
 
 import com.example.MonitorAgent.Entity.ApiReplica;
 import com.example.MonitorAgent.Repository.ApiReplicaRepository;
-import com.example.MonitorAgent.Repository.ApiRepository;
-import com.example.MonitorAgent.Threadfractory.ThreadFactory;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -27,9 +25,10 @@ public class ApiPodList {
     RestTemplate restTemplate;
     @Autowired
     ApiReplicaRepository apiReplicaRepository;
-    public double apiKubeGet(String baseUrl, String nameSpace, String serviceName) {
+    @Autowired ConfirmReplicaPrevValue confirmReplicaPrevValue;
+    public double apiKubeGet(String baseUrl, String nameSpace, String serviceName, Integer father) {
 
-        double items = 0;
+        double cont_items = 0;
         double state = 0;
         try {
             logger.debug(" Creando contexto ");
@@ -44,8 +43,10 @@ public class ApiPodList {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
+            ApiReplica apiReplica = new ApiReplica();
             state = 0;
-            items = 0;
+            cont_items = 0;
+
 
             logger.debug(" Invocando APIs ");
 
@@ -55,12 +56,17 @@ public class ApiPodList {
 
             for (V1Pod item : list.getItems()) {
 
-                items++;
+                cont_items++;
                 response = restTemplate.exchange("https://" + item.getStatus().getPodIP() + baseUrl,
                         HttpMethod.GET, requestEntity, Object.class);
-                logger.info("item = {} , response {}", item.getMetadata().getName(), response);
-                logger.info("status={}", response.getStatusCode());
-                ApiReplica apiReplica = new ApiReplica();
+                logger.info("item = {} , status {}", item.getMetadata().getName(), response.getStatusCode());
+                logger.info("response={}", response);
+
+                //confirmReplicaPrevValue.searchItemFromDb(father, item);
+
+                //apiReplica = confirmReplicaPrevValue.apiReplicaBuilder(item);
+
+                apiReplica.setFather_api_id(father);
                 apiReplica.setReplica_name(item.getMetadata().getName());
                 apiReplica.setReplica_ip(item.getStatus().getPodIP());
                 apiReplica.setReplica_status(response.getStatusCode().toString());
@@ -73,8 +79,11 @@ public class ApiPodList {
             }
         } catch (Exception e) {
             logger.error(" failure method getQueue " + e.getMessage());
-            continue;
         }
-        return (items / state) * 100;
+        if (state == 0){
+            return 0;
+        }else {
+            return (cont_items / state) * 100;
+        }
     }
 }

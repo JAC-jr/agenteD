@@ -35,15 +35,23 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
+            Integer apiID = api.getApi_id();
             String baseUrl = api.getDescription();
             String nameSpace = api.getNameSpace();
             String serviceName = api.getServiceName();
 
             double firstDate = System.currentTimeMillis();
-            double response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
+            double response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName, apiID);
             double timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
 
+            if (response ==0){
+                api.setStatus("sin replicas corriendo");
+                apiRepository.save(api);
+                logger.info("application_Id = {}, api_Id = {}, response = {}",
+                        api.getApplicationId(), api.getApi_id(), api.getStatus());
+                logger.info("respuesta del Api exitosa");
+            }
                 api.setStatus(response+"%");
                 apiRepository.save(api);
                 logger.info("{}",api.getStatus());

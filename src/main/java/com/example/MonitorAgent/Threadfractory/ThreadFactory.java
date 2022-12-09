@@ -1,17 +1,14 @@
 package com.example.MonitorAgent.Threadfractory;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.NextStep.ApiCurl;
+import com.example.MonitorAgent.NextStep.ConfirmReplicaPrevValue;
 import com.example.MonitorAgent.SubProcess.SubProcess;
-import io.kubernetes.client.openapi.models.V1Pod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 @Service
@@ -20,8 +17,7 @@ public class ThreadFactory {
     Logger logger = LoggerFactory.getLogger(ThreadFactory.class);
     @Autowired
     SubProcess subProcess;
-    @Autowired
-    ApiCurl apiCurl;
+
     @Async("ApiThreadPoolTaskExecutor")
     public void apiObjetResponse(Application application){
 

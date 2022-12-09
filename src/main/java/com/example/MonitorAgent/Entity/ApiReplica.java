@@ -18,6 +18,9 @@ public class ApiReplica {
     @Column(name = "replica_id", nullable = false)
     private Integer replica_id;
 
+    @Column(name = "father_api_id")
+    private Integer father_api_id;
+
     @Column(name = "replica_ip")
     private String replica_ip;
 
