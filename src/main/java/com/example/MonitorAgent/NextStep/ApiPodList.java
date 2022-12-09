@@ -29,6 +29,8 @@ public class ApiPodList {
     ApiReplicaRepository apiReplicaRepository;
     public double apiKubeGet(String baseUrl, String nameSpace, String serviceName) {
 
+        double items = 0;
+        double state = 0;
         try {
             logger.debug(" Creando contexto ");
 
@@ -42,19 +44,19 @@ public class ApiPodList {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
-            double state = 0;
-            double items = 0;
+            state = 0;
+            items = 0;
 
             logger.debug(" Invocando APIs ");
 
             V1PodList list = api.listNamespacedPod(nameSpace, null,
-                    null, null, null, "app="+serviceName, null, null, null,
-                    5000, null );
+                    null, null, null, "app=" + serviceName, null, null, null,
+                    5000, null);
 
             for (V1Pod item : list.getItems()) {
 
                 items++;
-                response = restTemplate.exchange("https://" + item.getStatus().getPodIP()+ baseUrl,
+                response = restTemplate.exchange("https://" + item.getStatus().getPodIP() + baseUrl,
                         HttpMethod.GET, requestEntity, Object.class);
                 logger.info("item = {} , response {}", item.getMetadata().getName(), response);
                 logger.info("status={}", response.getStatusCode());
@@ -65,15 +67,14 @@ public class ApiPodList {
                 apiReplica.setReplica_date(item.getMetadata().getCreationTimestamp().toString());
                 apiReplicaRepository.save(apiReplica);
 
-
-                if (response.getStatusCode().is2xxSuccessful())
-                {state++;}
-                return (items/state)*100;
+                if (response.getStatusCode().is2xxSuccessful()) {
+                    state++;
+                }
             }
         } catch (Exception e) {
             logger.error(" failure method getQueue " + e.getMessage());
+            continue;
         }
-
-        return 0;
+        return (items / state) * 100;
     }
 }
