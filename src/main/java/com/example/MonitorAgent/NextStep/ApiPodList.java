@@ -63,23 +63,26 @@ public class ApiPodList {
                 logger.info("response={}", response);
                 logger.info("item = {} , status {}", item.getMetadata().getName(), response.getStatusCode());
 
-                apiReplica.setApiId(apiID);
-                apiReplica.setReplica_name(item.getMetadata().getName());
-                apiReplica.setReplicaIp(item.getStatus().getPodIP());
-                apiReplica.setReplica_status(response.getStatusCode().toString());
-                apiReplica.setReplica_date(item.getMetadata().getCreationTimestamp().toString());
-
-                if (){
-                    ApiReplica PREV = apiReplicaRepository.findAllByReplicaIp(apiReplica.getReplicaIp());
-                    apiReplica.setReplica_last_ip(PREV.getReplicaIp());
-                    apiReplica.setReplica_previous_name(PREV.getReplica_name());
-                    apiReplica.setReplica_last_status(PREV.getReplica_status());
-                    apiReplica.setPrevious_replica_date(PREV.getReplica_date());
+                ApiReplica prev = apiReplicaRepository.findAllByReplicaIp(apiReplica.getReplicaIp());
+                logger.info("prev ip = {}", prev.getReplicaIp());
+                logger.info("new ip = {}", item.getStatus().getPodIP());
+                if (Objects.equals(prev.getReplicaIp(), item.getStatus().getPodIP())){
+                    logger.info("new ip= {}, prev ip= {} ", item.getStatus().getPodIP(),prev.getReplicaIp());
+                    apiReplica.setReplica_last_ip(prev.getReplicaIp());
+                    apiReplica.setReplica_previous_name(prev.getReplica_name());
+                    apiReplica.setReplica_last_status(prev.getReplica_status());
+                    apiReplica.setPrevious_replica_date(prev.getReplica_date());
                     apiReplicaRepository.save(apiReplica);
 
                 } else {
+
+                    apiReplica.setApiId(apiID);
+                    apiReplica.setReplica_name(item.getMetadata().getName());
+                    apiReplica.setReplicaIp(item.getStatus().getPodIP());
+                    apiReplica.setReplica_status(response.getStatusCode().toString());
+                    apiReplica.setReplica_date(item.getMetadata().getCreationTimestamp().toString());
                     apiReplicaRepository.save(apiReplica);
-                    logger.info("replica----- {}", apiReplica.getReplicaIp());
+                    logger.info("replica new ip= {}", apiReplica.getReplicaIp());
                 }
             }
         } catch (Exception e) {
