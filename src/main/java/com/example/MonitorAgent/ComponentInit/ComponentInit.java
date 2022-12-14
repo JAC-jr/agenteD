@@ -15,12 +15,8 @@ import java.util.Optional;
 @Component
 public class ComponentInit implements CommandLineRunner {
     Logger logger = LoggerFactory.getLogger(ComponentInit.class);
-    @Autowired
-    ApplicationRepository applicationRepository;
-
-    @Autowired
-    ThreadFactory threadFactory;
-
+    @Autowired ApplicationRepository applicationRepository;
+    @Autowired ThreadFactory threadFactory;
     @Value("${monitor.application}")
     private String applicationName;
 
@@ -33,7 +29,7 @@ public class ComponentInit implements CommandLineRunner {
             Optional<Application> optId = applicationRepository.getIdByApplicationName(app);
             if(optId.isEmpty())
             {
-                logger.error("la application "+app +"  No esta definida en la BD");
+                logger.error("la application "+ app +"  No esta definida en la BD");
                 continue;
             }
             else

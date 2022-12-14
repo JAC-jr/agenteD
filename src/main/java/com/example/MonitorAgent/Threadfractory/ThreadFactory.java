@@ -1,10 +1,7 @@
 package com.example.MonitorAgent.Threadfractory;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.NextStep.ConfirmReplicaPrevValue;
 import com.example.MonitorAgent.SubProcess.SubProcess;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -14,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class ThreadFactory {
 
-    Logger logger = LoggerFactory.getLogger(ThreadFactory.class);
     @Autowired
     SubProcess subProcess;
 

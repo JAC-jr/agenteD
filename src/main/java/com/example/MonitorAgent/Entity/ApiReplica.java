@@ -18,11 +18,11 @@ public class ApiReplica {
     @Column(name = "replica_id", nullable = false)
     private Integer replica_id;
 
-    @Column(name = "father_api_id")
-    private Integer father_api_id;
+    @Column(name = "api_id")
+    private Integer apiId;
 
     @Column(name = "replica_ip")
-    private String replica_ip;
+    private String replicaIp;
 
     @Column(name = "replica_last_ip")
     private String replica_last_ip;
@@ -33,8 +33,8 @@ public class ApiReplica {
     @Column(name = "replica_last_status")
     private String replica_last_status;
 
-    @Column(name = "replica_port")
-    private String replica_port;
+    @Column(name = "replica_previous_name")
+    private String replica_previous_name;
 
     @Column(name = "replica_date")
     private String replica_date;

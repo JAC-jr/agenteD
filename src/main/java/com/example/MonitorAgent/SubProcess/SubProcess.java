@@ -22,11 +22,9 @@ public class SubProcess {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-
     @Autowired ServiceCurl serviceCurl;
     @Autowired LoadBalancerCurl loadBalancerCurl;
-    @Autowired
-    ApiPodList apiPodList;
+    @Autowired ApiPodList apiPodList;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //------------------------------------------------------------------------------------------------------
@@ -191,7 +189,6 @@ public class SubProcess {
                 throw new RuntimeException(e);
             }
         });
-
         return CompletableFuture.completedFuture(result);
     }
 }
