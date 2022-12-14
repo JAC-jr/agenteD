@@ -22,11 +22,9 @@ public class SubProcess {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-
     @Autowired ServiceCurl serviceCurl;
     @Autowired LoadBalancerCurl loadBalancerCurl;
-    @Autowired
-    ApiPodList apiPodList;
+    @Autowired ApiPodList apiPodList;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //------------------------------------------------------------------------------------------------------
@@ -35,16 +33,24 @@ public class SubProcess {
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
 
         result.forEach(api -> {
+            Integer apiID = api.getApi_id();
             String baseUrl = api.getDescription();
             String nameSpace = api.getNameSpace();
             String serviceName = api.getServiceName();
 
             double firstDate = System.currentTimeMillis();
-            ResponseEntity<Object> response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName);
+            double response = apiPodList.apiKubeGet(baseUrl, nameSpace, serviceName, apiID);
             double timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
 
-                api.setStatus(response.getStatusCode().toString());
+            if (response ==0){
+                api.setStatus("sin replicas corriendo");
+                apiRepository.save(api);
+                logger.info("application_Id = {}, api_Id = {}, response = {}",
+                        api.getApplicationId(), api.getApi_id(), api.getStatus());
+                logger.info("respuesta del Api exitosa");
+            }
+                api.setStatus(response+"%");
                 apiRepository.save(api);
                 logger.info("{}",api.getStatus());
                 logger.info("application_Id = {}, api_Id = {}, status = {}, ",
@@ -183,7 +189,6 @@ public class SubProcess {
                 throw new RuntimeException(e);
             }
         });
-
         return CompletableFuture.completedFuture(result);
     }
 }
