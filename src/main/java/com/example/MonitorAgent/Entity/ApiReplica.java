@@ -21,7 +21,7 @@ public class ApiReplica {
     @Column(name = "api_id")
     private Integer apiId;
 
-    @Column(name = "replica_ip", nullable = false)
+    @Column(name = "replica_ip")
     private String replicaIp;
 
     @Column(name = "replica_last_ip")
