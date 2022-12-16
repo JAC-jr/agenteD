@@ -2,6 +2,7 @@ package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.NextStep.ApiPodList;
+import com.example.MonitorAgent.NextStep.ConfirmApi;
 import com.example.MonitorAgent.NextStep.ServiceCurl;
 import com.example.MonitorAgent.NextStep.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
@@ -25,6 +26,7 @@ public class SubProcess {
     @Autowired ServiceCurl serviceCurl;
     @Autowired LoadBalancerCurl loadBalancerCurl;
     @Autowired ApiPodList apiPodList;
+    @Autowired ConfirmApi confirmApi;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //------------------------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ public class SubProcess {
 
         result.forEach(api -> {
             Integer apiID = api.getApi_id();
-            String baseUrl = api.getDescription();
+            String baseUrl = api.getBase_url();
             String nameSpace = api.getNameSpace();
             String serviceName = api.getServiceName();
 
@@ -56,6 +58,8 @@ public class SubProcess {
                 logger.info("application_Id = {}, api_Id = {}, status = {}, ",
                         api.getApplicationId(), api.getApi_id(), api.getStatus());
                 logger.info("respuesta del Api exitosa");
+
+                confirmApi.confirmAvailability(apiID);
 
             try {
                 Thread.sleep(api.getTestInterv());

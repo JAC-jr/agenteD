@@ -27,8 +27,8 @@ public class Api {
     @Column(name = "common")
     private Boolean common;
 
-    @Column(name = "description", length = 45)
-    private String description;
+    @Column(name = "base_url", length = 45)
+    private String base_url;
 
     @Column(name = "service_name", length = 45)
     private String serviceName;
