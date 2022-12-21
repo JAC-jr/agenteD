@@ -17,6 +17,7 @@ public class ComponentInit implements CommandLineRunner {
     Logger logger = LoggerFactory.getLogger(ComponentInit.class);
     @Autowired ApplicationRepository applicationRepository;
     @Autowired ThreadFactory threadFactory;
+
     @Value("${monitor.application}")
     private String applicationName;
 

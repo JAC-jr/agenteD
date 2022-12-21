@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ApiReplicaRepository extends JpaRepository<ApiReplica, Integer> {
-    ApiReplica findAllByReplicaIp(String replicaIp);
-    List<ApiReplica> findAllByApiId(Integer apiId);
+    ApiReplica findAllByReplicaIpAndActualState(String replicaIp, boolean actualState);
+    List<ApiReplica> findAllByApiIdAndActualState(Integer apiId, boolean actualState);
 }

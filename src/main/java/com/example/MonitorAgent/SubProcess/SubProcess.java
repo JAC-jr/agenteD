@@ -29,7 +29,7 @@ public class SubProcess {
     @Autowired ConfirmApi confirmApi;
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
-    //------------------------------------------------------------------------------------------------------
+    //--------------------------------APIS----------------------------------------------------
     public CompletableFuture<List<Api>> apiSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Api> result = apiRepository.findAllByApplicationId(applicationId);
@@ -59,8 +59,6 @@ public class SubProcess {
                         api.getApplicationId(), api.getApi_id(), api.getStatus());
                 logger.info("respuesta del Api exitosa");
 
-                confirmApi.confirmAvailability(apiID);
-
             try {
                 Thread.sleep(api.getTestInterv());
             } catch (InterruptedException e) {
@@ -69,7 +67,7 @@ public class SubProcess {
         });
     return CompletableFuture.completedFuture(result);
     }
-//------------------------------------------------------------------------------------------------------------
+//-------------------------------------INTEGRATION--------------------------------------------------------
     public CompletableFuture<List<Integration>> integrationSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Integration> result = integrationRepository.findAllByApplicationId(applicationId);
@@ -86,7 +84,7 @@ public class SubProcess {
         });
         return CompletableFuture.completedFuture(result);
     }
-//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------LOAD BALANCER (F5)--------------------------------------------------------
     public CompletableFuture<List<LoadBalancer>> loadBalancerSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<LoadBalancer> result = loadBalancerRepository.findAllByApplicationId(applicationId);
@@ -109,7 +107,7 @@ public class SubProcess {
                             logger.info("application_Id = {}, load_balancer_id = {}, status = {}, ",
                                     loadBalancer.getApplicationId(), loadBalancer.getVserver_id(),
                                     loadBalancer.getStatus());
-                            logger.info("respuesta del servicio exitosa");
+                            logger.info("respuesta del F5 exitosa");
                         }
                         else {
                             loadBalancer.setStatus(response.getStatusCode().toString());
@@ -132,7 +130,7 @@ public class SubProcess {
         });
         return CompletableFuture.completedFuture(result);
     }
-    //--------------------------------------------------------------------------------------------------------
+    //-------------------------------PERSISTENCE----------------------------------------------------------
     public CompletableFuture<List<Persistence>> persistenceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Persistence> result = persistenceRepository.findAllByApplicationId(applicationId);
@@ -150,7 +148,7 @@ public class SubProcess {
 
         return CompletableFuture.completedFuture(result);
     }
-//-----------------------------------------------------------------------------------------------------------
+//------------------------------------SERVICES-------------------------------------------------------
     public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();
         List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);

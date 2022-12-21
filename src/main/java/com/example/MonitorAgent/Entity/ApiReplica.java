@@ -3,9 +3,8 @@ package com.example.MonitorAgent.Entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Builder
 @AllArgsConstructor
@@ -42,14 +41,7 @@ public class ApiReplica {
     @Column(name = "replica_last_test_date")
     private LocalDateTime replica_last_test_date;
 
-    @Column(name = "replica_last_ok_status_date")
-    private LocalDateTime replica_last_ok_status_date;
-
-    @Column(name = "replica_last_fail_status_date")
-    private LocalDateTime replica_last_fail_status_date;
-
-
-
-
+    @Column(name = "actual_state")
+    private boolean actualState;
 
 }
