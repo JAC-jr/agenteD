@@ -5,11 +5,8 @@ import com.example.MonitorAgent.Repository.ApiReplicaRepository;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
-import io.kubernetes.client.openapi.apis.AppsApi;
-import io.kubernetes.client.openapi.apis.AppsV1Api;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
-import io.kubernetes.client.proto.V1Apps;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
 import org.slf4j.Logger;
@@ -42,7 +39,7 @@ public class ApiPodList {
             ApiClient client = ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(
                             new FileReader("./config")))
                     .build();
-//            prueba.invokeDeployment();
+
             Configuration.setDefaultApiClient(client);
             CoreV1Api api = new CoreV1Api();
             ResponseEntity<Object> response = null;
@@ -51,14 +48,8 @@ public class ApiPodList {
             HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
             state = 0;
             cont_items = 0;
+            ArrayList<String> actualist = new ArrayList<>();
             LocalDateTime testTime = null;
-            ArrayList<String> actualIps = new ArrayList<String>();
-            AppsV1Api Apis = new AppsV1Api();
-
-            V1DeploymentList deploymentList = Apis.listNamespacedDeployment(
-                    nameSpace, null, null, null,
-                    serviceName, null, null, null,
-                    null, 5000, null);
 
             logger.info(" Invocando APIs ");
 
@@ -67,15 +58,8 @@ public class ApiPodList {
                     "app=" + serviceName, null, null,
                     null, 5000, null);
 
-            for (V1Deployment deployment : deploymentList.getItems()) {
-                if (deployment.getMetadata().getName().equals(serviceName)) {
-                    logger.info("{}",deployment.getStatus());;
-                    logger.info("deployment = {}",deployment.getMetadata().getName());
-                }
-            }
             for (V1Pod item : list.getItems()) {
                 cont_items++;
-
                 ApiReplica previous_replica = apiReplicaRepository.findAllByReplicaIpAndActualState(item.getStatus().getPodIP(), true);
 
                 try {
@@ -109,10 +93,10 @@ public class ApiPodList {
                 }
                 logger.info("item = {} , status {}", item.getMetadata().getName(), response.getStatusCode());
                 logger.info("Replica IP= " + item.getStatus().getPodIP());
-                actualIps.add(item.getStatus().getPodIP());
+                actualist.add(item.getStatus().getPodIP());
 
             }
-            confirmApi.confirmActualState(apiID, actualIps);
+            confirmApi.confirmActualState(apiID, actualist);
         } catch (IOException | ApiException e) {
             throw new RuntimeException(e);
         }

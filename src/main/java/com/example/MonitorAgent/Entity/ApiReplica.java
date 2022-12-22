@@ -44,4 +44,6 @@ public class ApiReplica {
     @Column(name = "actual_state")
     private boolean actualState;
 
+    @Column(name = "label_hash")
+    private String label_hash;
 }

@@ -6,21 +6,17 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ConfirmApi {
     Logger logger = LoggerFactory.getLogger(ConfirmApi.class);
     @Autowired ApiReplicaRepository apiReplicaRepository;
-    Map<LocalDateTime, HttpStatus> history = new HashMap<>();
 
     public void confirmActualState(Integer apiID, ArrayList<String> actualPods){
         List<ApiReplica> listReplicas = apiReplicaRepository.findAllByApiIdAndActualState(apiID, true);
@@ -36,6 +32,7 @@ public class ConfirmApi {
     public void newApiReplicaRegistry (V1Pod item, Integer apiID, ResponseEntity<Object> response, LocalDateTime testTime){
         ApiReplica apiReplica = new ApiReplica();
         apiReplica.setApiId(apiID);
+        apiReplica.setLabel_hash(item.getMetadata().getLabels().get("pod-template-hash"));
         apiReplica.setReplicaIp(item.getStatus().getPodIP());
         apiReplica.setReplica_name(item.getMetadata().getName());
         apiReplica.setReplica_creation_date(item.getMetadata().getCreationTimestamp().toString());
