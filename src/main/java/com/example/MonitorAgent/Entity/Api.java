@@ -30,8 +30,8 @@ public class Api {
     @Column(name = "base_url", length = 45)
     private String base_url;
 
-    @Column(name = "service_name", length = 45)
-    private String serviceName;
+    @Column(name = "label_app", length = 45)
+    private String label_app;
 
     @Column(name = "name_space", length = 45)
     private String nameSpace;
@@ -60,8 +60,8 @@ public class Api {
     @Column(name = "last_test_date")
     private LocalDate lastTestDate;
 
-    @Column(name = "\"req/seg\"", length = 45)
-    private String reqSeg;
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 
     @Column(name = "test_interv")
     private Long testInterv;

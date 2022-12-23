@@ -1,4 +1,4 @@
-package com.example.MonitorAgent.NextStep;
+package com.example.MonitorAgent.InterrogationMethods.ApiMethod;
 
 import com.example.MonitorAgent.Entity.ApiReplica;
 import com.example.MonitorAgent.Repository.ApiReplicaRepository;
@@ -23,13 +23,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
-public class ApiPodList {
-    Logger logger = LoggerFactory.getLogger(ApiPodList.class);
+public class GetApiPods {
+    Logger logger = LoggerFactory.getLogger(GetApiPods.class);
     @Autowired RestTemplate restTemplate;
     @Autowired ApiReplicaRepository apiReplicaRepository;
-    @Autowired ConfirmApi confirmApi;
+    @Autowired
+    ConfirmAndSaveApi confirmAndSaveApi;
 
-    public double apiKubeGet(String baseUrl, String nameSpace, String serviceName, Integer apiID){
+    public double apiKubeGet(String baseUrl, String nameSpace, String label_app, Integer apiID){
 
         double cont_items = 0;
         double state = 0;
@@ -55,7 +56,7 @@ public class ApiPodList {
 
             V1PodList list = api.listNamespacedPod(nameSpace, null,
                     null, null, null,
-                    "app=" + serviceName, null, null,
+                    "app=" + label_app, null, null,
                     null, 5000, null);
 
             for (V1Pod item : list.getItems()) {
@@ -71,22 +72,22 @@ public class ApiPodList {
                     logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
 
                     if (previous_replica == null) {
-                        confirmApi.newApiReplicaRegistry(item, apiID, response, testTime);
+                        confirmAndSaveApi.newApiReplicaRegistry(item, apiID, response, testTime);
                     } else {
-                        confirmApi.prevReplicaBuilder(item, apiID, response, previous_replica, testTime);
+                        confirmAndSaveApi.prevReplicaBuilder(item, apiID, response, previous_replica, testTime);
                     }
                     break;
                 }
 
                 if (previous_replica == null) {
-                    confirmApi.newApiReplicaRegistry(item, apiID, response, testTime);
+                    confirmAndSaveApi.newApiReplicaRegistry(item, apiID, response, testTime);
                     if (response.getStatusCode().is2xxSuccessful()) {
                     state++;
                     }
 
                 } else {
 
-                    confirmApi.prevReplicaBuilder(item, apiID, response, previous_replica, testTime);
+                    confirmAndSaveApi.prevReplicaBuilder(item, apiID, response, previous_replica, testTime);
                     if (response.getStatusCode().is2xxSuccessful()) {
                     state++;
                     }
@@ -96,7 +97,7 @@ public class ApiPodList {
                 actualist.add(item.getStatus().getPodIP());
 
             }
-            confirmApi.confirmActualState(apiID, actualist);
+            confirmAndSaveApi.confirmActualState(apiID, actualist);
         } catch (IOException | ApiException e) {
             throw new RuntimeException(e);
         }

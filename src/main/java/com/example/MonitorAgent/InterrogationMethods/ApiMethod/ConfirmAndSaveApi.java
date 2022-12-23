@@ -1,4 +1,4 @@
-package com.example.MonitorAgent.NextStep;
+package com.example.MonitorAgent.InterrogationMethods.ApiMethod;
 
 import com.example.MonitorAgent.Entity.ApiReplica;
 import com.example.MonitorAgent.Repository.ApiReplicaRepository;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ConfirmApi {
-    Logger logger = LoggerFactory.getLogger(ConfirmApi.class);
+public class ConfirmAndSaveApi {
+    Logger logger = LoggerFactory.getLogger(ConfirmAndSaveApi.class);
     @Autowired ApiReplicaRepository apiReplicaRepository;
 
     public void confirmActualState(Integer apiID, ArrayList<String> actualPods){

@@ -1,4 +1,4 @@
-package com.example.MonitorAgent.NextStep;
+package com.example.MonitorAgent.InterrogationMethods.ServiceMethod;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
