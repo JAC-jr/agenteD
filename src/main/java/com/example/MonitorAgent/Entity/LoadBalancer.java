@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class LoadBalancer {
     private Integer numTest;
 
     @Column(name = "last_test_date")
-    private LocalDate lastTestDate;
+    private LocalDateTime lastTestDate;
 
     @Column(name = "successful_consecutive_test")
     private Integer successfulConsecutiveTest;
@@ -68,5 +69,8 @@ public class LoadBalancer {
 
     @Column(name = "history_successful_test")
     private Long historySuccessfulTest;
+
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 
 }

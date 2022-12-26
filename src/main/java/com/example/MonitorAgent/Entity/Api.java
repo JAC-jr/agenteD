@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -58,7 +59,7 @@ public class Api {
     private Integer highAlarm;
 
     @Column(name = "last_test_date")
-    private LocalDate lastTestDate;
+    private LocalDateTime lastTestDate;
 
     @Column(name = "response_time", length = 45)
     private Long response_time;

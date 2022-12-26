@@ -2,6 +2,7 @@ package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
+import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ServiceCurl;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -45,7 +47,8 @@ public class SubProcess {
             Long timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
             api.setResponse_time(timeLapse);
-//            api.setNumTest(+1);
+            api.setNumTest(+1);
+            api.setLastTestDate(LocalDateTime.now());
 
             if (response ==0){
                 api.setStatus("sin replicas funcionales");
@@ -79,10 +82,13 @@ public class SubProcess {
             String Json = loadBalancer.getPort();
 
             try{
-                double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json);
-                double timeLapse = System.currentTimeMillis() - firstDate;
+                long firstDate = System.currentTimeMillis();
+                ResponseEntity<F5ResponseModel> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json);
+                long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
+                loadBalancer.setResponse_time(timeLapse);
+                loadBalancer.setNumTest(+1);
+                loadBalancer.setLastTestDate(LocalDateTime.now());
 
                 if (response.getStatusCode().is2xxSuccessful()){
 
