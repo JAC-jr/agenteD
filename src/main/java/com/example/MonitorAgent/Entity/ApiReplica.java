@@ -3,6 +3,8 @@ package com.example.MonitorAgent.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+
 
 @Builder
 @AllArgsConstructor
@@ -21,28 +23,27 @@ public class ApiReplica {
     @Column(name = "api_id")
     private Integer apiId;
 
-    @Column(name = "replica_ip", nullable = false)
+    @Column(name = "replica_ip")
     private String replicaIp;
 
-    @Column(name = "replica_last_ip")
-    private String replica_last_ip;
+    @Column(name = "metadata")
+    private String metadata;
 
     @Column(name = "replica_status")
     private String replica_status;
 
-    @Column(name = "replica_last_status")
-    private String replica_last_status;
-
-    @Column(name = "replica_previous_name")
-    private String replica_previous_name;
-
-    @Column(name = "replica_date")
-    private String replica_date;
-
-    @Column(name = "previous_replica_date")
-    private String previous_replica_date;
+    @Column(name = "replica_creation_date")
+    private String replica_creation_date;
 
     @Column(name = "replica_name")
     private String replica_name;
 
+    @Column(name = "replica_last_test_date")
+    private LocalDateTime replica_last_test_date;
+
+    @Column(name = "actual_state")
+    private boolean actualState;
+
+    @Column(name = "label_hash")
+    private String label_hash;
 }

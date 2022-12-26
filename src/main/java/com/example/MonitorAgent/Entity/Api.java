@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -27,11 +28,11 @@ public class Api {
     @Column(name = "common")
     private Boolean common;
 
-    @Column(name = "description", length = 45)
-    private String description;
+    @Column(name = "base_url", length = 45)
+    private String base_url;
 
-    @Column(name = "service_name", length = 45)
-    private String serviceName;
+    @Column(name = "label_app", length = 45)
+    private String label_app;
 
     @Column(name = "name_space", length = 45)
     private String nameSpace;
@@ -58,10 +59,10 @@ public class Api {
     private Integer highAlarm;
 
     @Column(name = "last_test_date")
-    private LocalDate lastTestDate;
+    private LocalDateTime lastTestDate;
 
-    @Column(name = "\"req/seg\"", length = 45)
-    private String reqSeg;
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 
     @Column(name = "test_interv")
     private Long testInterv;
