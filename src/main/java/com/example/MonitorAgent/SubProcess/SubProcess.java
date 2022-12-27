@@ -3,8 +3,9 @@ package com.example.MonitorAgent.SubProcess;
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
-import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ServiceCurl;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
+import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
+import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ResponseStatus;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class SubProcess {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-    @Autowired ServiceCurl serviceCurl;
+    @Autowired GetServicesPods getServicesPods;
     @Autowired LoadBalancerCurl loadBalancerCurl;
     @Autowired
     GetApiPods getApiPods;
@@ -130,35 +131,34 @@ public class SubProcess {
 
         result.forEach(servicio -> {
 
-            String method = servicio.getMethod();
-            String baseUrl = servicio.getTestUrl();
-            String Json = servicio.getJson();
+            String UrlServices = servicio.getTestUrl();
+            String nameSpace = servicio.getNameSpace();
+            String labelApp = servicio.getLabelApp();
+            Integer serviceId = servicio.getServiceId();
 
-            try {
-                double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = serviceCurl.testService(baseUrl,method,Json);
-                double timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("time lapse= {}" ,timeLapse);
+            double firstDate = System.currentTimeMillis();
+            double response = getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+            getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+            double timeLapse = System.currentTimeMillis() - firstDate;
+            logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getStatusCode().isError()){
+            if (response ==0){
 
-                    servicio.setStatus(response.getStatusCode().toString());
-                    serviceRepository.save(servicio);
-                    logger.info("{}",servicio);
-                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
-                    logger.info("error al recibir respuesta");
-                }
-                else {
-                    servicio.setStatus(response.getStatusCode().toString());
-                    serviceRepository.save(servicio);
-                    logger.info("{}",servicio.getStatus());
-                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
-                    logger.info("respuesta del servicio exitosa");
-                }
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
+                servicio.setStatus("sin replicas funcionales");
+                serviceRepository.save(servicio);
+                logger.info("{}",servicio);
+                logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                        servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+                logger.info("error al recibir respuesta");
+            }
+            else {
+                servicio.setStatus(response+"%");
+                serviceRepository.save(servicio);
+                logger.info("{}",servicio.getStatus());
+                logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                        servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+                logger.info("respuesta del servicio exitosa");
+
             }
             try {
                 Thread.sleep(servicio.getTestInterv());

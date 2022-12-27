@@ -16,7 +16,7 @@ public class Servicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id", nullable = false)
-    private Integer service_id;
+    private Integer serviceId;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -27,14 +27,8 @@ public class Servicio {
     @Column(name = "service_name", length = 45)
     private String serviceName;
 
-    @Column(name = "json", length = 200)
-    private String json;
-
-    @Column(name = "port", length = 45)
-    private String port;
-
-    @Column(name = "method", length = 45)
-    private String method;
+    @Column(name = "label_app", length = 45)
+    private String labelApp;
 
     @Column(name = "test_url", length = 200)
     private String testUrl;
@@ -72,10 +66,10 @@ public class Servicio {
     @Column(name = "last_tests_date")
     private LocalDate lastTestsDate;
 
+    @Column(name = "name_space", length = 45)
+    private String nameSpace;
+
     @Column(name = "status", length = 45)
     private String status;
-
-    @Column(name = "http_method")
-    private String httpMethod;
 
 }
