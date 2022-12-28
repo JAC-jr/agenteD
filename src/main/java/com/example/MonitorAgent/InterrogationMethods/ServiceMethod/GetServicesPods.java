@@ -86,13 +86,17 @@ public class GetServicesPods {
                         response = restTemplate.exchange("http://" + item.getStatus().getPodIP() + UrlServices, HttpMethod.GET, requestEntity, Object.class);
                         testTime = LocalDateTime.now();
 
-                        
 
                         logger.info(" Response: " + response.getBody().toString());
+
 
                     } catch (RestClientException e) {
 
                         logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
+
+                        if(response == null){
+                            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+                        }
 
                         if (previous_replica_services== null) {
 
