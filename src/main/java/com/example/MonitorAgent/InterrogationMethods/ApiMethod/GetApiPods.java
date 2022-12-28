@@ -61,7 +61,8 @@ public class GetApiPods {
 
             for (V1Pod item : list.getItems()) {
                 cont_items++;
-                ApiReplica previous_replica = apiReplicaRepository.findAllByReplicaIpAndActualState(item.getStatus().getPodIP(), true);
+                ApiReplica previous_replica = apiReplicaRepository.findAllByReplicaIpAndActualState(
+                        item.getStatus().getPodIP(), true);
 
                 try {
                     response = restTemplate.exchange("https://" + item.getStatus().getPodIP() + baseUrl,
@@ -69,12 +70,14 @@ public class GetApiPods {
                     testTime = LocalDateTime.now();
                 } catch (RestClientException e) {
 
-                    logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
+                    logger.error("error en conexión a replica ({}), ip ({})----error {}",e
+                            , item.getMetadata().getName(), item.getStatus().getPodIP());
 
                     if (previous_replica == null) {
                         confirmAndSaveApi.newApiReplicaRegistry(item, apiID, response, testTime);
                     } else {
-                        confirmAndSaveApi.prevReplicaBuilder(item, apiID, response, previous_replica, testTime);
+                        confirmAndSaveApi.prevReplicaBuilder(item, apiID, response
+                                , previous_replica, testTime);
                     }
                     break;
                 }

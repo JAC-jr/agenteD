@@ -46,23 +46,28 @@ public class SubProcess {
             double response = getApiPods.apiKubeGet(baseUrl, nameSpace, label_app, apiID);
             Long timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
-            api.setResponse_time(timeLapse);
-            api.setNumTest(+1);
-            api.setLastTestDate(LocalDateTime.now());
+            api.setStatus(response+"%");
 
             if (response ==0){
                 api.setStatus("sin replicas funcionales");
-                apiRepository.save(api);
-                logger.info("application_Id = {}, api_Id = {}, response = {}",
-                        api.getApplicationId(), api.getApi_id(), api.getStatus());
+                api.setConsecutiveSuccessfulTest(+1);
+                api.setConsecutiveFailedTest(0);
+                logger.info("api_Id = {}, response = {}",
+                         api.getApi_id(), api.getStatus());
                 logger.info("respuesta del Api exitosa");
             }
-                api.setStatus(response+"%");
-                apiRepository.save(api);
-                logger.info("{}",api.getStatus());
-                logger.info("application_Id = {}, api_Id = {}, status = {}, ",
-                        api.getApplicationId(), api.getApi_id(), api.getStatus());
+            else {
+                api.setConsecutiveSuccessfulTest(+1);
+                api.setConsecutiveFailedTest(0);
+                logger.info("api_Id = {}, status = {}, ",
+                        api.getApi_id(), api.getStatus());
                 logger.info("respuesta del Api exitosa");
+            }
+
+            api.setResponse_time(timeLapse);
+            api.setNumTest(+1);
+            api.setLastTestDate(LocalDateTime.now());
+            apiRepository.save(api);
 
             try {
                 Thread.sleep(api.getTestInterv());
@@ -78,40 +83,37 @@ public class SubProcess {
         List<LoadBalancer> result = loadBalancerRepository.findAllByApplicationId(applicationId);
 
         result.forEach(loadBalancer -> {
-            String baseUrl = loadBalancer.getIpServer();
-            String Json = loadBalancer.getPort();
+            String baseUrl = loadBalancer.getUrlServer();
+            String Json = loadBalancer.getJson();
+            Integer Id = loadBalancer.getVserverId();
 
             try{
                 long firstDate = System.currentTimeMillis();
-                ResponseEntity<F5ResponseModel> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json);
+                LocalDateTime testTime = LocalDateTime.now();
+                ResponseEntity<F5ResponseModel> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json,loadBalancer);
                 long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
-                loadBalancer.setResponse_time(timeLapse);
-                loadBalancer.setNumTest(+1);
-                loadBalancer.setLastTestDate(LocalDateTime.now());
+                logger.info("respuesta del F5 exitosa");
+//                loadBalancer.setLastTestDate(testTime);
+//                loadBalancer.setNumTest(loadBalancer.getNumTest() + 1);
+//                loadBalancer.setResponse_time(timeLapse);
 
-                if (response.getStatusCode().is2xxSuccessful()){
-
-                    loadBalancer.setStatus(response.getStatusCode().toString());
-                    loadBalancerRepository.save(loadBalancer);
-                    logger.info("{}",loadBalancer.getStatus());
-                    logger.info("application_Id = {}, load_balancer_id = {}, status = {}, ",
-                            loadBalancer.getApplicationId(), loadBalancer.getVserver_id(),
-                            loadBalancer.getStatus());
-                    logger.info("respuesta del F5 exitosa");
+                if (response.getStatusCode().toString().equals(loadBalancer.getStatus())){
+                    logger.info("mismo estado");
+//                    loadBalancer.setSuccessfulConsecutiveTest(loadBalancer.getSuccessfulConsecutiveTest()+1);
+//                    loadBalancer.setFailedConsecutiveTest(0);
+//                    loadBalancer.setStatus(response.getStatusCode().toString());
                 }
                 else {
-                    loadBalancer.setStatus(response.getStatusCode().toString());
-                    loadBalancerRepository.save(loadBalancer);
-                    logger.info("{}",loadBalancer);
-                    logger.info("application_Id = {}, load_balancer_id = {}, status = {}, ",
-                            loadBalancer.getApplicationId(), loadBalancer.getVserver_id(),
-                            loadBalancer.getStatus());
+
                     logger.info("error al recibir respuesta");
+//                    loadBalancer.setSuccessfulConsecutiveTest(0);
+//                    loadBalancer.setFailedConsecutiveTest(loadBalancer.getFailedConsecutiveTest()+1);
+//                    loadBalancer.setStatus(response.getStatusCode().toString());
                 }
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+//                loadBalancerRepository.save(loadBalancer);
+
+            } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
             }
 

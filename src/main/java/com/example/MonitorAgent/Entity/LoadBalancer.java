@@ -3,7 +3,6 @@ package com.example.MonitorAgent.Entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
@@ -17,7 +16,7 @@ public class LoadBalancer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vserver_id", nullable = false)
-    private Integer vserver_id;
+    private Integer vserverId;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -25,11 +24,11 @@ public class LoadBalancer {
     @Column(name = "status", length = 45)
     private String status;
 
-    @Column(name = "ip_server", length = 45)
-    private String ipServer;
+    @Column(name = "url_server")
+    private String urlServer;
 
-    @Column(name = "port", length = 45)
-    private String port;
+    @Column(name = "json")
+    private String json;
 
     @Column(name = "num_test")
     private Integer numTest;
@@ -72,5 +71,8 @@ public class LoadBalancer {
 
     @Column(name = "response_time", length = 45)
     private Long response_time;
+
+    @Column(name = "actual_state")
+    private boolean actualState;
 
 }

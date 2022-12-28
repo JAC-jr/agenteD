@@ -51,9 +51,10 @@ public class ConfirmAndSaveApi {
             logger.info("cambio de estado detectado");
 
             previous_replica.setActualState(false);
-            apiReplicaRepository.save(previous_replica);
-
             newApiReplicaRegistry(item, apiID, response, testTime);
         }
+
+        previous_replica.setReplica_last_test_date(testTime);
+        apiReplicaRepository.save(previous_replica);
     }
 }
