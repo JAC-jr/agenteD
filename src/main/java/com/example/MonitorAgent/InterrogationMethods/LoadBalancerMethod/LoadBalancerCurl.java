@@ -1,5 +1,6 @@
 package com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod;
 
+import com.example.MonitorAgent.Entity.LoadBalancer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,19 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpResponse;
-import java.util.Objects;
 
 @Service
 public class LoadBalancerCurl {
 
     Logger logger = LoggerFactory.getLogger(LoadBalancerCurl.class);
-    @Autowired
-    RestTemplate restTemplate;
-    public ResponseEntity<F5ResponseModel> testLoadBalancer (String baseUrl, String Json) throws URISyntaxException, IOException {
+    @Autowired RestTemplate restTemplate;
+
+    public ResponseEntity<F5ResponseModel> testLoadBalancer (String baseUrl, String Json, LoadBalancer loadBalancer) throws URISyntaxException, IOException {
 
         URI uri = new URI(baseUrl);
         HttpHeaders headers = new HttpHeaders();
@@ -33,15 +31,16 @@ public class LoadBalancerCurl {
         try
         {
             response = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, F5ResponseModel.class);
-            logger.info("response = " + response);
-            logger.info("test exitoso de url: {}",baseUrl);
+            logger.info("test exitoso de url: " + baseUrl);
             logger.info("status code = " + response.getStatusCode());
+
         }
         catch(Exception ex)
         {
             ex.printStackTrace();
             logger.error("error haciendo test de url: {} error {}",baseUrl,ex.getMessage());
-            logger.info("response=",response.getStatusCode());
+            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+//            return response;
         }
         return response;
     }

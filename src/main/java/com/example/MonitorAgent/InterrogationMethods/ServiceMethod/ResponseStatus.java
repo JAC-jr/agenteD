@@ -8,12 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class ResponseStatus {
 
     Logger logger = LoggerFactory.getLogger(ResponseStatus.class);
-
 
     public String checkstatus(ResponseEntity<Object>response) {
 
@@ -21,34 +19,28 @@ public class ResponseStatus {
         String responseString = null;
 
         logger.info("response = {}", response.toString());
+        logger.info("response body = {}", response.getBody().toString());
 
-        if (response.getBody() == null) {
-            logger.info("response = {}", response.getBody().toString());
-            responseString = "BAD";
+        try {
+            String responseJSON = mapperIn.writeValueAsString(response.getBody());
+            JSONObject responseObject = new JSONObject(responseJSON);
 
-        } else {
+            responseString = responseObject.getString("status");
 
-            try {
+            logger.info("response status = {}", responseString);
 
-                String responseJSON = mapperIn.writeValueAsString(response.getBody());
-                JSONObject responseObject = new JSONObject(responseJSON);
-
-                responseString = responseObject.getString("status");
-
-                logger.info("response status = {}", responseString);
-
-                if (responseString.equals("UP")) {
-                    responseString = "OK";
-                } else {
-                    responseString = "BAD";
-                }
-                logger.info("response status = {}", responseString);
-
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+            if (responseString.equals("UP")) {
+                responseString = "OK";
+            } else {
+                responseString = "BAD";
             }
+            logger.info("response status = {}", responseString);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
         return responseString;
     }
+
 }
 

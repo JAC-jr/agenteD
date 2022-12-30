@@ -2,11 +2,9 @@ package com.example.MonitorAgent.InterrogationMethods.ServiceMethod;
 
 
 import com.example.MonitorAgent.Entity.ServicesReplica;
+import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmReplica;
 import com.example.MonitorAgent.Repository.ServicesReplicaRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.kubernetes.client.openapi.models.V1Pod;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import java.util.List;
 public class ConfirmAndSaveServices {
 
   
-        Logger logger = LoggerFactory.getLogger(com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApi.class);
+        Logger logger = LoggerFactory.getLogger(ConfirmReplica.class);
         
         @Autowired ServicesReplicaRepository servicesReplicaRepository;
 

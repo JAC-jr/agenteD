@@ -1,11 +1,8 @@
 package com.example.MonitorAgent.InterrogationMethods.ServiceMethod;
 
-
 import com.example.MonitorAgent.Entity.ServicesReplica;
 
-
 import com.example.MonitorAgent.Repository.ServicesReplicaRepository;
-
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
@@ -85,16 +82,17 @@ public class GetServicesPods {
                         response = restTemplate.exchange("http://" + item.getStatus().getPodIP() + UrlServices, HttpMethod.GET, requestEntity, Object.class);
                         testTime = LocalDateTime.now();
 
+                        
 
                         logger.info(" Response: " + response.getBody().toString());
 
-
                     } catch (RestClientException e) {
-
-
 
                         logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
 
+                        if (response == null) {
+                            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+                        }
                         if (previous_replica_services== null) {
 
                             confirmAndSaveServices.newServiceReplicaRegistry(item, serviceId, response, testTime);
