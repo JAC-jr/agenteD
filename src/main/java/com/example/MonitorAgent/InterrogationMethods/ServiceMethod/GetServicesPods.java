@@ -1,11 +1,11 @@
 package com.example.MonitorAgent.InterrogationMethods.ServiceMethod;
 
-import com.example.MonitorAgent.Entity.Servicio;
+
 import com.example.MonitorAgent.Entity.ServicesReplica;
-import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApi;
+
 
 import com.example.MonitorAgent.Repository.ServicesReplicaRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
@@ -14,7 +14,6 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +91,9 @@ public class GetServicesPods {
 
                     } catch (RestClientException e) {
 
-                        logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
 
-                        if(response == null){
-                            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
-                        }
+
+                        logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
 
                         if (previous_replica_services== null) {
 

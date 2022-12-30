@@ -7,7 +7,8 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class F5ResponseModel {
+public class
+ F5ResponseModel {
 
     private String codigo;
     private String descripcion;

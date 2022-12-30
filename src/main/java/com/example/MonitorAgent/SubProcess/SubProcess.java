@@ -4,6 +4,8 @@ import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
+
+import com.example.MonitorAgent.InterrogationMethods.PersistencesMethod.GetConnectionData;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ResponseStatus;
 import com.example.MonitorAgent.Repository.*;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +33,9 @@ public class SubProcess {
     @Autowired LoadBalancerCurl loadBalancerCurl;
     @Autowired
     GetApiPods getApiPods;
+    @Autowired
+    GetConnectionData getConnectionData;
+
     Logger logger = LoggerFactory.getLogger(SubProcess.class);
 
     //--------------------------------APIS----------------------------------------------------
@@ -79,8 +85,8 @@ public class SubProcess {
         List<LoadBalancer> result = loadBalancerRepository.findAllByApplicationId(applicationId);
 
         result.forEach(loadBalancer -> {
-            String baseUrl = loadBalancer.getIpServer();
-            String Json = loadBalancer.getPort();
+            String baseUrl = loadBalancer.getDescription();
+            String Json = loadBalancer.getStatus();
 
             try{
                 long firstDate = System.currentTimeMillis();
@@ -174,9 +180,29 @@ public class SubProcess {
         List<Persistence> result = persistenceRepository.findAllByApplicationId(applicationId);
 
         result.forEach(persistence -> {
-            logger.info("application_Id = {}, Db_Id = {}, Test_interv = {}, " +
-                            "status = {}",persistence.getApplicationId(),persistence.getDb_id(),persistence.getTestInterv()
-                    ,persistence.getStatus());
+
+            String UrlPersistence = persistence.getUrl();
+            String UserName = persistence.getUserName();
+            String Password = persistence.getPassword();
+            String SQL = persistence.getSqlSentence();
+            String DBType = persistence.getDbType();
+
+            try {
+
+           String response = getConnectionData.getDATA(UrlPersistence, UserName, Password, SQL, DBType);
+
+            persistence.setStatus(response);
+            persistenceRepository.save(persistence);
+
+            logger.info("{}",response);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            logger.info("{}",UrlPersistence, UserName, Password, SQL, DBType);
+
+
             try {
                 Thread.sleep(persistence.getTestInterv());
             } catch (InterruptedException e) {

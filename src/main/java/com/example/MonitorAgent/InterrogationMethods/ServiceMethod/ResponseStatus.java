@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 
 @Service
 public class ResponseStatus {
@@ -22,28 +21,34 @@ public class ResponseStatus {
         String responseString = null;
 
         logger.info("response = {}", response.toString());
-        logger.info("response body = {}", Objects.requireNonNull(response.getBody()).toString());
 
-        try {
-            String responseJSON = mapperIn.writeValueAsString(response.getBody());
-            JSONObject responseObject = new JSONObject(responseJSON);
+        if (response.getBody() == null) {
+            logger.info("response = {}", response.getBody().toString());
+            responseString = "BAD";
 
-            responseString = responseObject.getString("status");
+        } else {
 
-            logger.info("response status = {}", responseString);
+            try {
 
-            if (responseString.equals("UP")) {
-                responseString = "OK";
-            } else {
-                responseString = "BAD";
+                String responseJSON = mapperIn.writeValueAsString(response.getBody());
+                JSONObject responseObject = new JSONObject(responseJSON);
+
+                responseString = responseObject.getString("status");
+
+                logger.info("response status = {}", responseString);
+
+                if (responseString.equals("UP")) {
+                    responseString = "OK";
+                } else {
+                    responseString = "BAD";
+                }
+                logger.info("response status = {}", responseString);
+
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
-            logger.info("response status = {}", responseString);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         }
         return responseString;
     }
-
 }
 

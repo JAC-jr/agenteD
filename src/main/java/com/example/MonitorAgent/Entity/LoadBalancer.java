@@ -25,12 +25,6 @@ public class LoadBalancer {
     @Column(name = "status", length = 45)
     private String status;
 
-    @Column(name = "ip_server", length = 45)
-    private String ipServer;
-
-    @Column(name = "port", length = 45)
-    private String port;
-
     @Column(name = "num_test")
     private Integer numTest;
 

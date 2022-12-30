@@ -75,4 +75,19 @@ public class Persistence {
     @Column(name = "hist_successful_test")
     private Long histSuccessfulTest;
 
+    @Column(name = "url", length = 45)
+    private String url;
+
+    @Column(name = "user_name", length = 45)
+    private String userName;
+
+    @Column(name = "password", length = 45)
+    private String password;
+
+    @Column(name = "sql_sentence", length = 45)
+    private String sqlSentence;
+
+    @Column(name = "db_type", length = 45)
+    private String dbType;
+
 }
