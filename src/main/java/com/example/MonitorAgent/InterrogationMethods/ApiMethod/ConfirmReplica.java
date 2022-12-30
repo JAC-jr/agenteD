@@ -33,7 +33,6 @@ public class ConfirmReplica {
         } else {
             replicaRegistry.updateApiReplicaRegistry(pod, apiID, response, previousReplicaRegistry, testTime);
         }
-
     }
 
     public void confirmActualState (ArrayList<String> actualPods, Integer apiID){

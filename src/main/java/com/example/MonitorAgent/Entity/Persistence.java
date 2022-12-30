@@ -16,7 +16,7 @@ public class Persistence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "db_id", nullable = false)
-    private Integer persistence_id;
+    private Integer db_id;
 
     @Column(name = "db_name", length = 45)
     private String dbName;
@@ -75,28 +75,4 @@ public class Persistence {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + persistence_id + ", " +
-                "dbName = " + dbName + ", " +
-                "status = " + status + ", " +
-                "description = " + description + ", " +
-                "applicationId = " + applicationId + ", " +
-                "serviceName = " + serviceName + ", " +
-                "host = " + host + ", " +
-                "port = " + port + ", " +
-                "numTest = " + numTest + ", " +
-                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
-                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
-                "histFailedTest = " + histFailedTest + ", " +
-                "histSuccessfullTest = " + histSuccessfullTest + ", " +
-                "minTestFailed = " + minTestFailed + ", " +
-                "maxTestFailed = " + maxTestFailed + ", " +
-                "lowAlarm = " + lowAlarm + ", " +
-                "highAlarm = " + highAlarm + ", " +
-                "lastTestDate = " + lastTestDate + ", " +
-                "reqSeg = " + reqSeg + ", " +
-                "testInterv = " + testInterv + ")";
-    }
 }
