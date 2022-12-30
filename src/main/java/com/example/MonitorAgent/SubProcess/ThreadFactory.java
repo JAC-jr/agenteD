@@ -1,7 +1,6 @@
-package com.example.MonitorAgent.Threadfractory;
+package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.SubProcess.SubProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -12,17 +11,15 @@ import java.util.concurrent.ExecutionException;
 public class ThreadFactory {
 
     @Autowired
-    SubProcess subProcess;
+    ProcessThreads processThreads;
 
     @Async("ApiThreadPoolTaskExecutor")
     public void apiObjetResponse(Application application){
 
        while (true){
            try {
-               List<Api> objectResponse = subProcess.apiSubProcessCompletableFuture(application).get();
-           } catch (InterruptedException e) {
-               throw new RuntimeException(e);
-           } catch (ExecutionException e) {
+               List<Api> objectResponse = processThreads.apiSubProcessCompletableFuture(application).get();
+           } catch (InterruptedException | ExecutionException e) {
                throw new RuntimeException(e);
            }
        }
@@ -33,10 +30,8 @@ public class ThreadFactory {
 
         while (true){
             try {
-                List<Integration> objectResponse = subProcess.integrationSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+                List<Integration> objectResponse = processThreads.integrationSubProcessCompletableFuture(application).get();
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -47,10 +42,8 @@ public class ThreadFactory {
 
         while (true){
             try {
-                List<LoadBalancer> objectResponse = subProcess.loadBalancerSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+                List<LoadBalancer> objectResponse = processThreads.loadBalancerSubProcessCompletableFuture(application).get();
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -61,10 +54,8 @@ public class ThreadFactory {
 
         while (true){
             try {
-                List<Persistence> objectResponse = subProcess.persistenceSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+                List<Persistence> objectResponse = processThreads.persistenceSubProcessCompletableFuture(application).get();
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -75,10 +66,8 @@ public class ThreadFactory {
 
         while (true){
             try {
-                List<Servicio> objectResponse = subProcess.serviceSubProcessCompletableFuture(application).get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+                List<Servicio> objectResponse = processThreads.serviceSubProcessCompletableFuture(application).get();
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         }

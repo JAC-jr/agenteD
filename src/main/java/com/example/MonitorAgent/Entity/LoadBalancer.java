@@ -72,7 +72,4 @@ public class LoadBalancer {
     @Column(name = "response_time", length = 45)
     private Long response_time;
 
-    @Column(name = "actual_state")
-    private boolean actualState;
-
 }

@@ -12,14 +12,13 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 
 @Service
 public class LoadBalancerCurl {
 
     Logger logger = LoggerFactory.getLogger(LoadBalancerCurl.class);
     @Autowired RestTemplate restTemplate;
-    @Autowired ConfirmAndSave confirmAndSave;
+
     public ResponseEntity<F5ResponseModel> testLoadBalancer (String baseUrl, String Json, LoadBalancer loadBalancer) throws URISyntaxException, IOException {
 
         URI uri = new URI(baseUrl);
@@ -28,12 +27,10 @@ public class LoadBalancerCurl {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Object> requestEntity = new HttpEntity<Object>(body.toString(),headers);
         ResponseEntity<F5ResponseModel> response = null;
-        LocalDateTime testTime = null;
 
         try
         {
             response = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, F5ResponseModel.class);
-            testTime = LocalDateTime.now();
             logger.info("test exitoso de url: " + baseUrl);
             logger.info("status code = " + response.getStatusCode());
 
@@ -42,9 +39,9 @@ public class LoadBalancerCurl {
         {
             ex.printStackTrace();
             logger.error("error haciendo test de url: {} error {}",baseUrl,ex.getMessage());
-            logger.info("response = " + response.getStatusCode());
+            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+//            return response;
         }
-        confirmAndSave.confirmAndSaveF5(testTime, response, loadBalancer);
         return response;
     }
 }

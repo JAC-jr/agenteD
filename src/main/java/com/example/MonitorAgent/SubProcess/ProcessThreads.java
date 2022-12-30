@@ -1,9 +1,12 @@
 package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
+import com.example.MonitorAgent.InterrogationMethods.ApiMethod.CalculateCommonValues;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
+import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApiState;
+import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.ConfirmAndSaveLoadBalancer;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
-import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ServiceCurl;
+import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
@@ -19,17 +22,19 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class SubProcess {
+public class ProcessThreads {
     @Autowired ApiRepository apiRepository;
     @Autowired IntegrationRepository integrationRepository;
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
-    @Autowired ServiceCurl serviceCurl;
+    @Autowired GetServicesPods getServicesPods;
     @Autowired LoadBalancerCurl loadBalancerCurl;
-    @Autowired
-    GetApiPods getApiPods;
-    Logger logger = LoggerFactory.getLogger(SubProcess.class);
+    @Autowired ConfirmAndSaveLoadBalancer confirmAndSaveLoadBalancer;
+    @Autowired GetApiPods getApiPods;
+    @Autowired ConfirmAndSaveApiState confirmAndSaveApiState;
+    @Autowired CalculateCommonValues calculateCommonValues;
+    Logger logger = LoggerFactory.getLogger(ProcessThreads.class);
 
     //--------------------------------APIS----------------------------------------------------
     public CompletableFuture<List<Api>> apiSubProcessCompletableFuture(Application application) throws InterruptedException{
@@ -42,32 +47,15 @@ public class SubProcess {
             String nameSpace = api.getNameSpace();
             String label_app = api.getLabel_app();
 
-            Long firstDate = System.currentTimeMillis();
+            LocalDateTime testTime = LocalDateTime.now();
+            long firstDate = System.currentTimeMillis();
             double response = getApiPods.apiKubeGet(baseUrl, nameSpace, label_app, apiID);
-            Long timeLapse = System.currentTimeMillis() - firstDate;
+            long timeLapse = System.currentTimeMillis() - firstDate;
             logger.info("time lapse= {}" ,timeLapse);
-            api.setStatus(response+"%");
 
-            if (response ==0){
-                api.setStatus("sin replicas funcionales");
-                api.setConsecutiveSuccessfulTest(+1);
-                api.setConsecutiveFailedTest(0);
-                logger.info("api_Id = {}, response = {}",
-                         api.getApi_id(), api.getStatus());
-                logger.info("respuesta del Api exitosa");
-            }
-            else {
-                api.setConsecutiveSuccessfulTest(+1);
-                api.setConsecutiveFailedTest(0);
-                logger.info("api_Id = {}, status = {}, ",
-                        api.getApi_id(), api.getStatus());
-                logger.info("respuesta del Api exitosa");
-            }
+            String status = calculateCommonValues.statusApi(response, api);
 
-            api.setResponse_time(timeLapse);
-            api.setNumTest(+1);
-            api.setLastTestDate(LocalDateTime.now());
-            apiRepository.save(api);
+            confirmAndSaveApiState.confirmAndSaveApi(api, status, testTime, response);
 
             try {
                 Thread.sleep(api.getTestInterv());
@@ -85,7 +73,6 @@ public class SubProcess {
         result.forEach(loadBalancer -> {
             String baseUrl = loadBalancer.getUrlServer();
             String Json = loadBalancer.getJson();
-            Integer Id = loadBalancer.getVserverId();
 
             try{
                 long firstDate = System.currentTimeMillis();
@@ -93,25 +80,23 @@ public class SubProcess {
                 ResponseEntity<F5ResponseModel> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json,loadBalancer);
                 long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
-                logger.info("respuesta del F5 exitosa");
-//                loadBalancer.setLastTestDate(testTime);
-//                loadBalancer.setNumTest(loadBalancer.getNumTest() + 1);
-//                loadBalancer.setResponse_time(timeLapse);
+                confirmAndSaveLoadBalancer.confirmAndSaveF5(testTime, response, loadBalancer);
+                loadBalancer.setResponse_time(timeLapse);
 
-                if (response.getStatusCode().toString().equals(loadBalancer.getStatus())){
-                    logger.info("mismo estado");
-//                    loadBalancer.setSuccessfulConsecutiveTest(loadBalancer.getSuccessfulConsecutiveTest()+1);
-//                    loadBalancer.setFailedConsecutiveTest(0);
-//                    loadBalancer.setStatus(response.getStatusCode().toString());
+                if (response.getStatusCode().is2xxSuccessful()){
+                    logger.info("respuesta del F5 exitosa");
+                    loadBalancer.setSuccessfulConsecutiveTest(loadBalancer.getSuccessfulConsecutiveTest()+1);
+                    loadBalancer.setFailedConsecutiveTest(0);
+                    loadBalancer.setHistorySuccessfulTest(loadBalancer.getHistorySuccessfulTest()+1);
                 }
                 else {
 
                     logger.info("error al recibir respuesta");
-//                    loadBalancer.setSuccessfulConsecutiveTest(0);
-//                    loadBalancer.setFailedConsecutiveTest(loadBalancer.getFailedConsecutiveTest()+1);
-//                    loadBalancer.setStatus(response.getStatusCode().toString());
+                    loadBalancer.setSuccessfulConsecutiveTest(0);
+                    loadBalancer.setFailedConsecutiveTest(loadBalancer.getFailedConsecutiveTest()+1);
+                    loadBalancer.setHistoryFailedTest(loadBalancer.getHistoryFailedTest()+1);
                 }
-//                loadBalancerRepository.save(loadBalancer);
+                loadBalancerRepository.save(loadBalancer);
 
             } catch (URISyntaxException | IOException e) {
                 throw new RuntimeException(e);
@@ -126,50 +111,49 @@ public class SubProcess {
         return CompletableFuture.completedFuture(result);
     }
 //------------------------------------SERVICES-------------------------------------------------------
-    public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
-        Integer applicationId = application.getApplication_id();
-        List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);
+public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Application application) throws InterruptedException{
+    Integer applicationId = application.getApplication_id();
+    List<Servicio> result = serviceRepository.findAllByApplicationId(applicationId);
 
-        result.forEach(servicio -> {
+    result.forEach(servicio -> {
 
-            String method = servicio.getMethod();
-            String baseUrl = servicio.getTestUrl();
-            String Json = servicio.getJson();
+        String UrlServices = servicio.getTestUrl();
+        String nameSpace = servicio.getNameSpace();
+        String labelApp = servicio.getLabelApp();
+        Integer serviceId = servicio.getServiceId();
 
-            try {
-                double firstDate = System.currentTimeMillis();
-                ResponseEntity<Object> response = serviceCurl.testService(baseUrl,method,Json);
-                double timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("time lapse= {}" ,timeLapse);
+        double firstDate = System.currentTimeMillis();
+        double response = getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+        getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+        double timeLapse = System.currentTimeMillis() - firstDate;
+        logger.info("time lapse= {}" ,timeLapse);
 
-                if (response.getStatusCode().isError()){
+        if (response ==0){
 
-                    servicio.setStatus(response.getStatusCode().toString());
-                    serviceRepository.save(servicio);
-                    logger.info("{}",servicio);
-                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
-                    logger.info("error al recibir respuesta");
-                }
-                else {
-                    servicio.setStatus(response.getStatusCode().toString());
-                    serviceRepository.save(servicio);
-                    logger.info("{}",servicio.getStatus());
-                    logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                            servicio.getApplicationId(), servicio.getService_id(), servicio.getStatus());
-                    logger.info("respuesta del servicio exitosa");
-                }
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                Thread.sleep(servicio.getTestInterv());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        return CompletableFuture.completedFuture(result);
-    }
+            servicio.setStatus("sin replicas funcionales");
+            serviceRepository.save(servicio);
+            logger.info("{}",servicio);
+            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+            logger.info("error al recibir respuesta");
+        }
+        else {
+            servicio.setStatus(response+"%");
+            serviceRepository.save(servicio);
+            logger.info("{}",servicio.getStatus());
+            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+            logger.info("respuesta del servicio exitosa");
+
+        }
+        try {
+            Thread.sleep(servicio.getTestInterv());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    });
+    return CompletableFuture.completedFuture(result);
+}
 //-------------------------------PERSISTENCE----------------------------------------------------------
     public CompletableFuture<List<Persistence>> persistenceSubProcessCompletableFuture(Application application) throws InterruptedException{
         Integer applicationId = application.getApplication_id();

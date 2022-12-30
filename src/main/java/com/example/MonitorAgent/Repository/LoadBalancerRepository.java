@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface LoadBalancerRepository extends JpaRepository<LoadBalancer, Integer> {
     List<LoadBalancer> findAllByApplicationId(Integer applicationId);
-    LoadBalancer findByVserverIdAndActualState(Integer vserverId, boolean actualState);
 }

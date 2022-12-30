@@ -1,4 +1,4 @@
-package com.example.MonitorAgent.RestTemplateConfig;
+package com.example.MonitorAgent.Config;
 
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
