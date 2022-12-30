@@ -16,7 +16,7 @@ public class Persistence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "db_id", nullable = false)
-    private Integer db_id;
+    private Integer persistence_id;
 
     @Column(name = "db_name", length = 45)
     private String dbName;
@@ -42,11 +42,17 @@ public class Persistence {
     @Column(name = "num_test")
     private Integer numTest;
 
+    @Column(name = "consecutive_successfull_test")
+    private Integer consecutiveSuccessfullTest;
+
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
     @Column(name = "hist_failed_test")
     private Long histFailedTest;
+
+    @Column(name = "hist_successfull_test")
+    private Long histSuccessfullTest;
 
     @Column(name = "\"min_test-failed\"")
     private Integer minTestFailed;
@@ -69,10 +75,28 @@ public class Persistence {
     @Column(name = "test_interv")
     private Long testInterv;
 
-    @Column(name = "consecutive_successful_test")
-    private Integer consecutiveSuccessfulTest;
-
-    @Column(name = "hist_successful_test")
-    private Long histSuccessfulTest;
-
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + persistence_id + ", " +
+                "dbName = " + dbName + ", " +
+                "status = " + status + ", " +
+                "description = " + description + ", " +
+                "applicationId = " + applicationId + ", " +
+                "serviceName = " + serviceName + ", " +
+                "host = " + host + ", " +
+                "port = " + port + ", " +
+                "numTest = " + numTest + ", " +
+                "consecutiveSuccessfullTest = " + consecutiveSuccessfullTest + ", " +
+                "consecutiveFailedTest = " + consecutiveFailedTest + ", " +
+                "histFailedTest = " + histFailedTest + ", " +
+                "histSuccessfullTest = " + histSuccessfullTest + ", " +
+                "minTestFailed = " + minTestFailed + ", " +
+                "maxTestFailed = " + maxTestFailed + ", " +
+                "lowAlarm = " + lowAlarm + ", " +
+                "highAlarm = " + highAlarm + ", " +
+                "lastTestDate = " + lastTestDate + ", " +
+                "reqSeg = " + reqSeg + ", " +
+                "testInterv = " + testInterv + ")";
+    }
 }
