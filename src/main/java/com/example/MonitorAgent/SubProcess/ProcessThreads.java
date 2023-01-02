@@ -1,13 +1,16 @@
 package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApiState;
+import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.ConfirmAndSaveLoadBalancer;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
+import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
+import com.example.MonitorAgent.InterrogationMethods.PersistencesMethod.ConfirmAndSavePersistence;
+import com.example.MonitorAgent.InterrogationMethods.PersistencesMethod.GetConnectionData;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ConfirmAndSaveServiceState;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
-import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
+import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ResponseStatus;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -28,13 +32,18 @@ public class ProcessThreads {
     @Autowired LoadBalancerRepository loadBalancerRepository;
     @Autowired PersistenceRepository persistenceRepository;
     @Autowired ServiceRepository serviceRepository;
+//    -----------------------------------------------------------------------
     @Autowired GetServicesPods getServicesPods;
-    @Autowired LoadBalancerCurl loadBalancerCurl;
-    @Autowired ConfirmAndSaveLoadBalancer confirmAndSaveLoadBalancer;
     @Autowired GetApiPods getApiPods;
+    @Autowired LoadBalancerCurl loadBalancerCurl;
+    @Autowired GetConnectionData getConnectionData;
+//    ------------------------------------------------------------------------
+    @Autowired ConfirmAndSaveLoadBalancer confirmAndSaveLoadBalancer;
     @Autowired ConfirmAndSaveApiState confirmAndSaveApiState;
-    @Autowired CalculateCommonValues calculateCommonValues;
     @Autowired ConfirmAndSaveServiceState confirmAndSaveServiceState;
+    @Autowired ConfirmAndSavePersistence confirmAndSavePersistence;
+    @Autowired CalculateCommonValues calculateCommonValues;
+
     Logger logger = LoggerFactory.getLogger(ProcessThreads.class);
 
     //--------------------------------APIS----------------------------------------------------
@@ -147,9 +156,44 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
         List<Persistence> result = persistenceRepository.findAllByApplicationId(applicationId);
 
         result.forEach(persistence -> {
-            logger.info("application_Id = {}, Db_Id = {}, Test_interv = {}, " +
-                            "status = {}",persistence.getApplicationId(),persistence.getDb_id(),persistence.getTestInterv()
-                    ,persistence.getStatus());
+
+            String UrlPersistence = persistence.getUrl();
+            String UserName = persistence.getUserName();
+            String Password = persistence.getPassword();
+            String SQL = persistence.getSqlSentence();
+            String DBType = persistence.getDbType();
+
+            try {
+                LocalDateTime testTime = LocalDateTime.now();
+                long firstDate = System.currentTimeMillis();
+                String response = getConnectionData.getDATA(UrlPersistence, UserName, Password, SQL, DBType);
+                long timeLapse = System.currentTimeMillis() - firstDate;
+                logger.info("time lapse= {}" ,timeLapse);
+                confirmAndSavePersistence.confirmAndSavePersistence(testTime, response, persistence);
+                persistence.setResponse_time(timeLapse);
+
+                if (Objects.equals(response, "OK")){
+                    logger.info("respuesta de la Db exitosa");
+                    persistence.setConsecutiveSuccessfulTest(persistence.getConsecutiveSuccessfulTest()+1);
+                    persistence.setHistoryFailedTest(0L);
+                    persistence.setHistorySuccessfulTest(persistence.getHistorySuccessfulTest()+1);
+                }
+                else {
+
+                    logger.info("error al recibir respuesta");
+                    persistence.setHistorySuccessfulTest(0L);
+                    persistence.setConsecutiveFailedTest(persistence.getConsecutiveFailedTest()+1);
+                    persistence.setHistoryFailedTest(persistence.getHistoryFailedTest()+1);
+                }
+                persistenceRepository.save(persistence);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+//            logger.info("{}",UrlPersistence, UserName, Password, SQL, DBType);
+
+
             try {
                 Thread.sleep(persistence.getTestInterv());
             } catch (InterruptedException e) {

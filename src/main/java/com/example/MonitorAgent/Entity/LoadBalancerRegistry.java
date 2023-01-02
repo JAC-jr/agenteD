@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity(name = "LoadBalancer_Registry")
 @Table(name = "load_balancer_registry")
-public class VserverRegistry {
+public class LoadBalancerRegistry {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

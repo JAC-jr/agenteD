@@ -20,8 +20,7 @@ public class ConfirmReplica {
     Logger logger = LoggerFactory.getLogger(ConfirmReplica.class);
     @Autowired ApiReplicaRepository apiReplicaRepository;
     @Autowired ReplicaRegistry replicaRegistry;
-    @Autowired
-    ServiceReplicaRepository serviceReplicaRepository;
+    @Autowired ServiceReplicaRepository serviceReplicaRepository;
 //-------------------------------------------APIs---------------------------------------------------------
     public void ConfirmApiReplicaExist(V1Pod pod, Integer apiID, ResponseEntity<Object> response, LocalDateTime testTime) {
 

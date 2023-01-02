@@ -45,12 +45,6 @@ public class LoadBalancer {
     @Column(name = "history_failed_test")
     private Long historyFailedTest;
 
-    @Column(name = "min_fail_test")
-    private Integer minFailTest;
-
-    @Column(name = "max_fail_test")
-    private Integer maxFailTest;
-
     @Column(name = "low_alarm")
     private Integer lowAlarm;
 

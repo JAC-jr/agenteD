@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -30,35 +31,14 @@ public class Persistence {
     @Column(name = "application_id")
     private Integer applicationId;
 
-    @Column(name = "service_name", length = 45)
-    private String serviceName;
-
-    @Column(name = "host", length = 45)
-    private String host;
-
-    @Column(name = "port", length = 45)
-    private String port;
-
     @Column(name = "num_test")
     private Integer numTest;
-
-    @Column(name = "consecutive_successfull_test")
-    private Integer consecutiveSuccessfullTest;
 
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
-    @Column(name = "hist_failed_test")
-    private Long histFailedTest;
-
-    @Column(name = "hist_successfull_test")
-    private Long histSuccessfullTest;
-
-    @Column(name = "\"min_test-failed\"")
-    private Integer minTestFailed;
-
-    @Column(name = "max_test_failed")
-    private Integer maxTestFailed;
+    @Column(name = "history_failed_test")
+    private Long historyFailedTest;
 
     @Column(name = "low_alarm")
     private Integer lowAlarm;
@@ -67,12 +47,36 @@ public class Persistence {
     private Integer highAlarm;
 
     @Column(name = "last_test_date")
-    private LocalDate lastTestDate;
+    private LocalDateTime lastTestDate;
 
     @Column(name = "\"req/seg\"", length = 45)
     private String reqSeg;
 
     @Column(name = "test_interv")
     private Long testInterv;
+
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
+
+    @Column(name = "history_successful_test")
+    private Long historySuccessfulTest;
+
+    @Column(name = "url", length = 45)
+    private String url;
+
+    @Column(name = "user_name", length = 45)
+    private String userName;
+
+    @Column(name = "password", length = 45)
+    private String password;
+
+    @Column(name = "sql_sentence", length = 45)
+    private String sqlSentence;
+
+    @Column(name = "db_type", length = 45)
+    private String dbType;
+
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 
 }
