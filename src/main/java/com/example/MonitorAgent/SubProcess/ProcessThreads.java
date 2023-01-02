@@ -10,7 +10,6 @@ import com.example.MonitorAgent.InterrogationMethods.PersistencesMethod.ConfirmA
 import com.example.MonitorAgent.InterrogationMethods.PersistencesMethod.GetConnectionData;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ConfirmAndSaveServiceState;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
-import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ResponseStatus;
 import com.example.MonitorAgent.Repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +133,7 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
 
         LocalDateTime testTime = LocalDateTime.now();
         long firstDate = System.currentTimeMillis();
-        double response = getServicesPods.apiKubeGet(urlServices, nameSpace, labelApp, serviceId);
+        double response = getServicesPods.serviceKubeGet(urlServices, nameSpace, labelApp, serviceId);
         long timeLapse = System.currentTimeMillis() - firstDate;
         logger.info("time lapse= {}" ,timeLapse);
 

@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResponseStatus {
+public class ServiceResponseStatus {
 
-    Logger logger = LoggerFactory.getLogger(ResponseStatus.class);
+    Logger logger = LoggerFactory.getLogger(ServiceResponseStatus.class);
 
     public String checkstatus(ResponseEntity<Object>response) {
 

@@ -24,15 +24,10 @@ import java.util.ArrayList;
 
     @Service
 public class GetServicesPods {
-
         Logger logger = LoggerFactory.getLogger(GetServicesPods.class);
         @Autowired RestTemplate restTemplate;
-
         @Autowired ConfirmReplica confirmReplica;
-
-        @Autowired ResponseStatus responseStatus;
-
-        public double apiKubeGet(String UrlServices, String nameSpace, String labelApp, Integer serviceId) {
+        public double serviceKubeGet(String UrlServices, String nameSpace, String labelApp, Integer serviceId) {
 
             double cont_items = 0;
             double state = 0;
