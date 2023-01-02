@@ -133,29 +133,6 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
 
         confirmAndSaveServiceState.confirmAndSaveService(servicio, status, testTime, response, timeLapse);
 
-//        double firstDate = System.currentTimeMillis();
-//        double response = getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
-//        getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
-//        double timeLapse = System.currentTimeMillis() - firstDate;
-//        logger.info("time lapse= {}" ,timeLapse);
-//
-//        if (response ==0){
-//
-//            servicio.setStatus("sin replicas funcionales");
-//            serviceRepository.save(servicio);
-//            logger.info("{}",servicio);
-//            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-//                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
-//            logger.info("error al recibir respuesta");
-//        }
-//        else {
-//            servicio.setStatus(response+"%");
-//            serviceRepository.save(servicio);
-//            logger.info("{}",servicio.getStatus());
-//            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-//                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
-//            logger.info("respuesta del servicio exitosa");
-//        }
         try {
             Thread.sleep(servicio.getTestInterv());
         } catch (InterruptedException e) {
