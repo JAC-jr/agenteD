@@ -29,17 +29,17 @@ public class ApiReplica {
     @Column(name = "metadata")
     private String metadata;
 
-    @Column(name = "replica_status")
-    private String replica_status;
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "replica_creation_date")
-    private String replica_creation_date;
+    private String creation_date;
 
     @Column(name = "replica_name")
     private String replica_name;
 
     @Column(name = "replica_last_test_date")
-    private LocalDateTime replica_last_test_date;
+    private LocalDateTime last_test_date;
 
     @Column(name = "actual_state")
     private boolean actualState;

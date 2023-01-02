@@ -1,11 +1,11 @@
 package com.example.MonitorAgent.SubProcess;
 
 import com.example.MonitorAgent.Entity.*;
-import com.example.MonitorAgent.InterrogationMethods.ApiMethod.CalculateCommonValues;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApiState;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.ConfirmAndSaveLoadBalancer;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
+import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.ConfirmAndSaveServiceState;
 import com.example.MonitorAgent.InterrogationMethods.ServiceMethod.GetServicesPods;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
 import com.example.MonitorAgent.Repository.*;
@@ -34,6 +34,7 @@ public class ProcessThreads {
     @Autowired GetApiPods getApiPods;
     @Autowired ConfirmAndSaveApiState confirmAndSaveApiState;
     @Autowired CalculateCommonValues calculateCommonValues;
+    @Autowired ConfirmAndSaveServiceState confirmAndSaveServiceState;
     Logger logger = LoggerFactory.getLogger(ProcessThreads.class);
 
     //--------------------------------APIS----------------------------------------------------
@@ -55,7 +56,7 @@ public class ProcessThreads {
 
             String status = calculateCommonValues.statusApi(response, api);
 
-            confirmAndSaveApiState.confirmAndSaveApi(api, status, testTime, response);
+            confirmAndSaveApiState.confirmAndSaveApi(api, status, testTime, response, timeLapse);
 
             try {
                 Thread.sleep(api.getTestInterv());
@@ -117,35 +118,44 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
 
     result.forEach(servicio -> {
 
-        String UrlServices = servicio.getTestUrl();
+        String urlServices = servicio.getTestUrl();
         String nameSpace = servicio.getNameSpace();
         String labelApp = servicio.getLabelApp();
         Integer serviceId = servicio.getServiceId();
 
-        double firstDate = System.currentTimeMillis();
-        double response = getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
-        getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
-        double timeLapse = System.currentTimeMillis() - firstDate;
+        LocalDateTime testTime = LocalDateTime.now();
+        long firstDate = System.currentTimeMillis();
+        double response = getServicesPods.apiKubeGet(urlServices, nameSpace, labelApp, serviceId);
+        long timeLapse = System.currentTimeMillis() - firstDate;
         logger.info("time lapse= {}" ,timeLapse);
 
-        if (response ==0){
+        String status = calculateCommonValues.statusService(response, servicio);
 
-            servicio.setStatus("sin replicas funcionales");
-            serviceRepository.save(servicio);
-            logger.info("{}",servicio);
-            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
-            logger.info("error al recibir respuesta");
-        }
-        else {
-            servicio.setStatus(response+"%");
-            serviceRepository.save(servicio);
-            logger.info("{}",servicio.getStatus());
-            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
-                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
-            logger.info("respuesta del servicio exitosa");
+        confirmAndSaveServiceState.confirmAndSaveService(servicio, status, testTime, response, timeLapse);
 
-        }
+//        double firstDate = System.currentTimeMillis();
+//        double response = getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+//        getServicesPods.apiKubeGet(UrlServices, nameSpace, labelApp, serviceId);
+//        double timeLapse = System.currentTimeMillis() - firstDate;
+//        logger.info("time lapse= {}" ,timeLapse);
+//
+//        if (response ==0){
+//
+//            servicio.setStatus("sin replicas funcionales");
+//            serviceRepository.save(servicio);
+//            logger.info("{}",servicio);
+//            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+//                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+//            logger.info("error al recibir respuesta");
+//        }
+//        else {
+//            servicio.setStatus(response+"%");
+//            serviceRepository.save(servicio);
+//            logger.info("{}",servicio.getStatus());
+//            logger.info("application_Id = {}, Service_Id = {}, status = {}, ",
+//                    servicio.getApplicationId(), servicio.getServiceId(), servicio.getStatus());
+//            logger.info("respuesta del servicio exitosa");
+//        }
         try {
             Thread.sleep(servicio.getTestInterv());
         } catch (InterruptedException e) {

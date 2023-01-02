@@ -1,8 +1,6 @@
 package com.example.MonitorAgent.InterrogationMethods.ServiceMethod;
 
-import com.example.MonitorAgent.Entity.ServicesReplica;
-
-import com.example.MonitorAgent.Repository.ServicesReplicaRepository;
+import com.example.MonitorAgent.SubProcess.ConfirmReplica;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
@@ -27,19 +25,12 @@ import java.util.ArrayList;
     @Service
 public class GetServicesPods {
 
-
         Logger logger = LoggerFactory.getLogger(GetServicesPods.class);
-        @Autowired
-        RestTemplate restTemplate;
+        @Autowired RestTemplate restTemplate;
 
-        @Autowired
-        ConfirmAndSaveServices confirmAndSaveServices;
-
-        @Autowired
-        ServicesReplicaRepository servicesReplicaRepository;
+        @Autowired ConfirmReplica confirmReplica;
 
         @Autowired ResponseStatus responseStatus;
-
 
         public double apiKubeGet(String UrlServices, String nameSpace, String labelApp, Integer serviceId) {
 
@@ -58,13 +49,11 @@ public class GetServicesPods {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
+
+//----------------------------------------------------------------------------------------------
                 state = 0;
-                cont_items = 0;
-                ArrayList<String> actualist = new ArrayList<>();
                 LocalDateTime testTime = null;
-
-
-
+                ArrayList<String> actualPods = new ArrayList<String>();
 
                 logger.info(" Invocando services ");
 
@@ -73,59 +62,39 @@ public class GetServicesPods {
                         "app=" + labelApp, null, null,
                         null, 5000, null);
 
-                for (V1Pod item : list.getItems()) {
-                    cont_items++;
-                ServicesReplica previous_replica_services = servicesReplicaRepository.
-                        findAllByServicesReplicaIpAndServicesReplicaActualState(item.getStatus().getPodIP(), true);
+                cont_items = list.getItems().size();
 
+                for (V1Pod pod : list.getItems()) {
+
+                    actualPods.add(pod.getStatus().getPodIP());
+
+                    testTime = LocalDateTime.now();
                     try {
-                        response = restTemplate.exchange("http://" + item.getStatus().getPodIP() + UrlServices, HttpMethod.GET, requestEntity, Object.class);
-                        testTime = LocalDateTime.now();
-
-                        
+                        response = restTemplate.exchange("http://" + pod.getStatus().getPodIP() + UrlServices, HttpMethod.GET, requestEntity, Object.class);
 
                         logger.info(" Response: " + response.getBody().toString());
-
+                        logger.info("response status code = "+response.getStatusCode());
                     } catch (RestClientException e) {
 
-                        logger.error("conexión timeout a replica ({}), ip ({})", item.getMetadata().getName(), item.getStatus().getPodIP());
+                        response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
 
-                        if (response == null) {
-                            response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
-                        }
-                        if (previous_replica_services== null) {
+                        logger.error("error en conexión a pod ({}), ip ({})----error {}",e
+                                , pod.getMetadata().getName(), pod.getStatus().getPodIP());
 
-                            confirmAndSaveServices.newServiceReplicaRegistry(item, serviceId, response, testTime);
-
-                        } else {
-                            confirmAndSaveServices.prevReplicaBuilder(item, serviceId, response, previous_replica_services, testTime);
-                        }
+                        confirmReplica.ConfirmServiceReplicaExist(pod, serviceId, response, testTime);
                         break;
                     }
 
-                    if (previous_replica_services == null) {
-                       confirmAndSaveServices.newServiceReplicaRegistry(item, serviceId, response, testTime);
+                    logger.info("conexion a replica {} exirosa", pod.getMetadata().getName());
 
-
-
-                        if (responseStatus.checkstatus(response).equals("OK")) {
-                            state++;
-                        }
-
-                    } else {
-                        confirmAndSaveServices.prevReplicaBuilder(item, serviceId, response, previous_replica_services, testTime);
-                        if (responseStatus.checkstatus(response).equals("OK")) {
-                            state++;
-                        }
+                    confirmReplica.ConfirmServiceReplicaExist(pod, serviceId, response, testTime);
+                    if (response.getStatusCode().is2xxSuccessful()) {
+                        logger.info("response status code = "+response.getStatusCode());
+                        state++;
                     }
-
-                    logger.info("item = {} , status {}", item.getMetadata().getName(), responseStatus.checkstatus(response));
-                    logger.info("Replica IP= " + item.getStatus().getPodIP());
-                    actualist.add(item.getStatus().getPodIP());
-
                 }
-                confirmAndSaveServices.confirmActualState(serviceId, actualist);
 
+                confirmReplica.confirmServiceActualState(actualPods, serviceId);
 
             } catch (IOException | ApiException e) {
                 throw new RuntimeException(e);

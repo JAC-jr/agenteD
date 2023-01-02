@@ -1,5 +1,6 @@
 package com.example.MonitorAgent.InterrogationMethods.ApiMethod;
 
+import com.example.MonitorAgent.SubProcess.ConfirmReplica;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.Configuration;
@@ -24,7 +25,8 @@ import java.util.ArrayList;
 public class GetApiPods {
     Logger logger = LoggerFactory.getLogger(GetApiPods.class);
     @Autowired RestTemplate restTemplate;
-    @Autowired ConfirmReplica confirmReplica;
+    @Autowired
+    ConfirmReplica confirmReplica;
     public double apiKubeGet(String baseUrl, String nameSpace, String label_app, Integer apiID){
 
         double cont_items;
@@ -71,22 +73,22 @@ public class GetApiPods {
 
                     response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
 
-                    logger.error("error en conexión a replica ({}), ip ({})----error {}",e
+                    logger.error("error en conexión a pod ({}), ip ({})----error {}",e
                             , pod.getMetadata().getName(), pod.getStatus().getPodIP());
 
-                    confirmReplica.ConfirmReplicaExist(pod, apiID, response, testTime);
+                    confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
                     break;
                 }
 
                 logger.info("conexion a replica {} exirosa", pod.getMetadata().getName());
 
-                confirmReplica.ConfirmReplicaExist(pod, apiID, response, testTime);
+                confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
                 if (response.getStatusCode().is2xxSuccessful()) {
                     state++;
                 }
             }
 
-            confirmReplica.confirmActualState(actualPods, apiID);
+            confirmReplica.confirmApiActualState(actualPods, apiID);
 
         } catch (IOException | ApiException e) {
             throw new RuntimeException(e);

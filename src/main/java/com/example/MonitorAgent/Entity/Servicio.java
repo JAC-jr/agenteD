@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -20,6 +21,9 @@ public class Servicio {
 
     @Column(name = "description", length = 45)
     private String description;
+
+    @Column(name = "health", length = 45)
+    private String health;
 
     @Column(name = "application_id")
     private Integer applicationId;
@@ -64,12 +68,18 @@ public class Servicio {
     private Long histSuccessfulTest;
 
     @Column(name = "last_tests_date")
-    private LocalDate lastTestsDate;
+    private LocalDateTime lastTestsDate;
 
     @Column(name = "name_space", length = 45)
     private String nameSpace;
 
     @Column(name = "status", length = 45)
     private String status;
+
+    @Column(name = "consecutive_successful_test")
+    private Integer consecutiveSuccessfulTest;
+
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 
 }

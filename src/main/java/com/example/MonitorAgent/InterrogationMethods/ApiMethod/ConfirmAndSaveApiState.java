@@ -17,11 +17,12 @@ public class ConfirmAndSaveApiState {
     @Autowired ApiRepository apiRepository;
     @Autowired ApiRegistryRepository apiRegistryRepository;
     Logger logger = LoggerFactory.getLogger(ConfirmAndSaveApiState.class);
-    public void confirmAndSaveApi(Api api, String status, LocalDateTime tesTime, double response){
+    public void confirmAndSaveApi(Api api, String status, LocalDateTime tesTime, double response, long timelapse){
 
         if(Objects.equals(api.getStatus(), status)) {
             logger.info("Api " + api.getLabel_app());
             logger.info("mismo estado");
+
             api.setHealth(response+"%");
         }
         else{
@@ -30,7 +31,9 @@ public class ConfirmAndSaveApiState {
             api.setStatus(status);
             api.setHealth(response+"%");
         }
+
         confirmStatus(api, status);
+        api.setResponse_time(timelapse);
         api.setLastTestDate(tesTime);
         api.setNumTest(api.getNumTest() + 1);
         apiRepository.save(api);
