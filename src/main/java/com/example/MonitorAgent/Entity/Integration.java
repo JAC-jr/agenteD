@@ -3,6 +3,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class Integration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "integration_id", nullable = false)
-    private Long integration_id;
+    private Integer integration_id;
 
     @Column(name = "status", length = 45)
     private String status;
@@ -35,9 +36,6 @@ public class Integration {
     @Column(name = "consecutive_failed_test")
     private Integer consecutiveFailedTest;
 
-    @Column(name = "his_failed_test")
-    private Long hisFailedTest;
-
     @Column(name = "min_test_failed")
     private Integer minTestFailed;
 
@@ -51,7 +49,7 @@ public class Integration {
     private Integer highAlarm;
 
     @Column(name = "last_test_date")
-    private LocalDate lastTestDate;
+    private LocalDateTime lastTestDate;
 
     @Column(name = "\"req/seg\"", length = 45)
     private String reqSeg;
@@ -65,7 +63,18 @@ public class Integration {
     @Column(name = "consecutive_successful_test")
     private Integer consecutiveSuccessfulTest;
 
-    @Column(name = "his_successful_test")
-    private Long hisSuccessfulTest;
+    @Column(name = "url")
+    private String url;
 
+    @Column(name = "json")
+    private String json;
+
+    @Column(name = "history_failed_test")
+    private Long historyFailedTest;
+
+    @Column(name = "history_successful_test")
+    private Long historySuccessfulTest;
+
+    @Column(name = "response_time", length = 45)
+    private Long response_time;
 }

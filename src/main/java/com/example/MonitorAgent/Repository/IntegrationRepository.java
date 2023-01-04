@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IntegrationRepository extends JpaRepository<Integration, Long> {
+public interface IntegrationRepository extends JpaRepository<Integration, Integer> {
     List<Integration> findAllByApplicationId(Integer applicationId);
 }

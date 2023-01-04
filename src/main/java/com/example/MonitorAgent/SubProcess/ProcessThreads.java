@@ -3,6 +3,8 @@ package com.example.MonitorAgent.SubProcess;
 import com.example.MonitorAgent.Entity.*;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.ConfirmAndSaveApiState;
 import com.example.MonitorAgent.InterrogationMethods.ApiMethod.GetApiPods;
+import com.example.MonitorAgent.InterrogationMethods.IntegrationMethod.GetIntegrationPods;
+import com.example.MonitorAgent.InterrogationMethods.IntegrationMethod.IntegrationConfirmAndSave;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.ConfirmAndSaveLoadBalancer;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.F5ResponseModel;
 import com.example.MonitorAgent.InterrogationMethods.LoadBalancerMethod.LoadBalancerCurl;
@@ -36,11 +38,13 @@ public class ProcessThreads {
     @Autowired GetApiPods getApiPods;
     @Autowired LoadBalancerCurl loadBalancerCurl;
     @Autowired GetConnectionData getConnectionData;
+    @Autowired GetIntegrationPods getIntegrationPods;
 //    ------------------------------------------------------------------------
     @Autowired ConfirmAndSaveLoadBalancer confirmAndSaveLoadBalancer;
     @Autowired ConfirmAndSaveApiState confirmAndSaveApiState;
     @Autowired ConfirmAndSaveServiceState confirmAndSaveServiceState;
     @Autowired ConfirmAndSavePersistence confirmAndSavePersistence;
+    @Autowired IntegrationConfirmAndSave integrationConfirmAndSave;
     @Autowired CalculateCommonValues calculateCommonValues;
 
     Logger logger = LoggerFactory.getLogger(ProcessThreads.class);
@@ -83,11 +87,20 @@ public class ProcessThreads {
             String baseUrl = loadBalancer.getUrlServer();
             String Json = loadBalancer.getJson();
 
-            try{
-                long firstDate = System.currentTimeMillis();
-                LocalDateTime testTime = LocalDateTime.now();
-                ResponseEntity<F5ResponseModel> response = loadBalancerCurl.testLoadBalancer(baseUrl,Json,loadBalancer);
-                long timeLapse = System.currentTimeMillis() - firstDate;
+
+            long firstDate = System.currentTimeMillis();
+            LocalDateTime testTime = LocalDateTime.now();
+            ResponseEntity<F5ResponseModel> response = null;
+
+
+            try {
+                response = loadBalancerCurl.testLoadBalancer(baseUrl,Json,loadBalancer);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);
                 confirmAndSaveLoadBalancer.confirmAndSaveF5(testTime, response, loadBalancer);
                 loadBalancer.setResponse_time(timeLapse);
@@ -106,10 +119,6 @@ public class ProcessThreads {
                     loadBalancer.setHistoryFailedTest(loadBalancer.getHistoryFailedTest()+1);
                 }
                 loadBalancerRepository.save(loadBalancer);
-
-            } catch (URISyntaxException | IOException e) {
-                throw new RuntimeException(e);
-            }
 
             try {
                 Thread.sleep(loadBalancer.getTestInterv());
@@ -162,36 +171,28 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
             String SQL = persistence.getSqlSentence();
             String DBType = persistence.getDbType();
 
-            try {
-                LocalDateTime testTime = LocalDateTime.now();
-                long firstDate = System.currentTimeMillis();
-                String response = getConnectionData.getDATA(UrlPersistence, UserName, Password, SQL, DBType);
-                long timeLapse = System.currentTimeMillis() - firstDate;
-                logger.info("time lapse= {}" ,timeLapse);
-                confirmAndSavePersistence.confirmAndSavePersistence(testTime, response, persistence);
-                persistence.setResponse_time(timeLapse);
+            LocalDateTime testTime = LocalDateTime.now();
+            long firstDate = System.currentTimeMillis();
+            String response = getConnectionData.getDATA(UrlPersistence, UserName, Password, SQL, DBType);
+            long timeLapse = System.currentTimeMillis() - firstDate;
+            logger.info("time lapse= {}" ,timeLapse);
+            confirmAndSavePersistence.confirmAndSavePersistence(testTime, response, persistence);
+            persistence.setResponse_time(timeLapse);
 
-                if (Objects.equals(response, "OK")){
-                    logger.info("respuesta de la Db exitosa");
-                    persistence.setConsecutiveSuccessfulTest(persistence.getConsecutiveSuccessfulTest()+1);
-                    persistence.setHistoryFailedTest(0L);
-                    persistence.setHistorySuccessfulTest(persistence.getHistorySuccessfulTest()+1);
-                }
-                else {
-
-                    logger.info("error al recibir respuesta");
-                    persistence.setHistorySuccessfulTest(0L);
-                    persistence.setConsecutiveFailedTest(persistence.getConsecutiveFailedTest()+1);
-                    persistence.setHistoryFailedTest(persistence.getHistoryFailedTest()+1);
-                }
-                persistenceRepository.save(persistence);
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            if (Objects.equals(response, "OK")){
+                logger.info("respuesta de la Db exitosa");
+                persistence.setConsecutiveSuccessfulTest(persistence.getConsecutiveSuccessfulTest()+1);
+                persistence.setHistoryFailedTest(0L);
+                persistence.setHistorySuccessfulTest(persistence.getHistorySuccessfulTest()+1);
             }
+            else {
 
-//            logger.info("{}",UrlPersistence, UserName, Password, SQL, DBType);
-
+                logger.info("error al recibir respuesta");
+                persistence.setHistorySuccessfulTest(0L);
+                persistence.setConsecutiveFailedTest(persistence.getConsecutiveFailedTest()+1);
+                persistence.setHistoryFailedTest(persistence.getHistoryFailedTest()+1);
+            }
+            persistenceRepository.save(persistence);
 
             try {
                 Thread.sleep(persistence.getTestInterv());
@@ -208,9 +209,39 @@ public CompletableFuture<List<Servicio>> serviceSubProcessCompletableFuture(Appl
         List<Integration> result = integrationRepository.findAllByApplicationId(applicationId);
 
         result.forEach(integration -> {
-            logger.info("application_Id = {}, Integration_Id = {}, Test_interv = {}, status = {}",
-                    integration.getApplicationId(),integration.getIntegration_id(),integration.getTestInterv()
-                    ,integration.getStatus());
+            String baseUrl = integration.getUrl();
+            String Json = integration.getJson();
+
+
+            long firstDate = System.currentTimeMillis();
+            LocalDateTime testTime = LocalDateTime.now();
+            ResponseEntity<Object> response = null;
+
+            try {
+                response = getIntegrationPods.integrationKubeGet(baseUrl, Json);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+
+            long timeLapse = System.currentTimeMillis() - firstDate;
+            logger.info("time lapse= {}", timeLapse);
+            integrationConfirmAndSave.confirmAndSaveIntegration(testTime, response, integration);
+            integration.setResponse_time(timeLapse);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                logger.info("respuesta del canal exitosa");
+                integration.setConsecutiveSuccessfulTest(integration.getConsecutiveSuccessfulTest() + 1);
+                integration.setConsecutiveFailedTest(0);
+                integration.setHistorySuccessfulTest(integration.getHistorySuccessfulTest() + 1);
+            } else {
+
+                logger.info("error al recibir respuesta");
+                integration.setConsecutiveSuccessfulTest(0);
+                integration.setConsecutiveFailedTest(integration.getConsecutiveFailedTest() + 1);
+                integration.setHistoryFailedTest(integration.getHistoryFailedTest() + 1);
+            }
+            integrationRepository.save(integration);
+
             try {
                 Thread.sleep(integration.getTestInterv());
             } catch (InterruptedException e) {
