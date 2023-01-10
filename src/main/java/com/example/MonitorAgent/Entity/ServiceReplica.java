@@ -19,7 +19,7 @@ public class ServiceReplica {
         @Column(name = "replica_id", nullable = false)
         private Integer Replica_id;
 
-        @Column(name = "api_id")
+        @Column(name = "service_id")
         private Integer serviceId;
 
         @Column(name = "replica_ip")
