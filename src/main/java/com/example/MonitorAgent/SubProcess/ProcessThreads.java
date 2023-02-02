@@ -86,19 +86,16 @@ public class ProcessThreads {
         result.forEach(loadBalancer -> {
             String baseUrl = loadBalancer.getUrlServer();
             String Json = loadBalancer.getJson();
-
-
+            
             long firstDate = System.currentTimeMillis();
             LocalDateTime testTime = LocalDateTime.now();
             ResponseEntity<F5ResponseModel> response = null;
-
 
             try {
                 response = loadBalancerCurl.testLoadBalancer(baseUrl,Json,loadBalancer);
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
-
 
             long timeLapse = System.currentTimeMillis() - firstDate;
                 logger.info("time lapse= {}" ,timeLapse);

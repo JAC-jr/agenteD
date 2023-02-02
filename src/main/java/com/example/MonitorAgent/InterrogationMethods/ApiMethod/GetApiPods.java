@@ -80,7 +80,7 @@ public class GetApiPods {
                     break;
                 }
 
-                logger.info("conexión a replica {} exirosa", pod.getMetadata().getName());
+                logger.info("conexión a replica {} exitosa", pod.getMetadata().getName());
 
                 confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
                 if (response.getStatusCode().is2xxSuccessful()) {

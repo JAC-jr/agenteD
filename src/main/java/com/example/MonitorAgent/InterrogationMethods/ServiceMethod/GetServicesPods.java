@@ -80,7 +80,7 @@ public class GetServicesPods {
                         break;
                     }
 
-                    logger.info("conexion a replica {} exirosa", pod.getMetadata().getName());
+                    logger.info("conexion a replica {} exitosa", pod.getMetadata().getName());
 
                     confirmReplica.ConfirmServiceReplicaExist(pod, serviceId, response, testTime);
                     if (response.getStatusCode().is2xxSuccessful()) {
