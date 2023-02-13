@@ -52,10 +52,17 @@ public class GetServicesPods {
 
                 logger.info(" Invocando services ");
 
-                V1PodList list = api.listNamespacedPod(nameSpace, null,
-                        null, null, null,
-                        "app=" + labelApp, null, null,
-                        null, 5000, null);
+                V1PodList list=null;
+
+                try {
+                    list = api.listNamespacedPod(nameSpace, null,
+                            null, null, null,
+                            "app=" + labelApp, null, null,
+                            null, 5000, null);
+                } catch (ApiException e) {
+                logger.error("Failed to list services pods---error: " + e);
+                }
+
 
                 cont_items = list.getItems().size();
 
@@ -91,8 +98,8 @@ public class GetServicesPods {
 
                 confirmReplica.confirmServiceActualState(actualPods, serviceId);
 
-            } catch (IOException | ApiException e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                logger.error("error durante procesamiento----serviceid = {}---labelApp = {}", serviceId, labelApp);
             }
 
             if (state == 0) {

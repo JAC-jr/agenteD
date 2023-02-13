@@ -29,8 +29,8 @@ public class GetApiPods {
     ConfirmReplica confirmReplica;
     public double apiKubeGet(String baseUrl, String nameSpace, String label_app, Integer apiID){
 
-        double cont_items;
-        double state;
+        double cont_items=0;
+        double state=0;
 
         try {
             logger.debug(" Creando contexto ");
@@ -51,52 +51,58 @@ public class GetApiPods {
             LocalDateTime testTime = null;
             ArrayList<String> actualPods = new ArrayList<String>();
 
-            logger.info(" Invocando APIs ");
+                    logger.info(" Invocando APIs ");
 
-            V1PodList list = api.listNamespacedPod(nameSpace, null,
-                    null, null, null,
-                    "app=" + label_app, null, null,
-                    null, 5000, null);
+            V1PodList list = null;
+            try {
+                list = api.listNamespacedPod(nameSpace, null,
+                        null, null, null,
+                        "app=" + label_app, null, null,
+                        null, 5000, null);
+            } catch (ApiException e) {
+                logger.error("Failed to list apis pods---error: " + e);
+            }
 
             cont_items = list.getItems().size();
 
             for (V1Pod pod : list.getItems()) {
 
-                actualPods.add(pod.getStatus().getPodIP());
+                    actualPods.add(pod.getStatus().getPodIP());
 
-                testTime = LocalDateTime.now();
-                try {
-                    response = restTemplate.exchange("https://" + pod.getStatus().getPodIP() + baseUrl,
-                            HttpMethod.GET, requestEntity, Object.class);
+                    testTime = LocalDateTime.now();
+                    try {
+                        response = restTemplate.exchange("https://" + pod.getStatus().getPodIP() + baseUrl,
+                                HttpMethod.GET, requestEntity, Object.class);
 
-                } catch (RestClientException e) {
+                    } catch (RestClientException e) {
 
-                    response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+                        response = new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
 
-                    logger.error("error en conexión a pod ({}), ip ({})----error {}",e
-                            , pod.getMetadata().getName(), pod.getStatus().getPodIP());
+                        logger.error("error en conexión a pod ({}), ip ({})----error {}",e
+                                , pod.getMetadata().getName(), pod.getStatus().getPodIP());
+
+                        confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
+                        break;
+                    }
+
+                    logger.info("conexión a replica {} exitosa", pod.getMetadata().getName());
 
                     confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
-                    break;
+                    if (response.getStatusCode().is2xxSuccessful()) {
+                        state++;
+                    }
                 }
 
-                logger.info("conexión a replica {} exitosa", pod.getMetadata().getName());
+                confirmReplica.confirmApiActualState(actualPods, apiID);
 
-                confirmReplica.ConfirmApiReplicaExist(pod, apiID, response, testTime);
-                if (response.getStatusCode().is2xxSuccessful()) {
-                    state++;
-                }
-            }
-
-            confirmReplica.confirmApiActualState(actualPods, apiID);
-
-        } catch (IOException | ApiException e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            logger.error("error durante procesamiento----apiID = {}---labelApp = {}", apiID, label_app);
         }
         if (state == 0) {
             return 0;
         } else {
             return (state / cont_items) * 100;
         }
+
     }
 }
